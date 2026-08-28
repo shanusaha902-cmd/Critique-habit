@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Critique Clone V2</title>
+    
+    <link id="manifest-link" rel="manifest" href="">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B0E14;
+            color: #ffffff;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+        
+        .neon-text { text-shadow: 0 0 10px rgba(0, 230, 118, 0.5); }
+        .neon-shadow { box-shadow: 0 0 15px rgba(0, 230, 118, 0.3); }
+        
+        /* Custom Checkbox */
+        .habit-checkbox {
+            appearance: none; width: 28px; height: 28px;
+            border: 2px solid #374151; border-radius: 8px;
+            background-color: transparent; cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .habit-checkbox:checked {
+            background-color: #00E676; border-color: #00E676;
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.6);
+            transform: scale(1.1);
+        }
+        .habit-checkbox:checked::after {
+            content: '✓'; position: absolute; color: #0B0E14;
+            font-size: 18px; font-weight: 900;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        
+        /* Floating XP Animation */
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40px) scale(1.5); }
+        }
+        .floating-xp {
+            position: fixed; color: #00E676; font-weight: 900;
+            font-size: 20px; text-shadow: 0 0 10px #00E676;
+            pointer-events: none; z-index: 100;
+            animation: floatUp 1s ease-out forwards;
+        }
+
+        /* Level Up Animation */
+        @keyframes scaleGlow {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .level-up-active {
+            animation: scaleGlow 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen pb-24">
+
+    <!-- Top Progress -->
+    <div class="fixed top-0 left-0 w-full h-1.5 bg-gray-900 z-50">
+        <div id="top-progress" class="h-full bg-[#00E676] w-0 transition-all duration-700 shadow-[0_0_10px_#00E676]"></div>
+    </div>
+
+    <div class="max-w-md mx-auto relative min-h-screen flex flex-col">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center p-5 pt-8">
+            <h1 class="text-3xl font-black tracking-tighter">
+                <span class="text-white">LVL</span><span class="text-[#00E676] neon-text">UP</span>
+            </h1>
+            <div class="text-right">
+                <span class="text-xs text-gray-500 font-bold uppercase tracking-widest">Total XP</span>
+                <div id="header-xp" class="text-xl font-black text-[#00E676]">0</div>
+            </div>
+        </header>
+
+        <!-- Rank Card -->
+        <section class="mx-5 mb-8 p-1 rounded-2xl bg-gradient-to-b from-gray-700 to-[#0B0E14] relative overflow-hidden">
+            <div class="bg-[#11151c] rounded-xl p-5 relative z-10">
+                <div class="flex items-center gap-5">
+                    <div id="rank-icon" class="w-20 h-20 rounded-2xl bg-gray-900 flex items-center justify-center text-5xl shadow-2xl border border-gray-700 transition-all duration-700">
+                        🛡️
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Current Rank</div>
+                        <h2 id="rank-name" class="text-3xl font-black tracking-wide mb-2">Bronze</h2>
+                        <div class="text-sm font-bold text-gray-400">
+                            <span id="rank-progress-text" class="text-white">0 / 150</span> XP to next
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 h-3 bg-gray-900 rounded-full overflow-hidden border border-gray-800">
+                    <div id="xp-bar" class="h-full bg-[#00E676] w-0 transition-all duration-1000 ease-out shadow-[0_0_12px_#00E676]"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Habit Lists -->
+        <main class="flex-1 px-5 space-y-8" id="habit-container">
+            <!-- Dynamic Sections Injected Here -->
+        </main>
+
+        <!-- Add Button -->
+        <button onclick="UI.openModal()" class="fixed bottom-6 right-1/2 translate-x-[9.5rem] w-16 h-16 bg-[#00E676] text-[#0B0E14] rounded-full flex items-center justify-center text-4xl neon-shadow hover:scale-110 active:scale-90 transition-transform z-40">
+            <i class="ph-bold ph-plus"></i>
+        </button>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-backdrop" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden opacity-0 transition-opacity flex items-end sm:items-center justify-center">
+        
+        <!-- Add/Edit Modal -->
+        <div id="habit-modal" class="bg-[#11151c] w-full max-w-md sm:rounded-3xl rounded-t-3xl border border-gray-800 p-6 transform translate-y-full transition-transform hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="modal-title" class="text-2xl font-black text-white">Create Mission</h2>
+                <button onclick="UI.closeModal()" class="text-gray-500 hover:text-white"><i class="ph-bold ph-x text-2xl"></i></button>
+            </div>
+            
+            <input type="hidden" id="item-id">
+            
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Title</label>
+                    <input type="text" id="item-text" placeholder="e.g., Complete Physics worksheet" class="w-full bg-[#0B0E14] border border-gray-700 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-[#00E676] font-semibold text-lg">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Type</label>
+                        <select id="item-type" class="w-full bg-[#0B0E14] border border-gray-700 rounded-xl px-4 py-4 text-white font-semibold focus:outline-none focus:border-[#00E676]">
+                            <option value="habit">Daily Habit</option>
+                            <option value="task">One-Time Task</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">XP Reward</label>
+                        <input type="number" id="item-xp" value="50" class="w-full bg-[#0B0E14] border border-gray-700 rounded-xl px-4 py-4 text-[#00E676] font-black focus:outline-none focus:border-[#00E676]">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Schedule</label>
+                    <select id="item-category" class="w-full bg-[#0B0E14] border border-gray-700 rounded-xl px-4 py-4 text-white font-semibold focus:outline-none focus:border-[#00E676]">
+                        <option value="Morning">Morning Focus</option>
+                        <option value="Afternoon">Afternoon Grind</option>
+                        <option value="Evening">Evening Routine</option>
+                    </select>
+                </div>
+                
+                <button onclick="App.saveItem()" class="w-full py-4 mt-4 rounded-xl bg-[#00E676] text-[#0B0E14] font-black text-xl hover:bg-[#00c968] transition-colors shadow-[0_0_20px_rgba(0,230,118,0.3)]">LOCK IT IN</button>
+                <button id="btn-delete" onclick="App.deleteItem()" class="hidden w-full py-3 rounded-xl text-red-500 font-bold hover:bg-red-950/30">Delete Mission</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Screen Level Up Overlay -->
+    <div id="level-up-screen" class="fixed inset-0 z-[100] bg-black/95 hidden flex-col items-center justify-center">
+        <div id="level-up-content" class="text-center">
+            <h1 class="text-[#00E676] font-black text-6xl mb-4 tracking-tighter neon-text">RANK UP!</h1>
+            <div id="new-rank-icon" class="text-9xl mb-6 drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">🛡️</div>
+            <h2 class="text-white font-black text-4xl uppercase tracking-widest mb-2">You are now</h2>
+            <h3 id="new-rank-name" class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00E676] to-[#00BFFF]">SILVER</h3>
+            <button onclick="UI.hideLevelUp()" class="mt-12 px-10 py-4 bg-white text-black font-black text-xl rounded-full hover:scale-105 transition-transform">CONTINUE</button>
+        </div>
+    </div>
+
+    <script>
+        const Ranks = [
+            { name: "Bronze", req: 0, color: "#CD7F32", icon: "🥉" },
+            { name: "Silver", req: 500, color: "#C0C0C0", icon: "🥈" },
+            { name: "Gold", req: 1500, color: "#FFD700", icon: "🥇" },
+            { name: "Pro", req: 3000, color: "#00E676", icon: "🛡️" },
+            { name: "Elite", req: 6000, color: "#00BFFF", icon: "💎" },
+            { name: "Titan", req: 12000, color: "#FF4500", icon: "🔥" }
+        ];
+
+        let state = { xp: 0, items: [] };
+        let currentRankIndex = 0;
+
+        const App = {
+            init: () => {
+                const saved = localStorage.getItem('critiqueV2');
+                if (saved) {
+                    state = JSON.parse(saved);
+                } else {
+                    // Default setup utilizing learning and physical training context
+                    state.items = [
+                        { id: '1', text: "Morning Calisthenics Routine", type: "habit", xpReward: 100, category: "Morning", history: [] },
+                        { id: '2', text: "Read 10 pages (Non-fiction)", type: "habit", xpReward: 50, category: "Morning", history: [] },
+                        { id: '3', text: "Deep Work: Programming/Math", type: "habit", xpReward: 150, category: "Afternoon", history: [] },
+                        { id: '4', text: "Review daily notes", type: "habit", xpReward: 50, category: "Evening", history: [] }
+                    ];
+                }
+                currentRankIndex = App.calculateRankIndex(state.xp);
+                App.generatePWA();
+                UI.render();
+            },
+            getToday: () => new Date().toISOString().split('T')[0],
+            calculateRankIndex: (xp) => {
+                let index = 0;
+                for (let i = 0; i < Ranks.length; i++) {
+                    if (xp >= Ranks[i].req) index = i;
+                }
+                return index;
+            },
+            toggleItem: (id, event) => {
+                const today = App.getToday();
+                const item = state.items.find(i => i.id === id);
+                if (!item) return;
+
+                const index = item.history.indexOf(today);
+                if (index > -1) {
+                    item.history.splice(index, 1);
+                    state.xp = Math.max(0, state.xp - item.xpReward);
+                } else {
+                    item.history.push(today);
+                    state.xp += Number(item.xpReward);
+                    UI.triggerFloatingXP(event.clientX, event.clientY, item.xpReward);
+                }
+                
+                App.checkLevelUp();
+                
+                // If it's a one-time task and completed, we might want to delete it or keep it in history.
+                // For now, we leave it checked for the day.
+                
+                localStorage.setItem('critiqueV2', JSON.stringify(state));
+                UI.render();
+            },
+            checkLevelUp: () => {
+                const newRankIndex = App.calculateRankIndex(state.xp);
+                if (newRankIndex > currentRankIndex) {
+                    currentRankIndex = newRankIndex;
+                    UI.showLevelUp(Ranks[newRankIndex]);
+                }
+            },
+            saveItem: () => {
+                const id = document.getElementById('item-id').value;
+                const text = document.getElementById('item-text').value;
+                const type = document.getElementById('item-type').value;
+                const xpReward = parseInt(document.getElementById('item-xp').value) || 50;
+                const category = document.getElementById('item-category').value;
+
+                if (!text) return;
+
+                if (id) {
+                    const item = state.items.find(i => i.id === id);
+                    item.text = text; item.type = type; item.xpReward = xpReward; item.category = category;
+                } else {
+                    state.items.push({ id: Math.random().toString(), text, type, xpReward, category, history: [] });
+                }
+                
+                localStorage.setItem('critiqueV2', JSON.stringify(state));
+                UI.closeModal();
+                UI.render();
+            },
+            deleteItem: () => {
+                const id = document.getElementById('item-id').value;
+                state.items = state.items.filter(i => i.id !== id);
+                localStorage.setItem('critiqueV2', JSON.stringify(state));
+                UI.closeModal();
+                UI.render();
+            },
+            generatePWA: () => {
+                const manifest = {
+                    name: "LevelUp", short_name: "LevelUp",
+                    start_url: ".", display: "standalone",
+                    background_color: "#0B0E14", theme_color: "#00E676",
+                    icons: [{ src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iIzAwRTY3NiIvPjxwYXRoIGQ9Ik0zMCA1MGwyMCAyMCAzMC00MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMEIwRTE0IiBzdHJva2Utd2lkdGg9IjEwIi8+PC9zdmc+", sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" }]
+                };
+                document.getElementById('manifest-link').href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifest));
+                const blob = new Blob([`self.addEventListener('fetch', e => {});`], { type: 'application/javascript' });
+                if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+            }
+        };
+
+        const UI = {
+            render: () => {
+                const rank = Ranks[currentRankIndex];
+                const nextRank = Ranks[currentRankIndex + 1] || rank;
+                
+                // Dashboard
+                document.getElementById('header-xp').innerText = state.xp.toLocaleString();
+                document.getElementById('rank-name').innerText = rank.name;
+                document.getElementById('rank-name').style.color = rank.color;
+                document.getElementById('rank-icon').innerText = rank.icon;
+                document.getElementById('rank-icon').style.borderColor = rank.color;
+                document.getElementById('rank-progress-text').innerText = state.xp.toLocaleString() + " / " + (nextRank.req === rank.req ? "MAX" : nextRank.req.toLocaleString());
+                
+                let progress = nextRank.req > rank.req ? ((state.xp - rank.req) / (nextRank.req - rank.req)) * 100 : 100;
+                document.getElementById('xp-bar').style.width = `${Math.min(100, progress)}%`;
+                document.getElementById('xp-bar').style.backgroundColor = rank.color;
+
+                // Lists
+                const container = document.getElementById('habit-container');
+                container.innerHTML = '';
+                const today = App.getToday();
+                
+                let totalToday = 0;
+                let doneToday = 0;
+
+                ['Morning', 'Afternoon', 'Evening'].forEach(cat => {
+                    const categoryItems = state.items.filter(i => i.category === cat);
+                    
+                    // Filter out tasks that were completed on previous days (Daily habits recur, tasks don't)
+                    const activeItems = categoryItems.filter(item => {
+                        if (item.type === 'habit') return true;
+                        // If it's a task, only show it if it's NOT in history, OR if it was completed TODAY
+                        return item.history.length === 0 || item.history.includes(today);
+                    });
+
+                    if (activeItems.length > 0) {
+                        const sec = document.createElement('div');
+                        sec.innerHTML = `<h3 class="text-sm font-black text-gray-600 mb-4 uppercase tracking-widest">${cat}</h3>`;
+                        const list = document.createElement('div');
+                        list.className = "space-y-3 mb-8";
+                        
+                        activeItems.forEach(item => {
+                            totalToday++;
+                            const isDone = item.history.includes(today);
+                            if (isDone) doneToday++;
+
+                            const el = document.createElement('div');
+                            el.className = `flex items-center justify-between p-4 bg-[#11151c] rounded-2xl border ${isDone ? 'border-[#00E676]/50 shadow-[0_0_15px_rgba(0,230,118,0.1)]' : 'border-gray-800'} transition-all`;
+                            el.innerHTML = `
+                                <div class="flex items-center gap-4 flex-1" onclick="App.toggleItem('${item.id}', event)">
+                                    <input type="checkbox" class="habit-checkbox" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); App.toggleItem('${item.id}', event)">
+                                    <div>
+                                        <div class="text-base font-bold ${isDone ? 'text-gray-500 line-through' : 'text-white'} transition-colors">${item.text}</div>
+                                        <div class="text-xs font-black ${isDone ? 'text-gray-600' : 'text-[#00E676]'}">+${item.xpReward} XP ${item.type === 'task' ? '• TASK' : ''}</div>
+                                    </div>
+                                </div>
+                                <button onclick="UI.openModal('${item.id}')" class="p-3 text-gray-600 hover:text-white"><i class="ph-bold ph-pencil-simple text-xl"></i></button>
+                            `;
+                            list.appendChild(el);
+                        });
+                        sec.appendChild(list);
+                        container.appendChild(sec);
+                    }
+                });
+
+                document.getElementById('top-progress').style.width = totalToday ? `${(doneToday/totalToday)*100}%` : '0%';
+            },
+            triggerFloatingXP: (x, y, amount) => {
+                const el = document.createElement('div');
+                el.className = 'floating-xp';
+                el.innerText = `+${amount}`;
+                el.style.left = `${x - 20}px`;
+                el.style.top = `${y - 20}px`;
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1000);
+            },
+            showLevelUp: (rank) => {
+                const screen = document.getElementById('level-up-screen');
+                document.getElementById('new-rank-icon').innerText = rank.icon;
+                document.getElementById('new-rank-name').innerText = rank.name;
+                
+                screen.classList.remove('hidden');
+                screen.classList.add('flex');
+                document.getElementById('level-up-content').classList.add('level-up-active');
+            },
+            hideLevelUp: () => {
+                const screen = document.getElementById('level-up-screen');
+                screen.classList.add('hidden');
+                screen.classList.remove('flex');
+                document.getElementById('level-up-content').classList.remove('level-up-active');
+            },
+            openModal: (id = null) => {
+                const backdrop = document.getElementById('modal-backdrop');
+                const modal = document.getElementById('habit-modal');
+                
+                document.getElementById('item-id').value = id || '';
+                if (id) {
+                    const item = state.items.find(i => i.id === id);
+                    document.getElementById('item-text').value = item.text;
+                    document.getElementById('item-type').value = item.type;
+                    document.getElementById('item-xp').value = item.xpReward;
+                    document.getElementById('item-category').value = item.category;
+                    document.getElementById('modal-title').innerText = "Edit Mission";
+                    document.getElementById('btn-delete').classList.remove('hidden');
+                } else {
+                    document.getElementById('item-text').value = '';
+                    document.getElementById('item-type').value = 'habit';
+                    document.getElementById('item-xp').value = '50';
+                    document.getElementById('modal-title').innerText = "Create Mission";
+                    document.getElementById('btn-delete').classList.add('hidden');
+                }
+                
+                backdrop.classList.remove('hidden'); modal.classList.remove('hidden');
+                void backdrop.offsetWidth; // Reflow
+                backdrop.classList.remove('opacity-0'); modal.classList.remove('translate-y-full');
+            },
+            closeModal: () => {
+                const backdrop = document.getElementById('modal-backdrop');
+                const modal = document.getElementById('habit-modal');
+                backdrop.classList.add('opacity-0'); modal.classList.add('translate-y-full');
+                setTimeout(() => {
+                    backdrop.classList.add('hidden'); modal.classList.add('hidden');
+                }, 300);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', App.init);
+    </script>
+</body>
+</html>
+
