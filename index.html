@@ -4,214 +4,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Critique Pro UI</title>
+    <title>Critique Pro Max</title>
     
     <link id="manifest-link" rel="manifest" href="">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Chart.js for Profile Graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         :root { --bg: #050505; --card: #121212; --accent: #00E676; --text: #F5F5F7; --gray: #86868B; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); -webkit-tap-highlight-color: transparent; overflow-x: hidden; padding-bottom: 90px; }
         
-        /* iOS Glassmorphism */
+        /* Responsive Desktop adjustments */
+        @media (min-width: 768px) {
+            body { display: flex; justify-content: center; background: #000; }
+            #app-container { width: 100%; max-w: 480px; background: var(--bg); min-height: 100vh; border-left: 1px solid #222; border-right: 1px solid #222; position: relative; }
+            .glass-nav { max-w: 480px; left: auto !important; }
+            .fab-btn { right: calc(50% - 220px) !important; }
+        }
+
         .glass-nav { background: rgba(18, 18, 18, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.05); }
         .glass-card { background: var(--card); border: 1px solid rgba(255,255,255,0.05); }
         
-        /* Circular Progress Ring */
         .progress-ring__circle { transition: stroke-dashoffset 0.5s ease-in-out; transform: rotate(-90deg); transform-origin: 50% 50%; }
         
-        /* Custom Checkbox */
-        .habit-checkbox { appearance: none; width: 26px; height: 26px; border: 2px solid #333; border-radius: 50%; background: transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
-        .habit-checkbox:checked { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 12px rgba(0, 230, 118, 0.4); transform: scale(1.05); }
-        .habit-checkbox:checked::after { content: '✓'; position: absolute; color: #000; font-size: 14px; font-weight: 900; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        /* Interactive Checkbox */
+        .habit-checkbox { appearance: none; width: 28px; height: 28px; border: 2px solid #333; border-radius: 8px; background: transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .habit-checkbox:checked { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 230, 118, 0.4); transform: scale(1.1); }
+        .habit-checkbox:checked::after { content: '✓'; position: absolute; color: #000; font-size: 16px; font-weight: 900; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-        /* Streak Pills */
-        .streak-pill { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 12px; font-weight: 700; color: var(--gray); background: var(--card); border: 1px solid #333; }
+        /* Streak Pills - Interactive */
+        .streak-pill { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 12px; font-weight: 700; color: var(--gray); background: var(--card); border: 1px solid #333; cursor: pointer; transition: all 0.2s; }
         .streak-pill.active { background: #FF9F0A; color: #000; border-color: #FF9F0A; box-shadow: 0 0 10px rgba(255,159,10,0.3); }
-        .streak-pill.today-empty { background: transparent; color: #fff; border: 2px dashed var(--gray); }
+        .streak-pill.selected { border: 2px solid var(--accent); box-shadow: 0 0 15px rgba(0,230,118,0.3); }
 
-        /* Rank Ladder Line */
-        .ladder-line { position: absolute; left: 2.25rem; top: 0; bottom: 0; width: 2px; background: #333; z-index: 0; }
+        /* Priority Stars */
+        .priority-star { color: #FFD700; drop-shadow: 0 0 5px rgba(255,215,0,0.5); }
+
+        /* 3D Badge Animation */
+        @keyframes float3D {
+            0% { transform: translateY(0px) rotateX(5deg) rotateY(-5deg); }
+            50% { transform: translateY(-10px) rotateX(-5deg) rotateY(5deg); drop-shadow: 0 20px 20px rgba(0,230,118,0.2); }
+            100% { transform: translateY(0px) rotateX(5deg) rotateY(-5deg); }
+        }
+        .badge-3d { animation: float3D 4s ease-in-out infinite; transform-style: preserve-3d; perspective: 1000px; }
         
-        /* Animations */
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .tab-content { animation: slideUp 0.3s ease-out forwards; }
-        
-        @keyframes popOut { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
-        .level-up-active { animation: popOut 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-out forwards; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- MAIN APP TABS -->
-    <div id="app-container" class="max-w-md mx-auto relative min-h-screen">
+    <div id="app-container" class="mx-auto relative min-h-screen pb-24">
         
-        <!-- ==================== HOME TAB ==================== -->
-        <main id="tab-home" class="tab-content px-5 pt-8 pb-10 block">
-            <header class="mb-6 flex justify-between items-start">
+        <!-- ==================== TAB 1: HOME ==================== -->
+        <main id="tab-home" class="tab-content active px-5 pt-8">
+            <header class="mb-4 flex justify-between items-start">
                 <div>
-                    <h1 class="text-3xl font-black tracking-tight">Today's Plan</h1>
-                    <p id="current-date-text" class="text-[15px] font-semibold text-gray-400 mt-1">Date</p>
+                    <h1 class="text-3xl font-black tracking-tight" id="header-title">Today's Plan</h1>
+                    <p id="current-date-text" class="text-sm font-semibold text-[#00E676] mt-1 cursor-pointer hover:underline" onclick="Navigation.switchTab('calendar')">Select Date</p>
                 </div>
+                <button onclick="App.requestNotifications()" class="text-gray-500 hover:text-white"><i class="ph-fill ph-bell text-2xl"></i></button>
             </header>
 
-            <!-- Dashboard Card -->
-            <div class="glass-card rounded-3xl p-5 mb-8">
-                <div class="flex items-center gap-5 mb-6">
+            <!-- Dashboard & Timeline -->
+            <div class="glass-card rounded-3xl p-5 mb-6">
+                <div class="flex items-center gap-5 mb-5">
                     <div class="relative w-16 h-16">
-                        <svg class="w-16 h-16" viewBox="0 0 100 100">
-                            <circle class="text-gray-800 stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle>
-                            <circle id="home-ring" class="text-[#00E676] progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
-                        </svg>
+                        <svg class="w-16 h-16" viewBox="0 0 100 100"><circle class="text-gray-800 stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="home-ring" class="text-[#00E676] progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle></svg>
                         <div id="home-ring-text" class="absolute inset-0 flex items-center justify-center font-bold text-sm">0%</div>
                     </div>
                     <div>
                         <div class="flex gap-2 mb-2">
-                            <span class="bg-[#1C1C1E] px-3 py-1 rounded-full text-xs font-bold text-gray-300 border border-gray-800" id="task-ratio">0/0 Tasks</span>
-                            <span class="bg-[#1C1C1E] px-3 py-1 rounded-full text-xs font-bold text-gray-300 border border-gray-800" id="week-display">Week 1</span>
+                            <span class="bg-[#1C1C1E] px-3 py-1 rounded-full text-xs font-bold text-white border border-gray-800" id="task-ratio">0/0 Tasks</span>
                         </div>
                     </div>
                 </div>
-                <!-- 7 Day Streak -->
-                <div class="flex justify-between items-center px-1" id="streak-row"></div>
+                <div class="flex justify-between items-center" id="streak-row"></div>
+            </div>
+
+            <!-- Top 3 Priorities -->
+            <div class="mb-6">
+                <h3 class="text-[11px] font-bold text-[#FFD700] uppercase tracking-widest mb-3 flex items-center gap-2"><i class="ph-fill ph-star priority-star"></i> Top Priorities</h3>
+                <div id="priority-list" class="space-y-3"></div>
             </div>
 
             <div id="habit-list-container" class="space-y-6"></div>
         </main>
 
-        <!-- ==================== PROGRESS TAB ==================== -->
-        <main id="tab-progress" class="tab-content px-5 pt-8 hidden">
-            <h1 class="text-3xl font-black tracking-tight mb-8">Rank Ladder</h1>
-            <div class="relative pb-10" id="ladder-container">
-                <div class="ladder-line"></div>
-                <!-- Ranks injected here -->
+        <!-- ==================== TAB 2: CALENDAR ==================== -->
+        <main id="tab-calendar" class="tab-content px-5 pt-8">
+            <h1 class="text-3xl font-black tracking-tight mb-2">Schedule</h1>
+            <p class="text-gray-400 text-sm mb-6">Tap a day to view or edit past records.</p>
+            
+            <div class="glass-card rounded-3xl p-5 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <button onclick="CalendarUI.changeMonth(-1)" class="p-2 text-gray-400 hover:text-white"><i class="ph-bold ph-caret-left"></i></button>
+                    <h2 id="cal-month-year" class="font-bold text-lg">Month Year</h2>
+                    <button onclick="CalendarUI.changeMonth(1)" class="p-2 text-gray-400 hover:text-white"><i class="ph-bold ph-caret-right"></i></button>
+                </div>
+                <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-gray-500 mb-2">
+                    <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+                </div>
+                <div id="cal-grid" class="grid grid-cols-7 gap-2"></div>
             </div>
+            <button onclick="App.viewDate(App.getTodayReal())" class="w-full py-4 bg-[#1C1C1E] text-[#00E676] font-bold rounded-xl border border-gray-800">Jump to Today</button>
         </main>
 
-        <!-- ==================== TOOLS TAB ==================== -->
-        <main id="tab-tools" class="tab-content px-5 pt-8 hidden">
-            <h1 class="text-3xl font-black tracking-tight mb-2">Focus Mode</h1>
-            <p class="text-gray-400 text-sm mb-8 font-medium">Block distractions. If you break focus, pay the penalty.</p>
+        <!-- ==================== TAB 3: PROGRESS ==================== -->
+        <main id="tab-progress" class="tab-content px-5 pt-8">
+            <div class="text-center mb-10">
+                <div id="prog-badge" class="text-9xl mb-4 badge-3d drop-shadow-[0_0_30px_rgba(0,230,118,0.4)]">🛡️</div>
+                <h2 id="prog-rank" class="text-4xl font-black text-white mb-2">Rank</h2>
+                <p class="text-gray-400 font-bold"><span id="prog-xp" class="text-[#00E676]">0</span> / <span id="prog-next">1000</span> XP</p>
+                <div class="w-64 h-2 bg-gray-900 rounded-full mx-auto mt-4 overflow-hidden"><div id="prog-bar" class="h-full bg-[#00E676] w-0"></div></div>
+            </div>
+            <h3 class="text-xl font-black mb-4">Evolution Tree</h3>
+            <div class="relative pb-10 pl-8 border-l-2 border-gray-800" id="ladder-container"></div>
+        </main>
+
+        <!-- ==================== TAB 4: TOOLS ==================== -->
+        <main id="tab-tools" class="tab-content px-5 pt-8">
+            <h1 class="text-3xl font-black tracking-tight mb-2">Focus & Discipline</h1>
+            <p class="text-gray-400 text-sm mb-6 font-medium">Leave this tab while the timer is running, and you fail.</p>
             
-            <div class="glass-card rounded-3xl p-8 flex flex-col items-center justify-center mb-6 text-center border-t border-[#00E676]/30 shadow-[0_-10px_30px_rgba(0,230,118,0.05)]">
+            <div class="glass-card rounded-3xl p-8 flex flex-col items-center justify-center mb-6 text-center shadow-lg border-t border-[#00E676]/20">
                 <div id="timer-display" class="text-6xl font-black tabular-nums tracking-tighter mb-6 text-[#00E676]">25:00</div>
-                
-                <div class="flex gap-3 mb-8 w-full">
-                    <button onclick="Timer.setTime(15)" class="flex-1 py-2 rounded-xl bg-[#1C1C1E] text-sm font-bold hover:bg-[#2C2C2E] transition">15m</button>
-                    <button onclick="Timer.setTime(25)" class="flex-1 py-2 rounded-xl bg-[#1C1C1E] text-sm font-bold text-[#00E676] ring-1 ring-[#00E676]/50">25m</button>
-                    <button onclick="Timer.setTime(50)" class="flex-1 py-2 rounded-xl bg-[#1C1C1E] text-sm font-bold hover:bg-[#2C2C2E] transition">50m</button>
+                <div class="flex gap-2 w-full mb-6">
+                    <input type="number" id="custom-time" placeholder="Custom Mins" class="w-full bg-[#1C1C1E] border border-gray-800 rounded-xl px-4 py-2 text-white font-bold text-center">
+                    <button onclick="Timer.setCustom()" class="px-4 bg-[#333] rounded-xl font-bold">Set</button>
                 </div>
-
                 <div class="w-full bg-[#1C1C1E] rounded-xl p-4 mb-6 border border-gray-800 text-left">
-                    <span class="text-xs font-bold text-red-500 uppercase tracking-widest block mb-1">Failure Penalty</span>
-                    <span class="text-sm text-gray-300 font-medium">If you close this app before time is up: <strong class="text-white">10 Pull-ups or 20 Push-ups</strong>.</span>
+                    <span class="text-xs font-bold text-red-500 uppercase tracking-widest block mb-1">Breach Penalty</span>
+                    <input type="text" id="penalty-text" class="w-full bg-transparent text-sm text-white font-medium focus:outline-none" value="20 Pull-ups or 40 Push-ups">
                 </div>
-                
-                <button id="timer-btn" onclick="Timer.toggle()" class="w-full py-4 rounded-full bg-[#00E676] text-black font-bold text-lg">Start Deep Work</button>
+                <button id="timer-btn" onclick="Timer.toggle()" class="w-full py-4 rounded-full bg-[#00E676] text-black font-bold text-lg">Initiate Lockdown</button>
             </div>
         </main>
 
-        <!-- ==================== PROFILE TAB ==================== -->
-        <main id="tab-profile" class="tab-content px-5 pt-8 hidden">
-            <h1 class="text-3xl font-black tracking-tight mb-6">Profile</h1>
+        <!-- ==================== TAB 5: PROFILE ==================== -->
+        <main id="tab-profile" class="tab-content px-5 pt-8">
+            <h1 class="text-3xl font-black tracking-tight mb-6">Commander Profile</h1>
             
-            <div class="glass-card rounded-3xl p-6 mb-8 flex items-center gap-6">
-                <div id="profile-rank-icon" class="text-6xl drop-shadow-lg">🛡️</div>
-                <div>
-                    <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Total XP Earned</div>
-                    <div id="profile-xp" class="text-3xl font-black text-[#00E676]">0</div>
-                    <div id="profile-rank-name" class="text-lg font-bold text-white mt-1">Bronze</div>
-                </div>
+            <div class="glass-card rounded-3xl p-5 mb-6 border-t border-[#00E676]/20">
+                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">XP Trajectory (Last 7 Days)</h3>
+                <canvas id="xpChart" height="150"></canvas>
             </div>
 
-            <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="ph-fill ph-target text-[#00E676]"></i> Core Goals</h2>
-            <div class="space-y-3">
-                <textarea class="w-full bg-[#1C1C1E] rounded-xl p-4 border border-gray-800 text-sm font-medium text-white focus:outline-none focus:border-[#00E676] resize-none h-24" placeholder="Yearly Goal: e.g., Ace Class 12 Boards..."></textarea>
-                <textarea class="w-full bg-[#1C1C1E] rounded-xl p-4 border border-gray-800 text-sm font-medium text-white focus:outline-none focus:border-[#00E676] resize-none h-24" placeholder="Physical Goal: e.g., Unlock the Muscle Up..."></textarea>
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold flex items-center gap-2"><i class="ph-fill ph-target text-[#00E676]"></i> Strategic Goals</h2>
+                    <button onclick="UI.addGoal()" class="text-[#00E676] text-sm font-bold">+ Add</button>
+                </div>
+                <div id="goals-container" class="space-y-3"></div>
             </div>
             
-            <button onclick="App.exportData()" class="mt-8 w-full py-3 rounded-xl bg-[#1C1C1E] text-white font-bold border border-gray-800 hover:bg-gray-800">Export Backup Data</button>
-            <button onclick="App.resetData()" class="mt-4 w-full py-3 rounded-xl bg-red-950/20 text-red-500 font-bold border border-red-900/50 hover:bg-red-900/30">Reset Journey</button>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="App.exportData()" class="py-3 rounded-xl bg-[#1C1C1E] text-white font-bold border border-gray-800 text-sm">Backup Data</button>
+                <button onclick="App.resetData()" class="py-3 rounded-xl bg-red-950/20 text-red-500 font-bold border border-red-900/50 text-sm">Wipe System</button>
+            </div>
         </main>
 
     </div>
 
-    <!-- ==================== FLOATING ADD BUTTON ==================== -->
-    <button onclick="UI.openModal()" class="fixed bottom-[100px] right-5 w-14 h-14 bg-[#00E676] text-black rounded-full flex items-center justify-center text-3xl shadow-[0_4px_20px_rgba(0,230,118,0.4)] hover:scale-105 active:scale-95 transition-transform z-40">
+    <!-- FLOATING ADD BUTTON -->
+    <button onclick="UI.openModal()" class="fixed bottom-[100px] right-5 w-14 h-14 bg-[#00E676] text-black rounded-full flex items-center justify-center text-3xl shadow-[0_4px_20px_rgba(0,230,118,0.4)] hover:scale-105 transition-transform z-40 fab-btn">
         <i class="ph-bold ph-plus"></i>
     </button>
 
-    <!-- ==================== BOTTOM NAVIGATION (iOS Style) ==================== -->
-    <nav class="fixed bottom-0 left-0 w-full h-[85px] glass-nav flex justify-around items-start pt-3 z-50">
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="fixed bottom-0 w-full h-[85px] glass-nav flex justify-around items-start pt-3 z-50">
         <button onclick="Navigation.switchTab('home')" class="nav-btn active flex flex-col items-center gap-1 w-16" data-target="home">
-            <i class="ph-fill ph-house text-2xl nav-icon text-[#00E676]"></i>
-            <span class="text-[10px] font-semibold nav-text text-[#00E676]">Home</span>
+            <i class="ph-fill ph-house text-2xl nav-icon text-[#00E676]"></i><span class="text-[10px] font-semibold nav-text text-[#00E676]">Home</span>
+        </button>
+        <button onclick="Navigation.switchTab('calendar')" class="nav-btn flex flex-col items-center gap-1 w-16" data-target="calendar">
+            <i class="ph-bold ph-calendar text-2xl nav-icon text-gray-500"></i><span class="text-[10px] font-semibold nav-text text-gray-500">Calendar</span>
         </button>
         <button onclick="Navigation.switchTab('progress')" class="nav-btn flex flex-col items-center gap-1 w-16" data-target="progress">
-            <i class="ph-bold ph-chart-line-up text-2xl nav-icon text-gray-500"></i>
-            <span class="text-[10px] font-semibold nav-text text-gray-500">Progress</span>
+            <i class="ph-bold ph-shield text-2xl nav-icon text-gray-500"></i><span class="text-[10px] font-semibold nav-text text-gray-500">Progress</span>
         </button>
         <button onclick="Navigation.switchTab('tools')" class="nav-btn flex flex-col items-center gap-1 w-16" data-target="tools">
-            <i class="ph-bold ph-timer text-2xl nav-icon text-gray-500"></i>
-            <span class="text-[10px] font-semibold nav-text text-gray-500">Tools</span>
+            <i class="ph-bold ph-hourglass text-2xl nav-icon text-gray-500"></i><span class="text-[10px] font-semibold nav-text text-gray-500">Tools</span>
         </button>
         <button onclick="Navigation.switchTab('profile')" class="nav-btn flex flex-col items-center gap-1 w-16" data-target="profile">
-            <i class="ph-bold ph-user-circle text-2xl nav-icon text-gray-500"></i>
-            <span class="text-[10px] font-semibold nav-text text-gray-500">Profile</span>
+            <i class="ph-bold ph-user-circle text-2xl nav-icon text-gray-500"></i><span class="text-[10px] font-semibold nav-text text-gray-500">Profile</span>
         </button>
     </nav>
 
-    <!-- ==================== ADD/EDIT MODAL ==================== -->
+    <!-- ADD/EDIT MODAL -->
     <div id="modal-backdrop" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity flex items-end sm:items-center justify-center">
         <div id="habit-modal" class="bg-[#121212] w-full max-w-md sm:rounded-[2rem] rounded-t-[2rem] border border-gray-800 p-6 pb-12 transform translate-y-full transition-transform">
             <div class="flex justify-between items-center mb-6">
-                <h2 id="modal-title" class="text-2xl font-black">Create Mission</h2>
-                <button onclick="UI.closeModal()" class="w-8 h-8 bg-[#1C1C1E] rounded-full flex items-center justify-center text-gray-400 hover:text-white"><i class="ph-bold ph-x"></i></button>
+                <h2 id="modal-title" class="text-2xl font-black">Configure Target</h2>
+                <button onclick="UI.closeModal()" class="w-8 h-8 bg-[#1C1C1E] rounded-full text-gray-400"><i class="ph-bold ph-x"></i></button>
             </div>
-            
             <input type="hidden" id="item-id">
-            
             <div class="space-y-4">
-                <div>
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Title</label>
-                    <input type="text" id="item-text" placeholder="e.g., Complete Mathematics Assignment" class="w-full bg-[#1C1C1E] border border-gray-800 rounded-2xl px-4 py-4 text-white focus:outline-none focus:border-[#00E676] font-semibold">
+                <input type="text" id="item-text" placeholder="Mission Title" class="w-full bg-[#1C1C1E] border border-gray-800 rounded-2xl px-4 py-4 text-white focus:border-[#00E676] font-semibold">
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <select id="item-type" onchange="UI.toggleDateInput()" class="w-full bg-[#1C1C1E] border border-gray-800 rounded-2xl px-4 py-4 text-white font-semibold">
+                        <option value="habit">Daily Habit</option>
+                        <option value="task">One-Time Task</option>
+                        <option value="priority">Top Priority</option>
+                    </select>
+                    <input type="date" id="item-date" class="w-full bg-[#1C1C1E] border border-gray-800 rounded-2xl px-4 py-4 text-white font-semibold opacity-50" disabled>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-3">
+                    <input type="number" id="item-xp" placeholder="XP Reward (e.g. 50)" class="w-full bg-[#1C1C1E] border border-gray-800 rounded-2xl px-4 py-4 text-[#00E676] font-black">
                     <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Type</label>
-                        <select id="item-type" onchange="UI.toggleDateInput()" class="w-full bg-[#1C1C1E] border border-gray-800 rounded-2xl px-4 py-4 text-white font-semibold focus:outline-none focus:border-[#00E676] appearance-none">
-                            <option value="habit">Daily Habit</option>
-                            <option value="task">One-Time Task</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Date (Tasks)</label>
-                        <input type="date" id="item-date" disabled class="w-full bg-[#1C1C1E] border border-gray-800 rounded-2xl px-4 py-4 text-white font-semibold focus:outline-none focus:border-[#00E676] opacity-50">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">XP Reward</label>
-                        <input type="number" id="item-xp" value="50" class="w-full bg-[#1C1C1E] border border-gray-800 rounded-2xl px-4 py-4 text-[#00E676] font-black focus:outline-none focus:border-[#00E676]">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">Category</label>
-                        <input type="text" id="item-category" list="category-options" placeholder="Morning Focus" value="Morning Focus" class="w-full bg-[#1C1C1E] border border-gray-800 rounded-2xl px-4 py-4 text-white font-semibold focus:outline-none focus:border-[#00E676]">
-                        <datalist id="category-options">
-                            <option value="Morning Focus">
-                            <option value="Afternoon Grind">
-                            <option value="Evening Routine">
-                            <option value="Physical Training">
-                        </datalist>
+                        <input type="text" id="item-category" list="cat-list" placeholder="Category" class="w-full bg-[#1C1C1E] border border-gray-800 rounded-2xl px-4 py-4 text-white font-semibold">
+                        <datalist id="cat-list"></datalist>
                     </div>
                 </div>
                 
-                <button onclick="App.saveItem()" class="w-full py-4 mt-2 rounded-2xl bg-[#00E676] text-black font-black text-lg shadow-lg">LOCK IT IN</button>
-                <button id="btn-delete" onclick="App.deleteItem()" class="hidden w-full py-3 rounded-xl text-red-500 font-bold">Delete Mission</button>
+                <button onclick="App.saveItem()" class="w-full py-4 bg-[#00E676] text-black font-black text-lg rounded-2xl">LOCK IT IN</button>
+                <button id="btn-delete" onclick="App.deleteItem()" class="hidden w-full py-3 rounded-xl text-red-500 font-bold">Delete</button>
             </div>
         </div>
     </div>
@@ -219,238 +231,268 @@
     <!-- LEVEL UP OVERLAY -->
     <div id="level-up-screen" class="fixed inset-0 z-[200] bg-black/95 backdrop-blur-lg hidden flex-col items-center justify-center">
         <div id="level-up-content" class="text-center px-5">
-            <h1 class="text-[#00E676] font-black text-5xl mb-6 tracking-tighter">LEVEL UP</h1>
-            <div id="new-rank-icon" class="text-9xl mb-6 drop-shadow-[0_0_40px_rgba(255,255,255,0.2)]">🛡️</div>
-            <h2 class="text-white font-bold text-xl uppercase tracking-widest mb-1">Rank Achieved</h2>
+            <h1 class="text-[#00E676] font-black text-6xl mb-6 tracking-tighter badge-3d">CONQUERED</h1>
+            <div id="new-rank-icon" class="text-9xl mb-6 drop-shadow-[0_0_50px_rgba(0,230,118,0.4)]">🛡️</div>
+            <h2 class="text-white font-bold text-xl uppercase tracking-widest mb-1">Rank Upgraded</h2>
             <h3 id="new-rank-name" class="text-5xl font-black text-white mb-10">SILVER</h3>
             <button onclick="UI.hideLevelUp()" class="w-full max-w-[250px] py-4 bg-white text-black font-black text-xl rounded-full">CONTINUE</button>
         </div>
     </div>
 
     <script>
-        // --- 1. AUDIO SYNTHESIS ENGINE (No files needed) ---
+        // --- AUDIO ENGINE (Addictive Synthesis) ---
         const AudioSys = {
             ctx: null,
-            init: () => {
-                if (!AudioSys.ctx) AudioSys.ctx = new (window.AudioContext || window.webkitAudioContext)();
-                if (AudioSys.ctx.state === 'suspended') AudioSys.ctx.resume();
-            },
-            playDing: () => {
+            init: () => { if (!AudioSys.ctx) AudioSys.ctx = new (window.AudioContext || window.webkitAudioContext)(); if(AudioSys.ctx.state === 'suspended') AudioSys.ctx.resume(); },
+            playConquerDing: () => {
                 AudioSys.init();
-                const osc = AudioSys.ctx.createOscillator();
-                const gain = AudioSys.ctx.createGain();
-                osc.connect(gain); gain.connect(AudioSys.ctx.destination);
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, AudioSys.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1200, AudioSys.ctx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.5, AudioSys.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, AudioSys.ctx.currentTime + 0.3);
-                osc.start(); osc.stop(AudioSys.ctx.currentTime + 0.3);
+                const now = AudioSys.ctx.currentTime;
+                // Layer 1: Bass impact
+                const osc1 = AudioSys.ctx.createOscillator(); const gain1 = AudioSys.ctx.createGain();
+                osc1.type = 'sine'; osc1.frequency.setValueAtTime(150, now); osc1.frequency.exponentialRampToValueAtTime(40, now + 0.3);
+                gain1.gain.setValueAtTime(0.8, now); gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc1.connect(gain1).connect(AudioSys.ctx.destination); osc1.start(); osc1.stop(now + 0.3);
+                // Layer 2: High Chime (C Major Chord)
+                [523.25, 659.25, 783.99].forEach((freq, i) => {
+                    setTimeout(() => {
+                        const osc2 = AudioSys.ctx.createOscillator(); const gain2 = AudioSys.ctx.createGain();
+                        osc2.type = 'triangle'; osc2.frequency.value = freq;
+                        gain2.gain.setValueAtTime(0.3, AudioSys.ctx.currentTime); gain2.gain.exponentialRampToValueAtTime(0.01, AudioSys.ctx.currentTime + 0.4);
+                        osc2.connect(gain2).connect(AudioSys.ctx.destination); osc2.start(); osc2.stop(AudioSys.ctx.currentTime + 0.4);
+                    }, i * 50);
+                });
             },
             playLevelUp: () => {
                 AudioSys.init();
-                [400, 500, 600, 800].forEach((freq, i) => {
+                const now = AudioSys.ctx.currentTime;
+                [440, 554.37, 659.25, 880].forEach((freq, i) => { // A Major Arpeggio
                     setTimeout(() => {
-                        const osc = AudioSys.ctx.createOscillator();
-                        const gain = AudioSys.ctx.createGain();
-                        osc.connect(gain); gain.connect(AudioSys.ctx.destination);
-                        osc.type = 'triangle';
-                        osc.frequency.value = freq;
-                        gain.gain.setValueAtTime(0.4, AudioSys.ctx.currentTime);
-                        gain.gain.exponentialRampToValueAtTime(0.01, AudioSys.ctx.currentTime + 0.4);
-                        osc.start(); osc.stop(AudioSys.ctx.currentTime + 0.4);
+                        const osc = AudioSys.ctx.createOscillator(); const gain = AudioSys.ctx.createGain();
+                        osc.type = 'square'; osc.frequency.value = freq;
+                        gain.gain.setValueAtTime(0.2, AudioSys.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, AudioSys.ctx.currentTime + 0.6);
+                        osc.connect(gain).connect(AudioSys.ctx.destination); osc.start(); osc.stop(AudioSys.ctx.currentTime + 0.6);
                     }, i * 150);
                 });
             }
         };
 
-        // --- 2. CORE DATA ---
+        // --- CORE DATA & RANKS ---
         const Ranks = [
-            { name: "Bronze", req: 0, color: "#CD7F32", icon: "🥉", desc: "First reps in." },
-            { name: "Silver", req: 500, color: "#C0C0C0", icon: "🥈", desc: "Momentum building." },
-            { name: "Gold", req: 1500, color: "#FFD700", icon: "🥇", desc: "Systems clicking." },
-            { name: "Pro", req: 3000, color: "#00E676", icon: "🛡️", desc: "Precision mode on." },
-            { name: "Elite", req: 6000, color: "#00BFFF", icon: "💎", desc: "Consistent execution." },
-            { name: "Prime", req: 12000, color: "#9370DB", icon: "🔮", desc: "Habits drive culture." },
-            { name: "Titan", req: 25000, color: "#FF4500", icon: "🔥", desc: "Compounding mastery." }
+            { name: "Novice", req: 0, color: "#8C8C8C", icon: "🌱" },
+            { name: "Iron", req: 500, color: "#A19D94", icon: "⚙️" },
+            { name: "Bronze", req: 1500, color: "#CD7F32", icon: "🥉" },
+            { name: "Silver", req: 3500, color: "#C0C0C0", icon: "🥈" },
+            { name: "Gold", req: 7000, color: "#FFD700", icon: "🥇" },
+            { name: "Platinum", req: 12000, color: "#E5E4E2", icon: "💠" },
+            { name: "Diamond", req: 20000, color: "#00BFFF", icon: "💎" },
+            { name: "Master", req: 35000, color: "#9370DB", icon: "🔮" },
+            { name: "Grandmaster",req: 55000, color: "#FF00FF", icon: "🌌" },
+            { name: "Titan", req: 80000, color: "#FF4500", icon: "🔥" },
+            { name: "Legend", req: 150000, color: "#FFD700", icon: "👑" }
         ];
 
-        let state = { xp: 0, items: [], startDate: new Date().toISOString() };
+        let state = { 
+            xp: 0, items: [], goals: [], categories: ["Morning", "Afternoon", "Evening"],
+            startDate: new Date().toISOString(), xpHistory: {} 
+        };
         let currentRankIndex = 0;
+        let viewingDate = ""; // For historical view
+        let chartInstance = null;
 
-        // --- 3. APPLICATION LOGIC ---
         const App = {
             init: () => {
-                const saved = localStorage.getItem('critiqueV3');
-                if (saved) {
-                    state = JSON.parse(saved);
-                } else {
-                    // Default setup utilizing logical progression
+                const saved = localStorage.getItem('critiqueV4');
+                if (saved) state = JSON.parse(saved);
+                else {
+                    // Context-aware presets
                     state.items = [
-                        { id: '1', text: "Morning Calisthenics Routine", type: "habit", date: "", xpReward: 100, category: "Physical Training", history: [] },
-                        { id: '2', text: "Deep Work: Core Subject Prep", type: "habit", date: "", xpReward: 150, category: "Morning Focus", history: [] },
-                        { id: '3', text: "Review Formulas/Code Logic", type: "task", date: App.getToday(), xpReward: 50, category: "Afternoon Grind", history: [] }
+                        { id: 'p1', text: "Complete Physics mock paper", type: "priority", date: "", xpReward: 200, category: "Academics", history: [] },
+                        { id: 'p2', text: "Upper Body Split (Target: Muscle-up)", type: "priority", date: "", xpReward: 150, category: "Physical Training", history: [] },
+                        { id: 'h1', text: "Read 10 pages (Productivity Book)", type: "habit", date: "", xpReward: 50, category: "Morning", history: [] },
+                        { id: 'h2', text: "Full-Stack Project (React/Node)", type: "habit", date: "", xpReward: 100, category: "Afternoon", history: [] }
+                    ];
+                    state.goals = [
+                        { id: 'g1', text: "Ace Class 12 WB Board Exams", done: false },
+                        { id: 'g2', text: "Achieve 20 Clean Pull-ups", done: false }
                     ];
                 }
+                if(!state.xpHistory) state.xpHistory = {};
                 
-                // Initialize week counter
-                const start = new Date(state.startDate);
-                const now = new Date();
-                const weeks = Math.floor((now - start) / (7 * 24 * 60 * 60 * 1000)) + 1;
-                document.getElementById('week-display').innerText = `Week ${weeks}`;
-
-                // Set today's date in header
-                const options = { weekday: 'long', month: 'long', day: 'numeric' };
-                document.getElementById('current-date-text').innerText = now.toLocaleDateString('en-US', options);
-                document.getElementById('item-date').value = App.getToday();
-
+                viewingDate = App.getTodayReal();
                 currentRankIndex = App.calculateRankIndex(state.xp);
-                App.generatePWA();
+                
+                App.updateCategories();
+                CalendarUI.init();
                 UI.render();
+                UI.renderChart();
+                
+                // Visibility API for App Blocker
+                document.addEventListener("visibilitychange", () => {
+                    if (document.hidden && Timer.isRunning) {
+                        Timer.failProtocol();
+                    }
+                });
             },
-            getToday: () => new Date().toLocaleDateString('en-CA'), // YYYY-MM-DD local time
-            calculateRankIndex: (xp) => {
-                let index = 0;
-                for (let i = 0; i < Ranks.length; i++) if (xp >= Ranks[i].req) index = i;
-                return index;
-            },
+            getTodayReal: () => new Date().toLocaleDateString('en-CA'),
+            viewDate: (dateStr) => { viewingDate = dateStr; Navigation.switchTab('home'); UI.render(); },
+            calculateRankIndex: (xp) => { let idx=0; Ranks.forEach((r, i) => { if(xp>=r.req) idx=i; }); return idx; },
+            
             toggleItem: (id, event) => {
-                AudioSys.init(); // Ensure audio context is alive on user click
-                const today = App.getToday();
+                AudioSys.init();
                 const item = state.items.find(i => i.id === id);
                 if (!item) return;
 
-                const index = item.history.indexOf(today);
+                const index = item.history.indexOf(viewingDate);
                 if (index > -1) {
                     item.history.splice(index, 1);
                     state.xp = Math.max(0, state.xp - item.xpReward);
+                    state.xpHistory[viewingDate] = (state.xpHistory[viewingDate] || 0) - item.xpReward;
                 } else {
-                    item.history.push(today);
+                    item.history.push(viewingDate);
                     state.xp += Number(item.xpReward);
-                    AudioSys.playDing(); // Play custom synthesized sound
+                    state.xpHistory[viewingDate] = (state.xpHistory[viewingDate] || 0) + Number(item.xpReward);
+                    AudioSys.playConquerDing();
                 }
                 
                 App.checkLevelUp();
-                localStorage.setItem('critiqueV3', JSON.stringify(state));
+                localStorage.setItem('critiqueV4', JSON.stringify(state));
+                UI.render();
+                if(chartInstance) UI.renderChart();
+            },
+            toggleGoal: (id) => {
+                AudioSys.init();
+                const goal = state.goals.find(g => g.id === id);
+                if(goal) { goal.done = !goal.done; if(goal.done) AudioSys.playLevelUp(); }
+                localStorage.setItem('critiqueV4', JSON.stringify(state));
                 UI.render();
             },
             checkLevelUp: () => {
-                const newRankIndex = App.calculateRankIndex(state.xp);
-                if (newRankIndex > currentRankIndex) {
-                    currentRankIndex = newRankIndex;
-                    AudioSys.playLevelUp(); // Level up fanfare
-                    UI.showLevelUp(Ranks[newRankIndex]);
+                const newRank = App.calculateRankIndex(state.xp);
+                if (newRank > currentRankIndex) {
+                    currentRankIndex = newRank; AudioSys.playLevelUp(); UI.showLevelUp(Ranks[newRank]);
                 }
             },
             saveItem: () => {
                 const id = document.getElementById('item-id').value;
-                const text = document.getElementById('item-text').value;
+                const text = document.getElementById('item-text').value.trim();
                 const type = document.getElementById('item-type').value;
                 const date = type === 'task' ? document.getElementById('item-date').value : "";
-                const xpReward = parseInt(document.getElementById('item-xp').value) || 50;
-                let category = document.getElementById('item-category').value.trim();
-                if(!category) category = "Uncategorized";
+                const xp = parseInt(document.getElementById('item-xp').value) || 50;
+                let cat = document.getElementById('item-category').value.trim() || "General";
 
                 if (!text) return;
+                if (!state.categories.includes(cat)) { state.categories.push(cat); App.updateCategories(); }
 
                 if (id) {
                     const item = state.items.find(i => i.id === id);
-                    item.text = text; item.type = type; item.date = date; item.xpReward = xpReward; item.category = category;
+                    item.text=text; item.type=type; item.date=date; item.xpReward=xp; item.category=cat;
                 } else {
-                    state.items.push({ id: Math.random().toString(), text, type, date, xpReward, category, history: [] });
+                    state.items.push({ id: Math.random().toString(), text, type, date, xpReward:xp, category:cat, history: [] });
                 }
                 
-                localStorage.setItem('critiqueV3', JSON.stringify(state));
-                UI.closeModal();
-                UI.render();
+                localStorage.setItem('critiqueV4', JSON.stringify(state));
+                UI.closeModal(); UI.render();
             },
             deleteItem: () => {
                 const id = document.getElementById('item-id').value;
                 state.items = state.items.filter(i => i.id !== id);
-                localStorage.setItem('critiqueV3', JSON.stringify(state));
-                UI.closeModal();
-                UI.render();
+                localStorage.setItem('critiqueV4', JSON.stringify(state));
+                UI.closeModal(); UI.render();
             },
-            exportData: () => {
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
-                const node = document.createElement('a');
-                node.setAttribute("href", dataStr); node.setAttribute("download", `CritiquePro_${App.getToday()}.json`);
-                document.body.appendChild(node); node.click(); node.remove();
+            updateCategories: () => {
+                const dl = document.getElementById('cat-list'); dl.innerHTML = '';
+                state.categories.forEach(c => { dl.innerHTML += `<option value="${c}">`; });
             },
-            resetData: () => {
-                if(confirm("Wipe all data and restart?")) {
-                    state = { xp: 0, items: [], startDate: new Date().toISOString() };
-                    localStorage.setItem('critiqueV3', JSON.stringify(state));
-                    location.reload();
+            requestNotifications: () => {
+                if ("Notification" in window) {
+                    Notification.requestPermission().then(perm => {
+                        if (perm === "granted") new Notification("Critique Pro", { body: "Notifications Activated! Ready to conquer." });
+                        else alert("Notifications blocked by browser.");
+                    });
                 }
             },
-            generatePWA: () => {
-                const manifest = {
-                    name: "CritiquePro", short_name: "Pro", start_url: ".", display: "standalone",
-                    background_color: "#050505", theme_color: "#00E676",
-                    icons: [{ src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iIzAwRTY3NiIvPjxwYXRoIGQ9Ik0zMCA1MGwyMCAyMCAzMC00MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDUwNTA1IiBzdHJva2Utd2lkdGg9IjEwIi8+PC9zdmc+", sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" }]
-                };
-                document.getElementById('manifest-link').href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifest));
-            }
+            exportData: () => {
+                const blob = new Blob([JSON.stringify(state)], {type: "application/json"});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a'); a.href = url; a.download = `CritiqueProMax_${App.getTodayReal()}.json`;
+                a.click(); URL.revokeObjectURL(url);
+            },
+            resetData: () => { if(confirm("WIPE ALL PROGRESS?")) { localStorage.removeItem('critiqueV4'); location.reload(); } }
         };
 
-        // --- 4. NAVIGATION TAB SYSTEM ---
-        const Navigation = {
-            switchTab: (tabId) => {
-                document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-                document.querySelectorAll('.nav-btn').forEach(btn => {
-                    const icon = btn.querySelector('.nav-icon');
-                    const text = btn.querySelector('.nav-text');
-                    if (btn.dataset.target === tabId) {
-                        icon.classList.remove('text-gray-500', 'ph-regular'); icon.classList.add('text-[#00E676]', 'ph-fill');
-                        text.classList.remove('text-gray-500'); text.classList.add('text-[#00E676]');
-                    } else {
-                        icon.classList.remove('text-[#00E676]', 'ph-fill'); icon.classList.add('text-gray-500', 'ph-bold');
-                        text.classList.remove('text-[#00E676]'); text.classList.add('text-gray-500');
-                    }
-                });
-                const target = document.getElementById(`tab-${tabId}`);
-                target.classList.remove('hidden');
+        // --- CALENDAR UI ---
+        const CalendarUI = {
+            currentMonth: new Date().getMonth(),
+            currentYear: new Date().getFullYear(),
+            init: () => { CalendarUI.renderMonth(); },
+            changeMonth: (dir) => {
+                CalendarUI.currentMonth += dir;
+                if(CalendarUI.currentMonth > 11) { CalendarUI.currentMonth = 0; CalendarUI.currentYear++; }
+                else if(CalendarUI.currentMonth < 0) { CalendarUI.currentMonth = 11; CalendarUI.currentYear--; }
+                CalendarUI.renderMonth();
+            },
+            renderMonth: () => {
+                const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+                document.getElementById('cal-month-year').innerText = `${monthNames[CalendarUI.currentMonth]} ${CalendarUI.currentYear}`;
                 
-                // Re-trigger animation
-                target.style.animation = 'none'; target.offsetHeight; target.style.animation = null;
+                const firstDay = new Date(CalendarUI.currentYear, CalendarUI.currentMonth, 1).getDay(); // Sunday = 0
+                const daysInMonth = new Date(CalendarUI.currentYear, CalendarUI.currentMonth + 1, 0).getDate();
+                
+                const grid = document.getElementById('cal-grid'); grid.innerHTML = '';
+                
+                // Blanks
+                for(let i=0; i<firstDay; i++) grid.innerHTML += `<div></div>`;
+                
+                // Days
+                for(let i=1; i<=daysInMonth; i++) {
+                    const dStr = `${CalendarUI.currentYear}-${String(CalendarUI.currentMonth+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                    const isToday = dStr === App.getTodayReal();
+                    // Check if day had activity
+                    const hasActivity = state.items.some(item => item.history.includes(dStr));
+                    
+                    let cls = "w-8 h-8 mx-auto flex items-center justify-center rounded-full text-sm font-bold cursor-pointer transition ";
+                    if(isToday) cls += "bg-[#00E676] text-black shadow-[0_0_10px_rgba(0,230,118,0.5)]";
+                    else if(hasActivity) cls += "bg-[#1C1C1E] text-white border border-[#00E676]";
+                    else cls += "text-gray-500 hover:bg-[#1C1C1E]";
+                    
+                    grid.innerHTML += `<div class="${cls}" onclick="App.viewDate('${dStr}')">${i}</div>`;
+                }
             }
         };
 
-        // --- 5. POMODORO TIMER ---
+        // --- STRICT TIMER ---
         const Timer = {
-            timeLeft: 25 * 60,
-            interval: null,
-            isRunning: false,
-            setTime: (mins) => {
-                Timer.timeLeft = mins * 60;
-                Timer.updateDisplay();
-                if(Timer.isRunning) Timer.toggle(); // Stop if running
+            timeLeft: 25 * 60, interval: null, isRunning: false,
+            setCustom: () => {
+                const val = parseInt(document.getElementById('custom-time').value);
+                if(val > 0) { Timer.timeLeft = val * 60; Timer.updateDisplay(); }
             },
             toggle: () => {
                 const btn = document.getElementById('timer-btn');
                 if (Timer.isRunning) {
-                    clearInterval(Timer.interval);
-                    btn.innerText = "Start Deep Work";
-                    btn.classList.replace('bg-red-500', 'bg-[#00E676]');
-                    btn.classList.replace('text-white', 'text-black');
+                    clearInterval(Timer.interval); Timer.isRunning = false;
+                    btn.innerText = "Initiate Lockdown"; btn.classList.replace('bg-red-500', 'bg-[#00E676]'); btn.classList.replace('text-white', 'text-black');
                 } else {
-                    AudioSys.init();
+                    AudioSys.init(); Timer.isRunning = true;
+                    if ("Notification" in window && Notification.permission === "granted") {
+                        new Notification("Deep Work Started", { body: "Do not switch tabs or minimize the app." });
+                    }
                     Timer.interval = setInterval(() => {
-                        Timer.timeLeft--;
-                        Timer.updateDisplay();
+                        Timer.timeLeft--; Timer.updateDisplay();
                         if (Timer.timeLeft <= 0) {
-                            clearInterval(Timer.interval);
-                            AudioSys.playLevelUp(); // Sound alarm
-                            alert("Session Complete! Take a break.");
-                            Timer.toggle();
+                            clearInterval(Timer.interval); Timer.isRunning = false; AudioSys.playLevelUp();
+                            alert("Focus Session Conquered! Great work."); Timer.toggle();
                         }
                     }, 1000);
-                    btn.innerText = "Abandon Session";
-                    btn.classList.replace('bg-[#00E676]', 'bg-red-500');
-                    btn.classList.replace('text-black', 'text-white');
+                    btn.innerText = "Abandon Protocol (Fail)"; btn.classList.replace('bg-[#00E676]', 'bg-red-500'); btn.classList.replace('text-black', 'text-white');
                 }
-                Timer.isRunning = !Timer.isRunning;
+            },
+            failProtocol: () => {
+                clearInterval(Timer.interval); Timer.isRunning = false;
+                const penalty = document.getElementById('penalty-text').value;
+                alert(`PROTOCOL BREACHED!\nYou left the app.\n\nPenalty Due: ${penalty}`);
+                const btn = document.getElementById('timer-btn');
+                btn.innerText = "Initiate Lockdown"; btn.classList.replace('bg-red-500', 'bg-[#00E676]'); btn.classList.replace('text-white', 'text-black');
             },
             updateDisplay: () => {
                 const m = Math.floor(Timer.timeLeft / 60).toString().padStart(2, '0');
@@ -459,127 +501,148 @@
             }
         };
 
-        // --- 6. UI RENDERING ---
+        // --- NAVIGATION & UI ---
+        const Navigation = {
+            switchTab: (tabId) => {
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    const icon = btn.querySelector('.nav-icon'); const text = btn.querySelector('.nav-text');
+                    if (btn.dataset.target === tabId) {
+                        icon.classList.replace('text-gray-500', 'text-[#00E676]'); icon.classList.replace('ph-bold', 'ph-fill');
+                        text.classList.replace('text-gray-500', 'text-[#00E676]');
+                    } else {
+                        icon.classList.replace('text-[#00E676]', 'text-gray-500'); icon.classList.replace('ph-fill', 'ph-bold');
+                        text.classList.replace('text-[#00E676]', 'text-gray-500');
+                    }
+                });
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+                if(tabId === 'calendar') CalendarUI.renderMonth();
+            }
+        };
+
         const UI = {
             render: () => {
-                const today = App.getToday();
-                
-                // 1. Filter Items for Today
-                let activeItems = state.items.filter(item => {
-                    if (item.type === 'habit') return true;
-                    // Tasks: Show if scheduled for today, or if completed today (even if scheduled past)
-                    return item.date === today || item.history.includes(today);
+                // Header Date Logic
+                const isToday = viewingDate === App.getTodayReal();
+                document.getElementById('header-title').innerText = isToday ? "Today's Plan" : "Historical Record";
+                const dObj = new Date(viewingDate);
+                document.getElementById('current-date-text').innerText = dObj.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+                if(!isToday) document.getElementById('current-date-text').innerText += " (Tap to change)";
+
+                // Filter Items
+                const activeItems = state.items.filter(i => {
+                    if (i.type === 'priority' || i.type === 'habit') return true;
+                    return i.date === viewingDate || i.history.includes(viewingDate);
                 });
 
-                // Group by Category
+                // Separate Priorities
+                const priorities = activeItems.filter(i => i.type === 'priority');
+                const regular = activeItems.filter(i => i.type !== 'priority');
+                
+                // Render Priorities
+                const prioList = document.getElementById('priority-list'); prioList.innerHTML = '';
+                let doneToday = 0; let totalToday = activeItems.length;
+
+                priorities.forEach(item => {
+                    const isDone = item.history.includes(viewingDate); if(isDone) doneToday++;
+                    prioList.innerHTML += UI.generateItemHTML(item, isDone, true);
+                });
+
+                // Render Categories
                 let grouped = {};
-                activeItems.forEach(i => {
-                    if(!grouped[i.category]) grouped[i.category] = [];
-                    grouped[i.category].push(i);
-                });
-
-                const container = document.getElementById('habit-list-container');
-                container.innerHTML = '';
+                regular.forEach(i => { if(!grouped[i.category]) grouped[i.category] = []; grouped[i.category].push(i); });
                 
-                let totalToday = activeItems.length;
-                let doneToday = 0;
-
+                const container = document.getElementById('habit-list-container'); container.innerHTML = '';
                 Object.keys(grouped).forEach(cat => {
                     const sec = document.createElement('div');
                     sec.innerHTML = `<h3 class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2"><i class="ph-fill ph-circles-four"></i> ${cat}</h3>`;
-                    const list = document.createElement('div');
-                    list.className = "space-y-3 mb-6";
-                    
+                    const list = document.createElement('div'); list.className = "space-y-3 mb-6";
                     grouped[cat].forEach(item => {
-                        const isDone = item.history.includes(today);
-                        if (isDone) doneToday++;
-
-                        const el = document.createElement('div');
-                        el.className = `glass-card rounded-2xl p-4 flex justify-between items-center transition-all ${isDone ? 'border-[#00E676]/30 bg-[#00E676]/5' : ''}`;
-                        el.innerHTML = `
-                            <div class="flex items-center gap-4 flex-1" onclick="App.toggleItem('${item.id}', event)">
-                                <input type="checkbox" class="habit-checkbox" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); App.toggleItem('${item.id}', event)">
-                                <div>
-                                    <div class="text-sm font-semibold ${isDone ? 'text-gray-500 line-through' : 'text-white'} transition-colors">${item.text}</div>
-                                    <div class="text-[11px] font-bold ${isDone ? 'text-gray-600' : 'text-gray-400'} mt-0.5">${item.xpReward} XP ${item.type === 'task' ? '• TASK' : ''}</div>
-                                </div>
-                            </div>
-                            <button onclick="UI.openModal('${item.id}')" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white rounded-full hover:bg-gray-800"><i class="ph-bold ph-pencil-simple text-lg"></i></button>
-                        `;
-                        list.appendChild(el);
+                        const isDone = item.history.includes(viewingDate); if(isDone) doneToday++;
+                        list.innerHTML += UI.generateItemHTML(item, isDone, false);
                     });
-                    sec.appendChild(list);
-                    container.appendChild(sec);
+                    sec.appendChild(list); container.appendChild(sec);
                 });
 
-                // Update Header Dashboard
-                document.getElementById('task-ratio').innerText = `${doneToday}/${totalToday} Tasks`;
+                // Dashboard Ring
+                document.getElementById('task-ratio').innerText = `${doneToday}/${totalToday} Missions`;
                 const progressPct = totalToday === 0 ? 0 : (doneToday / totalToday) * 100;
                 document.getElementById('home-ring-text').innerText = `${Math.round(progressPct)}%`;
-                
                 const circle = document.getElementById('home-ring');
-                const radius = circle.r.baseVal.value;
-                const circumference = radius * 2 * Math.PI;
-                circle.style.strokeDashoffset = circumference - (progressPct / 100) * circumference;
+                circle.style.strokeDashoffset = (40 * 2 * Math.PI) - (progressPct / 100) * (40 * 2 * Math.PI);
 
-                // Build Streak Pills (Last 7 Days)
-                const streakRow = document.getElementById('streak-row');
-                streakRow.innerHTML = '';
+                // Weekly Streak (Sunday Start)
+                const streakRow = document.getElementById('streak-row'); streakRow.innerHTML = '';
+                const todayObj = new Date(viewingDate);
+                const currentDay = todayObj.getDay(); // 0 is Sunday
                 const days = ['S','M','T','W','T','F','S'];
-                for(let i=6; i>=0; i--) {
-                    const d = new Date(); d.setDate(d.getDate() - i);
+                
+                // Generate week relative to viewingDate
+                for(let i=0; i<7; i++) {
+                    const d = new Date(todayObj); d.setDate(todayObj.getDate() - currentDay + i);
                     const dStr = d.toLocaleDateString('en-CA');
-                    const isToday = dStr === today;
-                    // Day active if any habit completed that day
                     const isActive = state.items.some(h => h.history.includes(dStr));
+                    const isSelected = dStr === viewingDate;
                     
                     let cls = "streak-pill";
                     if (isActive) cls += " active";
-                    else if (isToday) cls += " today-empty";
+                    if (isSelected) cls += " selected";
                     
-                    streakRow.innerHTML += `<div class="flex flex-col items-center gap-1.5"><div class="${cls}">${days[d.getDay()]}</div></div>`;
+                    streakRow.innerHTML += `<div onclick="App.viewDate('${dStr}')" class="${cls}">${days[i]}</div>`;
                 }
 
-                // Render Progress Tab (Ladder)
-                UI.renderLadder();
-
-                // Render Profile Stats
+                // Render Progress Tab
                 const rank = Ranks[currentRankIndex];
-                document.getElementById('profile-xp').innerText = state.xp.toLocaleString();
-                document.getElementById('profile-rank-name').innerText = rank.name;
-                document.getElementById('profile-rank-name').style.color = rank.color;
-                document.getElementById('profile-rank-icon').innerText = rank.icon;
-            },
-            renderLadder: () => {
-                const container = document.getElementById('ladder-container');
-                // Keep the line, remove old ranks
-                Array.from(container.children).forEach(c => { if(!c.classList.contains('ladder-line')) c.remove(); });
+                const nextRank = Ranks[currentRankIndex + 1] || rank;
+                document.getElementById('prog-badge').innerText = rank.icon;
+                document.getElementById('prog-rank').innerText = rank.name;
+                document.getElementById('prog-rank').style.color = rank.color;
+                document.getElementById('prog-xp').innerText = state.xp.toLocaleString();
+                document.getElementById('prog-next').innerText = nextRank.req.toLocaleString();
                 
-                // Reverse to show highest rank at top
-                [...Ranks].reverse().forEach((r, idx) => {
-                    const originalIndex = Ranks.length - 1 - idx;
-                    const isUnlocked = state.xp >= r.req;
-                    const isCurrent = currentRankIndex === originalIndex;
-                    
-                    let bgCls = isUnlocked ? 'bg-[#1C1C1E] border-gray-700' : 'bg-transparent border-gray-800 opacity-50';
-                    let iconCls = isUnlocked ? 'bg-[#2C2C2E] text-2xl' : 'bg-[#121212] text-xl grayscale';
-                    if (isCurrent) { bgCls = 'bg-[#1C1C1E] border-[#00E676]/50 shadow-[0_0_20px_rgba(0,230,118,0.1)]'; iconCls = 'bg-[#00E676]/20 text-3xl'; }
+                let pct = nextRank.req > rank.req ? ((state.xp - rank.req) / (nextRank.req - rank.req)) * 100 : 100;
+                document.getElementById('prog-bar').style.width = `${Math.min(100, Math.max(0, pct))}%`;
 
-                    const el = document.createElement('div');
-                    el.className = "flex items-center gap-6 mb-8 relative z-10";
-                    el.innerHTML = `
-                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center border border-gray-700 ${iconCls} z-10 transition-all">${r.icon}</div>
-                        <div class="flex-1 glass-card rounded-2xl p-4 border ${bgCls}">
-                            <div class="flex justify-between items-end mb-1">
-                                <h3 class="font-black text-lg ${isUnlocked ? 'text-white' : 'text-gray-500'}">${r.name}</h3>
-                                <span class="text-[10px] font-bold text-gray-500 tracking-widest">${r.req.toLocaleString()} XP</span>
+                // Ladder List
+                const ladder = document.getElementById('ladder-container'); ladder.innerHTML = '';
+                [...Ranks].reverse().forEach(r => {
+                    const isUnlocked = state.xp >= r.req;
+                    ladder.innerHTML += `
+                        <div class="flex items-center gap-4 mb-6 relative z-10">
+                            <div class="absolute -left-[45px] w-4 h-4 rounded-full ${isUnlocked ? 'bg-[#00E676] shadow-[0_0_10px_#00E676]' : 'bg-gray-800'}"></div>
+                            <div class="text-3xl ${isUnlocked?'':'grayscale opacity-50'}">${r.icon}</div>
+                            <div class="flex-1 ${isUnlocked?'text-white':'text-gray-600'}">
+                                <div class="font-black text-lg" style="color:${isUnlocked?r.color:''}">${r.name}</div>
+                                <div class="text-xs font-bold">${r.req.toLocaleString()} XP</div>
                             </div>
-                            <p class="text-xs font-semibold text-gray-400">${r.desc}</p>
-                        </div>
-                    `;
-                    container.appendChild(el);
+                        </div>`;
+                });
+
+                // Goals
+                const gc = document.getElementById('goals-container'); gc.innerHTML = '';
+                state.goals.forEach(g => {
+                    gc.innerHTML += `
+                        <div class="glass-card rounded-xl p-4 flex items-center justify-between border ${g.done ? 'border-[#00E676] bg-[#00E676]/10' : 'border-gray-800'}">
+                            <div class="flex items-center gap-3" onclick="App.toggleGoal('${g.id}')">
+                                <input type="checkbox" class="habit-checkbox" ${g.done ? 'checked' : ''} style="width:20px;height:20px;border-radius:4px;">
+                                <span class="font-bold text-sm ${g.done?'text-gray-500 line-through':'text-white'}">${g.text}</span>
+                            </div>
+                            <button onclick="UI.deleteGoal('${g.id}')" class="text-gray-600 hover:text-red-500"><i class="ph-bold ph-trash"></i></button>
+                        </div>`;
                 });
             },
+            generateItemHTML: (item, isDone, isPriority) => `
+                <div class="glass-card rounded-2xl p-4 flex justify-between items-center transition-all ${isDone ? 'border-[#00E676]/30 bg-[#00E676]/5' : (isPriority ? 'border-[#FFD700]/30' : '')}">
+                    <div class="flex items-center gap-4 flex-1" onclick="App.toggleItem('${item.id}', event)">
+                        <input type="checkbox" class="habit-checkbox" ${isDone ? 'checked' : ''} onclick="event.stopPropagation(); App.toggleItem('${item.id}', event)">
+                        <div>
+                            <div class="text-sm font-semibold ${isDone ? 'text-gray-500 line-through' : 'text-white'} transition-colors">${item.text}</div>
+                            <div class="text-[11px] font-bold ${isDone ? 'text-gray-600' : 'text-[#00E676]'} mt-0.5">+${item.xpReward} XP</div>
+                        </div>
+                    </div>
+                    <button onclick="UI.openModal('${item.id}')" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white rounded-full hover:bg-gray-800"><i class="ph-bold ph-pencil-simple text-lg"></i></button>
+                </div>`,
+            
             toggleDateInput: () => {
                 const type = document.getElementById('item-type').value;
                 const dateInput = document.getElementById('item-date');
@@ -587,37 +650,31 @@
                 else { dateInput.disabled = true; dateInput.classList.add('opacity-50'); }
             },
             openModal: (id = null) => {
-                const backdrop = document.getElementById('modal-backdrop');
-                const modal = document.getElementById('habit-modal');
-                
                 document.getElementById('item-id').value = id || '';
                 if (id) {
                     const item = state.items.find(i => i.id === id);
                     document.getElementById('item-text').value = item.text;
                     document.getElementById('item-type').value = item.type;
-                    document.getElementById('item-date').value = item.date || App.getToday();
+                    document.getElementById('item-date').value = item.date || App.getTodayReal();
                     document.getElementById('item-xp').value = item.xpReward;
                     document.getElementById('item-category').value = item.category;
-                    document.getElementById('modal-title').innerText = "Edit Mission";
                     document.getElementById('btn-delete').classList.remove('hidden');
                 } else {
                     document.getElementById('item-text').value = '';
                     document.getElementById('item-type').value = 'habit';
-                    document.getElementById('item-date').value = App.getToday();
+                    document.getElementById('item-date').value = viewingDate;
                     document.getElementById('item-xp').value = '50';
-                    document.getElementById('item-category').value = 'Morning Focus';
-                    document.getElementById('modal-title').innerText = "Create Mission";
+                    document.getElementById('item-category').value = '';
                     document.getElementById('btn-delete').classList.add('hidden');
                 }
                 UI.toggleDateInput();
                 
+                const backdrop = document.getElementById('modal-backdrop'); const modal = document.getElementById('habit-modal');
                 backdrop.classList.remove('hidden'); modal.classList.remove('hidden');
-                void backdrop.offsetWidth; // Reflow
-                backdrop.classList.remove('opacity-0'); modal.classList.remove('translate-y-full');
+                void backdrop.offsetWidth; backdrop.classList.remove('opacity-0'); modal.classList.remove('translate-y-full');
             },
             closeModal: () => {
-                const backdrop = document.getElementById('modal-backdrop');
-                const modal = document.getElementById('habit-modal');
+                const backdrop = document.getElementById('modal-backdrop'); const modal = document.getElementById('habit-modal');
                 backdrop.classList.add('opacity-0'); modal.classList.add('translate-y-full');
                 setTimeout(() => { backdrop.classList.add('hidden'); modal.classList.add('hidden'); }, 300);
             },
@@ -626,14 +683,30 @@
                 document.getElementById('new-rank-icon').innerText = rank.icon;
                 document.getElementById('new-rank-name').innerText = rank.name;
                 document.getElementById('new-rank-name').style.color = rank.color;
-                
                 screen.classList.remove('hidden'); screen.classList.add('flex');
-                document.getElementById('level-up-content').classList.add('level-up-active');
             },
-            hideLevelUp: () => {
-                const screen = document.getElementById('level-up-screen');
-                screen.classList.add('hidden'); screen.classList.remove('flex');
-                document.getElementById('level-up-content').classList.remove('level-up-active');
+            hideLevelUp: () => { document.getElementById('level-up-screen').classList.add('hidden'); document.getElementById('level-up-screen').classList.remove('flex'); },
+            addGoal: () => {
+                const text = prompt("Enter new strategic goal:");
+                if(text) { state.goals.push({id: Math.random().toString(), text, done: false}); localStorage.setItem('critiqueV4', JSON.stringify(state)); UI.render(); }
+            },
+            deleteGoal: (id) => { state.goals = state.goals.filter(g => g.id !== id); localStorage.setItem('critiqueV4', JSON.stringify(state)); UI.render(); },
+            
+            renderChart: () => {
+                const ctx = document.getElementById('xpChart').getContext('2d');
+                const labels = []; const data = [];
+                for(let i=6; i>=0; i--) {
+                    const d = new Date(); d.setDate(d.getDate() - i);
+                    const dStr = d.toLocaleDateString('en-CA');
+                    labels.push(d.toLocaleDateString('en-US', {weekday:'short'}));
+                    data.push(state.xpHistory[dStr] || 0);
+                }
+                if(chartInstance) chartInstance.destroy();
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: { labels: labels, datasets: [{ label: 'XP Gained', data: data, borderColor: '#00E676', backgroundColor: 'rgba(0, 230, 118, 0.1)', tension: 0.4, fill: true }] },
+                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false, color: '#333' }, ticks: { color: '#888' } } } }
+                });
             }
         };
 
