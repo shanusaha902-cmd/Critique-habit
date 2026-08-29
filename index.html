@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,11 +12,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* DARK INDIGO THEME + NEON LIME ACCENT (From Previous Favorites) */
+        /* DARK INDIGO THEME + NEON LIME ACCENT */
         :root { 
             --bg: #0F111A; 
             --card: #181B26; 
-            --accent: #D4FF00; /* Neon Lime */
+            --accent: #D4FF00; 
             --accent-dark: #A3C900;
             --text: #F5F5F7; 
             --gray: #8B949E; 
@@ -54,6 +53,19 @@
         .streak-pill { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--gray); background: var(--card); border: 1px solid #232838; cursor: pointer; transition: all 0.2s; }
         .streak-pill.active { background: var(--accent-dark); color: #0F111A; border-color: var(--accent-dark); }
         .streak-pill.selected { border: 2px solid var(--accent); color: var(--text); }
+
+        /* Progress Centerpiece 3D Animation */
+        @keyframes majesticFloat3D {
+            0% { transform: translateY(0px) rotateX(5deg) rotateY(-5deg); filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8)); }
+            50% { transform: translateY(-15px) rotateX(-5deg) rotateY(10deg); filter: drop-shadow(0 35px 35px rgba(212,255,0,0.2)); }
+            100% { transform: translateY(0px) rotateX(5deg) rotateY(-5deg); filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8)); }
+        }
+        .badge-centerpiece { animation: majesticFloat3D 4s ease-in-out infinite; transform-style: preserve-3d; perspective: 1000px; display: flex; justify-content: center; margin-bottom: 1.5rem; margin-top: 1rem;}
+
+        /* Star Animation */
+        @keyframes starPop { 0% { transform: scale(0); opacity: 0; } 70% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+        .star-lit { color: var(--accent); filter: drop-shadow(0 0 8px var(--accent)); animation: starPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .star-dim { color: #2D3345; }
 
         /* Epic Cosmic Level Up Sequence */
         .cosmic-bg {
@@ -143,24 +155,25 @@
             </div>
         </main>
 
-        <!-- ==================== TAB 3: PROGRESS (THE MEDAL LAYOUT) ==================== -->
+        <!-- ==================== TAB 3: PROGRESS (THE I, II, III LADDER) ==================== -->
         <main id="tab-progress" class="tab-content px-5 pt-8">
             
-            <!-- Sleek Header -->
-            <div class="flex justify-between items-end mb-4">
-                <div>
-                    <p class="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Current Rank</p>
-                    <h2 id="prog-rank" class="text-3xl font-black text-white">Rank</h2>
-                </div>
-                <div class="text-right">
-                    <p class="text-sm font-bold"><span id="prog-xp" class="text-[var(--accent)]">0</span> <span class="text-gray-500">/ <span id="prog-next">1000</span> XP</span></p>
-                </div>
+            <!-- Centerpiece: Floating Current Badge -->
+            <div class="text-center mb-10 pt-2">
+                <p class="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Current Designation</p>
+                <div id="prog-badge-main" class="badge-centerpiece"></div>
+                <h2 id="prog-rank" class="text-4xl font-black text-white mb-3">Rank</h2>
+                
+                <!-- Sub-level Stars -->
+                <div id="prog-stars" class="flex justify-center gap-3 mb-4 text-2xl"></div>
+                
+                <p class="text-sm font-bold text-gray-400"><span id="prog-xp" class="text-[var(--accent)]">0</span> / <span id="prog-next">1000</span> XP to next tier</p>
+                <div class="w-64 h-3 bg-[#181B26] rounded-full mx-auto mt-4 overflow-hidden border border-white/5"><div id="prog-bar" class="h-full bg-[var(--accent)] w-0 transition-all duration-1000 shadow-[0_0_15px_var(--accent)]"></div></div>
             </div>
-            <div class="w-full h-2 bg-[#232838] rounded-full mb-10 overflow-hidden"><div id="prog-bar" class="h-full bg-[var(--accent)] w-0 transition-all duration-1000 shadow-[0_0_10px_var(--accent)]"></div></div>
 
-            <!-- PK Level Style List (Match 1st Photo) -->
-            <h3 class="text-lg font-black mb-6">Levels of Membership</h3>
-            <div id="ladder-container" class="pb-10">
+            <!-- PK Level Style List (Major Ranks) -->
+            <h3 class="text-xl font-black mb-6 border-b border-[#232838] pb-2">Levels of Membership</h3>
+            <div id="ladder-container" class="pb-10 space-y-5">
                 <!-- Cards Injected Here -->
             </div>
         </main>
@@ -269,19 +282,22 @@
         </div>
     </div>
 
-    <!-- EPIC LEVEL UP OVERLAY (Matches 1st Video Sequence) -->
+    <!-- EPIC LEVEL UP OVERLAY -->
     <div id="level-up-screen" class="fixed inset-0 z-[200] hidden items-center justify-center overflow-hidden cosmic-bg">
         <div class="flash-overlay" id="lu-flash"></div>
         <div id="lu-energy" class="energy-swirl"></div>
         <div id="lu-shockwave" class="shockwave-ring"></div>
         
         <div id="level-up-content" class="text-center px-5 relative z-10 flex flex-col items-center badge-slam-active w-full">
-            <h1 class="text-[var(--accent)] font-black text-7xl mb-8 tracking-tighter" style="font-stretch: extra-condensed; transform: scaleY(1.1); text-shadow: 0 0 20px rgba(212,255,0,0.5);">RANK UP</h1>
+            <h1 class="text-[var(--accent)] font-black text-7xl mb-6 tracking-tighter" style="font-stretch: extra-condensed; transform: scaleY(1.1); text-shadow: 0 0 20px rgba(212,255,0,0.5);">RANK UP</h1>
             
-            <div id="new-rank-icon" class="mb-10 w-full flex justify-center drop-shadow-[0_0_50px_rgba(255,255,255,0.4)]"></div>
+            <div id="new-rank-icon" class="mb-6 w-full flex justify-center"></div>
             
             <h2 class="text-white font-bold text-sm uppercase tracking-widest mb-2">New Designation</h2>
-            <h3 id="new-rank-name" class="text-5xl font-black mb-12">Master</h3>
+            <h3 id="new-rank-name" class="text-5xl font-black mb-6 text-white drop-shadow-lg">Master I</h3>
+            
+            <!-- Sub-level stars in Level Up -->
+            <div id="new-rank-stars" class="flex justify-center gap-3 mb-10 text-3xl"></div>
             
             <button onclick="UI.hideLevelUp()" class="w-full max-w-[300px] py-5 bg-white text-black font-black text-2xl rounded-full hover:scale-105 transition-transform shadow-2xl">ACCEPT</button>
         </div>
@@ -334,26 +350,30 @@
             }
         };
 
-        // --- PROCEDURAL SVG MEDAL GENERATOR (Matches 1st Photo: Ribbon + Hexagons + Jewels) ---
+        // --- PROCEDURAL SVG MEDAL GENERATOR (Vibrant, Colorful, Addictive) ---
         const SVGBadge = (rank, size = 120, isLocked = false) => {
             const t = rank.tier;
-            let cMain = rank.cMain; let cInner = rank.cInner; let cStar = rank.cStar; let stripe = rank.ribbon;
+            let cMain = rank.cMain; let cInner = rank.cInner; let cStar = rank.cStar; let stripe = rank.cMain;
             
             if (isLocked) {
-                cMain = "#2D3345"; cInner = "#1F2633"; cStar = "#3B4252"; stripe = "#2D3345";
+                cMain = "#2D3345"; cInner = "#181B26"; cStar = "#3B4252"; stripe = "#232838";
             }
 
-            let svg = `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6)); overflow: visible;">
+            let svg = `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 8px 20px ${isLocked ? 'rgba(0,0,0,0.5)' : cMain+'80'}); overflow: visible;">
                 <defs>
-                    <linearGradient id="gMain${t}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff" stop-opacity="0.5"/><stop offset="100%" stop-color="${cMain}"/></linearGradient>
-                    <linearGradient id="gInner${t}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="${cInner}"/><stop offset="100%" stop-color="#000" stop-opacity="0.3"/></linearGradient>
+                    <radialGradient id="rGlow${t}" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="${cStar}" stop-opacity="1"/><stop offset="100%" stop-color="${cMain}" stop-opacity="0.2"/></radialGradient>
+                    <linearGradient id="gMain${t}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff" stop-opacity="0.6"/><stop offset="100%" stop-color="${cMain}"/></linearGradient>
+                    <linearGradient id="gInner${t}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="${cInner}"/><stop offset="100%" stop-color="#000" stop-opacity="0.5"/></linearGradient>
                     <linearGradient id="gStar${t}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="${cStar}"/></linearGradient>
                     <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFF7A1"/><stop offset="50%" stop-color="#FFD700"/><stop offset="100%" stop-color="#B8860B"/></linearGradient>
                 </defs>`;
 
+            // Inner Glow for unlocked items
+            if(!isLocked) { svg += `<circle cx="50" cy="55" r="35" fill="url(#rGlow${t})"/>`; }
+
             // Ribbon Component (Top)
             svg += `
-                <g transform="translate(38, -5)">
+                <g transform="translate(38, 0)">
                     <rect x="0" y="0" width="24" height="25" fill="${isLocked ? '#1F2633' : '#f8fafc'}"/>
                     <rect x="4" y="0" width="4" height="25" fill="${stripe}"/>
                     <rect x="10" y="0" width="4" height="25" fill="${stripe}"/>
@@ -362,92 +382,82 @@
                 </g>`;
                 
             // Medal connector ring
-            svg += `<circle cx="50" cy="18" r="4" fill="${isLocked ? '#2D3345' : '#fff'}" stroke="${cMain}" stroke-width="2"/>`;
+            svg += `<circle cx="50" cy="23" r="4" fill="${isLocked ? '#2D3345' : '#fff'}" stroke="${cMain}" stroke-width="2"/>`;
 
             if (t < 2) {
-                // Tier 0-1 (Silver): Hexagon + 4-Point Star
-                svg += `<polygon points="50,22 80,38 80,72 50,88 20,72 20,38" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
-                svg += `<polygon points="50,27 75,42 75,68 50,83 25,68 25,42" fill="url(#gInner${t})"/>`;
-                // 4-Point Star (Compass)
-                svg += `<polygon points="50,35 58,52 75,55 58,58 50,75 42,58 25,55 42,52" fill="url(#gStar${t})"/>`;
-                svg += `<polygon points="50,35 58,52 50,55 42,52" fill="#fff" opacity="0.6"/>`;
-                
+                // Tier 0-1 (Warrior/Elite): Hexagon + 4-Point Star
+                svg += `<polygon points="50,27 80,43 80,77 50,93 20,77 20,43" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
+                svg += `<polygon points="50,32 75,47 75,73 50,88 25,73 25,47" fill="url(#gInner${t})"/>`;
+                svg += `<polygon points="50,40 58,57 75,60 58,63 50,80 42,63 25,60 42,57" fill="url(#gStar${t})"/>`;
+                svg += `<polygon points="50,40 58,57 50,60 42,57" fill="#fff" opacity="0.6"/>`;
             } else if (t < 4) {
-                // Tier 2-3 (Gold): Octagon + 8-Point Star
-                svg += `<polygon points="50,20 80,35 80,75 50,90 20,75 20,35" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
-                svg += `<polygon points="50,25 75,38 75,72 50,85 25,72 25,38" fill="url(#gInner${t})"/>`;
-                // 8-Point Star
-                svg += `<path d="M50 35 L55 48 L68 50 L55 52 L50 65 L45 52 L32 50 L45 48 Z" fill="url(#gStar${t})"/>`;
-                svg += `<path d="M42 42 L58 42 L58 58 L42 58 Z" fill="url(#gStar${t})" transform="rotate(45 50 50)"/>`;
-                svg += `<circle cx="50" cy="50" r="5" fill="#EAB308"/>`;
-                
+                // Tier 2-3 (Master/GM): Octagon + 8-Point Star
+                svg += `<polygon points="50,25 80,40 80,80 50,95 20,80 20,40" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
+                svg += `<polygon points="50,30 75,43 75,77 50,90 25,77 25,43" fill="url(#gInner${t})"/>`;
+                svg += `<path d="M50 40 L55 53 L68 55 L55 57 L50 70 L45 57 L32 55 L45 53 Z" fill="url(#gStar${t})"/>`;
+                svg += `<path d="M42 47 L58 47 L58 63 L42 63 Z" fill="url(#gStar${t})" transform="rotate(45 50 55)"/>`;
+                svg += `<circle cx="50" cy="55" r="5" fill="#fff"/>`;
             } else if (t < 6) {
-                // Tier 4-5 (Platinum/Purple): Hexagon + 5-Point Star
-                svg += `<polygon points="50,22 80,38 80,72 50,88 20,72 20,38" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
-                svg += `<polygon points="50,27 75,42 75,68 50,83 25,68 25,42" fill="url(#gInner${t})"/>`;
-                // 5-Point Star
-                svg += `<polygon points="50,35 54,47 68,47 56,55 60,68 50,60 40,68 44,55 32,47 46,47" fill="url(#gStar${t})"/>`;
-                svg += `<circle cx="50" cy="53" r="4" fill="#3B82F6"/>`;
-
+                // Tier 4-5 (Epic/Legend): Hexagon + 5-Point Star + Laurels
+                svg += `<polygon points="50,27 80,43 80,77 50,93 20,77 20,43" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
+                svg += `<polygon points="50,32 75,47 75,73 50,88 25,73 25,47" fill="url(#gInner${t})"/>`;
+                svg += `<polygon points="50,40 54,52 68,52 56,60 60,73 50,65 40,73 44,60 32,52 46,52" fill="url(#gStar${t})"/>`;
+                svg += `<circle cx="50" cy="58" r="4" fill="#fff"/>`;
             } else if (t < 8) {
-                // Tier 6-7 (Diamond/Pink): Diamond + Pink Wings
-                // Wings Behind Base
-                svg += `<path d="M 25 50 Q 5 40 10 25 Q 15 45 25 55 Z" fill="${isLocked ? '#2D3345' : '#FBCFE8'}"/>`;
-                svg += `<path d="M 25 60 Q 0 50 5 35 Q 15 55 25 65 Z" fill="${isLocked ? '#1F2633' : '#FDA4AF'}"/>`;
-                svg += `<path d="M 75 50 Q 95 40 90 25 Q 85 45 75 55 Z" fill="${isLocked ? '#2D3345' : '#FBCFE8'}"/>`;
-                svg += `<path d="M 75 60 Q 100 50 95 35 Q 85 55 75 65 Z" fill="${isLocked ? '#1F2633' : '#FDA4AF'}"/>`;
-
-                svg += `<polygon points="50,22 80,38 80,72 50,88 20,72 20,38" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
-                svg += `<polygon points="50,27 75,42 75,68 50,83 25,68 25,42" fill="url(#gInner${t})"/>`;
-                // Big Diamond
-                svg += `<polygon points="50,32 65,55 50,78 35,55" fill="url(#gStar${t})"/>`;
-                svg += `<polygon points="50,32 58,55 50,78 42,55" fill="#fff" opacity="0.4"/>`;
-                
+                // Tier 6-7 (Mythic/Honor): Diamond + Pink Wings
+                svg += `<path d="M 25 55 Q 5 45 10 30 Q 15 50 25 60 Z" fill="${isLocked ? '#2D3345' : '#FBCFE8'}"/>`;
+                svg += `<path d="M 25 65 Q 0 55 5 40 Q 15 60 25 70 Z" fill="${isLocked ? '#1F2633' : '#FDA4AF'}"/>`;
+                svg += `<path d="M 75 55 Q 95 45 90 30 Q 85 50 75 60 Z" fill="${isLocked ? '#2D3345' : '#FBCFE8'}"/>`;
+                svg += `<path d="M 75 65 Q 100 55 95 40 Q 85 60 75 70 Z" fill="${isLocked ? '#1F2633' : '#FDA4AF'}"/>`;
+                svg += `<polygon points="50,27 80,43 80,77 50,93 20,77 20,43" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
+                svg += `<polygon points="50,32 75,47 75,73 50,88 25,73 25,47" fill="url(#gInner${t})"/>`;
+                svg += `<polygon points="50,37 65,60 50,83 35,60" fill="url(#gStar${t})"/>`;
+                svg += `<polygon points="50,37 58,60 50,83 42,60" fill="#fff" opacity="0.4"/>`;
             } else {
-                // Tier 8-9 (Champion/Trophy): Trophy + Massive Gold Wings
-                // Gold Wings
-                svg += `<path d="M 25 50 Q 5 20 15 10 Q 20 30 30 45 Z" fill="${isLocked ? '#2D3345' : 'url(#gGold)'}"/>`;
-                svg += `<path d="M 25 65 Q -5 30 5 20 Q 15 45 25 55 Z" fill="${isLocked ? '#1F2633' : '#CA8A04'}"/>`;
-                svg += `<path d="M 75 50 Q 95 20 85 10 Q 80 30 70 45 Z" fill="${isLocked ? '#2D3345' : 'url(#gGold)'}"/>`;
-                svg += `<path d="M 75 65 Q 105 30 95 20 Q 85 45 75 55 Z" fill="${isLocked ? '#1F2633' : '#CA8A04'}"/>`;
-
-                svg += `<polygon points="50,25 80,40 80,75 50,90 20,75 20,40" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
-                // Golden Trophy
+                // Tier 8-9 (Glory/Immortal): Trophy + Massive Gold Wings
+                svg += `<path d="M 25 55 Q 5 25 15 15 Q 20 35 30 50 Z" fill="${isLocked ? '#2D3345' : 'url(#gGold)'}"/>`;
+                svg += `<path d="M 25 70 Q -5 35 5 25 Q 15 50 25 60 Z" fill="${isLocked ? '#1F2633' : '#CA8A04'}"/>`;
+                svg += `<path d="M 75 55 Q 95 25 85 15 Q 80 35 70 50 Z" fill="${isLocked ? '#2D3345' : 'url(#gGold)'}"/>`;
+                svg += `<path d="M 75 70 Q 105 35 95 25 Q 85 50 75 60 Z" fill="${isLocked ? '#1F2633' : '#CA8A04'}"/>`;
+                svg += `<polygon points="50,30 80,45 80,80 50,95 20,80 20,45" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
                 const gold = isLocked ? '#3B4252' : 'url(#gGold)';
-                svg += `<path d="M 38 40 L 62 40 L 56 60 L 44 60 Z" fill="${gold}"/>`;
-                svg += `<rect x="46" y="60" width="8" height="12" fill="${gold}"/>`;
-                svg += `<rect x="35" y="72" width="30" height="6" fill="${gold}"/>`;
-                // Trophy handles
-                svg += `<path d="M 38 40 Q 30 40 30 50 Q 30 60 42 50" fill="none" stroke="${gold}" stroke-width="3"/>`;
-                svg += `<path d="M 62 40 Q 70 40 70 50 Q 70 60 58 50" fill="none" stroke="${gold}" stroke-width="3"/>`;
-                if(!isLocked) svg += `<polygon points="50,45 52,50 57,50 53,53 55,58 50,55 45,58 47,53 43,50 48,50" fill="#fff"/>`;
-            }
-
-            // Lower Banner Text Overlay (To give it the complete card feel)
-            if(!isLocked) {
-                svg += `<path d="M 15 85 L 85 85 L 90 95 L 50 100 L 10 95 Z" fill="#0F111A" stroke="${cMain}" stroke-width="1"/>`;
-                // Use substring to fit text inside the tiny banner
-                const shortName = rank.name.length > 10 ? rank.name.substring(0,9) + '..' : rank.name;
-                svg += `<text x="50" y="93" fill="#fff" font-size="8" font-family="sans-serif" font-weight="bold" text-anchor="middle" letter-spacing="0.5">${shortName.toUpperCase()}</text>`;
+                svg += `<path d="M 38 45 L 62 45 L 56 65 L 44 65 Z" fill="${gold}"/>`;
+                svg += `<rect x="46" y="65" width="8" height="12" fill="${gold}"/>`;
+                svg += `<rect x="35" y="77" width="30" height="6" fill="${gold}"/>`;
+                svg += `<path d="M 38 45 Q 30 45 30 55 Q 30 65 42 55" fill="none" stroke="${gold}" stroke-width="3"/>`;
+                svg += `<path d="M 62 45 Q 70 45 70 55 Q 70 65 58 55" fill="none" stroke="${gold}" stroke-width="3"/>`;
+                if(!isLocked) svg += `<polygon points="50,50 52,55 57,55 53,58 55,63 50,60 45,63 47,58 43,55 48,55" fill="#fff"/>`;
             }
 
             svg += `</svg>`;
             return svg;
         };
 
-        // RANKS: Mapped to 1st Photo (Silver, Gold, Plat, Diamond, Champion)
-        const Ranks = [
-            { tier: 0, name: "Warrior", req: 0, cMain: "#94A3B8", cInner: "#475569", cStar: "#FFFFFF", ribbon: "#475569" },
-            { tier: 1, name: "Elite", req: 2000, cMain: "#94A3B8", cInner: "#475569", cStar: "#FFFFFF", ribbon: "#475569" },
-            { tier: 2, name: "Master", req: 7000, cMain: "#EAB308", cInner: "#A16207", cStar: "#FEF08A", ribbon: "#CA8A04" },
-            { tier: 3, name: "Grand Master", req: 15000, cMain: "#EAB308", cInner: "#A16207", cStar: "#FEF08A", ribbon: "#CA8A04" },
-            { tier: 4, name: "Epic", req: 30000, cMain: "#A855F7", cInner: "#6B21A8", cStar: "#D8B4FE", ribbon: "#9333EA" },
-            { tier: 5, name: "Legend", req: 55000, cMain: "#A855F7", cInner: "#6B21A8", cStar: "#D8B4FE", ribbon: "#9333EA" },
-            { tier: 6, name: "Mythic", req: 90000, cMain: "#E11D48", cInner: "#9F1239", cStar: "#FDA4AF", ribbon: "#E11D48" },
-            { tier: 7, name: "Mythical Honor", req: 140000, cMain: "#E11D48", cInner: "#9F1239", cStar: "#FDA4AF", ribbon: "#E11D48" },
-            { tier: 8, name: "Mythical Glory", req: 200000, cMain: "#FEF08A", cInner: "#E11D48", cStar: "#CA8A04", ribbon: "#E11D48" },
-            { tier: 9, name: "Immortal", req: 300000, cMain: "#FEF08A", cInner: "#E11D48", cStar: "#CA8A04", ribbon: "#E11D48" }
+        // --- SUB-LEVEL PROGRESSION LOGIC (I, II, III for every rank) ---
+        const MajorRanksConfig = [
+            { major: "Warrior", t: 0, cMain: "#E28743", cInner: "#8A4B1A", cStar: "#FFD0A6", reqs: [0, 500, 1000] },
+            { major: "Elite", t: 1, cMain: "#94A3B8", cInner: "#475569", cStar: "#FFFFFF", reqs: [1500, 3000, 4500] },
+            { major: "Master", t: 2, cMain: "#FACC15", cInner: "#A16207", cStar: "#FEF08A", reqs: [6500, 9000, 12000] },
+            { major: "Grand Master", t: 3, cMain: "#2DD4BF", cInner: "#0369A1", cStar: "#CFFAFE", reqs: [15000, 20000, 25000] },
+            { major: "Epic", t: 4, cMain: "#4ADE80", cInner: "#14532D", cStar: "#BBF7D0", reqs: [32000, 40000, 48000] },
+            { major: "Legend", t: 5, cMain: "#F472B6", cInner: "#9F1239", cStar: "#FCE7F3", reqs: [58000, 70000, 85000] },
+            { major: "Mythic", t: 6, cMain: "#A855F7", cInner: "#581C87", cStar: "#E9D5FF", reqs: [105000, 125000, 145000] },
+            { major: "Mythical Honor", t: 7, cMain: "#3B82F6", cInner: "#1E3A8A", cStar: "#DBEAFE", reqs: [170000, 200000, 230000] },
+            { major: "Mythical Glory", t: 8, cMain: "#EF4444", cInner: "#7F1D1D", cStar: "#FECACA", reqs: [270000, 310000, 350000] },
+            { major: "Immortal", t: 9, cMain: "#D4FF00", cInner: "#4D7C0F", cStar: "#ECFCCB", reqs: [400000, 450000, 500000] }
         ];
+
+        // Flatten to 30 Sub-Ranks for easy XP calculation
+        const Ranks = [];
+        MajorRanksConfig.forEach(mr => {
+            mr.reqs.forEach((req, idx) => {
+                Ranks.push({
+                    tier: mr.t, major: mr.major, sub: idx + 1, numeral: ['I', 'II', 'III'][idx],
+                    name: `${mr.major} ${['I', 'II', 'III'][idx]}`,
+                    req: req, cMain: mr.cMain, cInner: mr.cInner, cStar: mr.cStar
+                });
+            });
+        });
 
         let state = { 
             xp: 0, items: [], goals: [], categories: ["Morning", "Afternoon", "Evening", "Physical Training", "Academics"],
@@ -459,7 +469,7 @@
 
         const App = {
             init: () => {
-                const saved = localStorage.getItem('critiqueV11');
+                const saved = localStorage.getItem('critiqueV12');
                 if (saved) state = JSON.parse(saved);
                 else {
                     state.items = [
@@ -474,10 +484,7 @@
                 viewingDate = App.getTodayReal();
                 currentRankIndex = App.calculateRankIndex(state.xp);
                 
-                App.updateCategories();
-                CalendarUI.init();
-                UI.render();
-                UI.renderChart();
+                App.updateCategories(); CalendarUI.init(); UI.render(); UI.renderChart();
                 
                 document.addEventListener("visibilitychange", () => { if (document.hidden && Timer.isRunning) Timer.failProtocol(); });
             },
@@ -487,9 +494,7 @@
             
             toggleItem: (id, event) => {
                 AudioSys.init();
-                const item = state.items.find(i => i.id === id);
-                if (!item) return;
-
+                const item = state.items.find(i => i.id === id); if (!item) return;
                 const index = item.history.indexOf(viewingDate);
                 if (index > -1) {
                     item.history.splice(index, 1);
@@ -501,24 +506,19 @@
                     state.xpHistory[viewingDate] = (state.xpHistory[viewingDate] || 0) + Number(item.xpReward);
                     AudioSys.playConquerDing();
                 }
-                
-                App.checkLevelUp();
-                localStorage.setItem('critiqueV11', JSON.stringify(state));
-                UI.render();
-                if(chartInstance) UI.renderChart();
+                App.checkLevelUp(); localStorage.setItem('critiqueV12', JSON.stringify(state));
+                UI.render(); if(chartInstance) UI.renderChart();
                 if(document.getElementById('tab-calendar').classList.contains('active')) CalendarUI.renderSchedule(viewingDate);
             },
             toggleGoal: (id) => {
                 AudioSys.init(); const goal = state.goals.find(g => g.id === id);
                 if(goal) { goal.done = !goal.done; if(goal.done) AudioSys.playConquerDing(); }
-                localStorage.setItem('critiqueV11', JSON.stringify(state)); UI.render();
+                localStorage.setItem('critiqueV12', JSON.stringify(state)); UI.render();
             },
             checkLevelUp: () => {
                 const newRank = App.calculateRankIndex(state.xp);
                 if (newRank > currentRankIndex) {
-                    currentRankIndex = newRank; 
-                    AudioSys.playLevelUpEpic(); 
-                    UI.showLevelUp(Ranks[newRank]);
+                    currentRankIndex = newRank; AudioSys.playLevelUpEpic(); UI.showLevelUp(Ranks[newRank]);
                 }
             },
             saveItem: () => {
@@ -536,18 +536,14 @@
                 if (id) {
                     const item = state.items.find(i => i.id === id);
                     item.text=text; item.type=type; item.date=date; item.time=time; item.xpReward=xp; item.category=cat;
-                } else {
-                    state.items.push({ id: Math.random().toString(), text, type, date, time, xpReward:xp, category:cat, history: [] });
-                }
+                } else { state.items.push({ id: Math.random().toString(), text, type, date, time, xpReward:xp, category:cat, history: [] }); }
                 
-                localStorage.setItem('critiqueV11', JSON.stringify(state));
-                UI.closeModal(); UI.render();
+                localStorage.setItem('critiqueV12', JSON.stringify(state)); UI.closeModal(); UI.render();
             },
             deleteItem: () => {
                 const id = document.getElementById('item-id').value;
                 state.items = state.items.filter(i => i.id !== id);
-                localStorage.setItem('critiqueV11', JSON.stringify(state));
-                UI.closeModal(); UI.render();
+                localStorage.setItem('critiqueV12', JSON.stringify(state)); UI.closeModal(); UI.render();
             },
             updateCategories: () => {
                 const dl = document.getElementById('cat-list'); dl.innerHTML = '';
@@ -562,18 +558,16 @@
                 }
             },
             exportData: () => {
-                const blob = new Blob([JSON.stringify(state)], {type: "application/json"});
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a'); a.href = url; a.download = `CritiqueV11_${App.getTodayReal()}.json`;
+                const blob = new Blob([JSON.stringify(state)], {type: "application/json"}); const url = URL.createObjectURL(blob);
+                const a = document.createElement('a'); a.href = url; a.download = `CritiqueV12_${App.getTodayReal()}.json`;
                 a.click(); URL.revokeObjectURL(url);
             },
-            resetData: () => { if(confirm("INITIATE TOTAL WIPE? THIS CANNOT BE UNDONE.")) { localStorage.removeItem('critiqueV11'); location.reload(); } }
+            resetData: () => { if(confirm("INITIATE TOTAL WIPE? THIS CANNOT BE UNDONE.")) { localStorage.removeItem('critiqueV12'); location.reload(); } }
         };
 
         // --- CALENDAR UI ---
         const CalendarUI = {
-            currentMonth: new Date().getMonth(),
-            currentYear: new Date().getFullYear(),
+            currentMonth: new Date().getMonth(), currentYear: new Date().getFullYear(),
             init: () => { CalendarUI.renderMonth(); CalendarUI.renderSchedule(App.getTodayReal()); },
             changeMonth: (dir) => {
                 CalendarUI.currentMonth += dir;
@@ -605,8 +599,7 @@
                 }
             },
             renderSchedule: (dateStr) => {
-                const dObj = new Date(dateStr);
-                const isToday = dateStr === App.getTodayReal();
+                const dObj = new Date(dateStr); const isToday = dateStr === App.getTodayReal();
                 document.getElementById('schedule-date-title').innerText = isToday ? "Today's Timeline" : dObj.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
                 
                 let dayItems = state.items.filter(i => i.date === dateStr || i.history.includes(dateStr) || (i.type !== 'task')); 
@@ -615,10 +608,7 @@
                 const timeline = document.getElementById('schedule-timeline');
                 Array.from(timeline.children).forEach(c => { if(!c.classList.contains('timeline-line')) c.remove(); });
 
-                if(dayItems.length === 0) {
-                    timeline.innerHTML += `<div class="text-center text-gray-500 py-10 italic">No missions scheduled.</div>`;
-                    return;
-                }
+                if(dayItems.length === 0) { timeline.innerHTML += `<div class="text-center text-gray-500 py-10 italic">No missions scheduled.</div>`; return; }
 
                 dayItems.forEach(item => {
                     const isDone = item.history.includes(dateStr);
@@ -627,21 +617,16 @@
                     const cardStyle = isDone ? 'border-[var(--accent)]/30 bg-[var(--accent)]/10' : 'border-[#232838] bg-[var(--card)]';
                     const textStyle = isDone ? 'text-gray-500 line-through' : 'text-white';
 
-                    const el = document.createElement('div');
-                    el.className = "flex items-start gap-4 mb-4 relative z-10 w-full";
+                    const el = document.createElement('div'); el.className = "flex items-start gap-4 mb-4 relative z-10 w-full";
                     el.innerHTML = `
                         <div class="w-14 text-right pt-2 text-[10px] font-bold text-gray-400 leading-tight">${timeStr.replace(' ', '<br>')}</div>
                         <div class="mt-2 w-3 h-3 rounded-full ${dotColor} border-2 border-[#0F111A] shrink-0"></div>
                         <div class="flex-1 rounded-[24px] p-4 border ${cardStyle} transition-all flex items-center justify-between" onclick="App.toggleItem('${item.id}', event)">
                             <div class="flex items-center gap-4">
                                 <input type="checkbox" class="habit-checkbox w-5 h-5 border-[1px]" ${isDone ? 'checked' : ''} style="width:22px;height:22px;" onclick="event.stopPropagation(); App.toggleItem('${item.id}', event)">
-                                <div>
-                                    <div class="text-sm font-bold ${textStyle}">${item.text}</div>
-                                    <div class="text-[10px] font-black text-[var(--accent)] mt-1 uppercase tracking-widest">${item.category}</div>
-                                </div>
+                                <div><div class="text-sm font-bold ${textStyle}">${item.text}</div><div class="text-[10px] font-black text-[var(--accent)] mt-1 uppercase tracking-widest">${item.category}</div></div>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                     timeline.appendChild(el);
                 });
             }
@@ -650,10 +635,7 @@
         // --- TIMER ---
         const Timer = {
             timeLeft: 25 * 60, interval: null, isRunning: false,
-            setCustom: () => {
-                const val = parseInt(document.getElementById('custom-time').value);
-                if(val > 0) { Timer.timeLeft = val * 60; Timer.updateDisplay(); }
-            },
+            setCustom: () => { const val = parseInt(document.getElementById('custom-time').value); if(val > 0) { Timer.timeLeft = val * 60; Timer.updateDisplay(); } },
             toggle: () => {
                 const btn = document.getElementById('timer-btn');
                 if (Timer.isRunning) {
@@ -664,10 +646,7 @@
                     if ("Notification" in window && Notification.permission === "granted") new Notification("Deep Focus", { body: "Lockdown initiated." });
                     Timer.interval = setInterval(() => {
                         Timer.timeLeft--; Timer.updateDisplay();
-                        if (Timer.timeLeft <= 0) {
-                            clearInterval(Timer.interval); Timer.isRunning = false; 
-                            alert("Session Conquered!"); Timer.toggle();
-                        }
+                        if (Timer.timeLeft <= 0) { clearInterval(Timer.interval); Timer.isRunning = false; alert("Session Conquered!"); Timer.toggle(); }
                     }, 1000);
                     btn.innerText = "Abandon Protocol (Fail)"; btn.classList.replace('bg-[var(--accent)]', 'bg-[#FF3B30]'); btn.classList.replace('text-[#0F111A]', 'text-white');
                 }
@@ -686,23 +665,16 @@
             }
         };
 
-        // --- UI SYSTEM & FLOATING NAV LOGIC ---
+        // --- UI SYSTEM ---
         const Navigation = {
             switchTab: (tabId) => {
                 document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
                 document.querySelectorAll('.nav-btn').forEach(btn => {
-                    const iconBg = btn.querySelector('.nav-icon-bg');
-                    const icon = btn.querySelector('i');
+                    const iconBg = btn.querySelector('.nav-icon-bg'); const icon = btn.querySelector('i');
                     if (btn.dataset.target === tabId) {
-                        btn.classList.add('active');
-                        iconBg.classList.add('bg-[var(--accent)]', 'text-[#0F111A]');
-                        iconBg.classList.remove('text-gray-400');
-                        icon.classList.replace('ph-bold', 'ph-fill');
+                        btn.classList.add('active'); iconBg.classList.add('bg-[var(--accent)]', 'text-[#0F111A]'); iconBg.classList.remove('text-gray-400'); icon.classList.replace('ph-bold', 'ph-fill');
                     } else {
-                        btn.classList.remove('active');
-                        iconBg.classList.remove('bg-[var(--accent)]', 'text-[#0F111A]');
-                        iconBg.classList.add('text-gray-400');
-                        icon.classList.replace('ph-fill', 'ph-bold');
+                        btn.classList.remove('active'); iconBg.classList.remove('bg-[var(--accent)]', 'text-[#0F111A]'); iconBg.classList.add('text-gray-400'); icon.classList.replace('ph-fill', 'ph-bold');
                     }
                 });
                 document.getElementById(`tab-${tabId}`).classList.add('active');
@@ -714,101 +686,96 @@
             render: () => {
                 const isToday = viewingDate === App.getTodayReal();
                 document.getElementById('header-title').innerText = isToday ? "Today's Plan" : "Historical Record";
-                const dObj = new Date(viewingDate);
-                document.getElementById('current-date-text').innerText = dObj.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+                const dObj = new Date(viewingDate); document.getElementById('current-date-text').innerText = dObj.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
 
                 const activeItems = state.items.filter(i => i.type === 'priority' || i.type === 'habit' || i.date === viewingDate || i.history.includes(viewingDate));
                 activeItems.sort((a,b) => (a.time || '00:00').localeCompare(b.time || '00:00'));
-
                 const priorities = activeItems.filter(i => i.type === 'priority');
                 const regular = activeItems.filter(i => i.type !== 'priority');
                 
                 const prioList = document.getElementById('priority-list'); prioList.innerHTML = '';
                 let doneToday = 0; let totalToday = activeItems.length;
 
-                priorities.forEach(item => {
-                    const isDone = item.history.includes(viewingDate); if(isDone) doneToday++;
-                    prioList.innerHTML += UI.generateItemHTML(item, isDone, true);
-                });
+                priorities.forEach(item => { const isDone = item.history.includes(viewingDate); if(isDone) doneToday++; prioList.innerHTML += UI.generateItemHTML(item, isDone, true); });
 
-                let grouped = {};
-                regular.forEach(i => { if(!grouped[i.category]) grouped[i.category] = []; grouped[i.category].push(i); });
-                
+                let grouped = {}; regular.forEach(i => { if(!grouped[i.category]) grouped[i.category] = []; grouped[i.category].push(i); });
                 const container = document.getElementById('habit-list-container'); container.innerHTML = '';
                 Object.keys(grouped).forEach(cat => {
-                    const sec = document.createElement('div');
-                    sec.innerHTML = `<h3 class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2"><i class="ph-fill ph-circles-four text-gray-600"></i> ${cat}</h3>`;
+                    const sec = document.createElement('div'); sec.innerHTML = `<h3 class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2"><i class="ph-fill ph-circles-four text-gray-600"></i> ${cat}</h3>`;
                     const list = document.createElement('div'); list.className = "space-y-4 mb-8";
-                    grouped[cat].forEach(item => {
-                        const isDone = item.history.includes(viewingDate); if(isDone) doneToday++;
-                        list.innerHTML += UI.generateItemHTML(item, isDone, false);
-                    });
+                    grouped[cat].forEach(item => { const isDone = item.history.includes(viewingDate); if(isDone) doneToday++; list.innerHTML += UI.generateItemHTML(item, isDone, false); });
                     sec.appendChild(list); container.appendChild(sec);
                 });
 
                 document.getElementById('task-ratio').innerText = `${doneToday}/${totalToday} Missions`;
                 const progressPct = totalToday === 0 ? 0 : (doneToday / totalToday) * 100;
                 document.getElementById('home-ring-text').innerText = `${Math.round(progressPct)}%`;
-                const circle = document.getElementById('home-ring');
-                circle.style.strokeDashoffset = (40 * 2 * Math.PI) - (progressPct / 100) * (40 * 2 * Math.PI);
+                const circle = document.getElementById('home-ring'); circle.style.strokeDashoffset = (40 * 2 * Math.PI) - (progressPct / 100) * (40 * 2 * Math.PI);
                 document.getElementById('dash-xp').innerText = `${state.xp.toLocaleString()} XP`;
 
                 const streakRow = document.getElementById('streak-row'); streakRow.innerHTML = '';
-                const todayObj = new Date(viewingDate); const currentDay = todayObj.getDay();
-                const days = ['S','M','T','W','T','F','S'];
+                const todayObj = new Date(viewingDate); const currentDay = todayObj.getDay(); const days = ['S','M','T','W','T','F','S'];
                 for(let i=0; i<7; i++) {
-                    const d = new Date(todayObj); d.setDate(todayObj.getDate() - currentDay + i);
-                    const dStr = d.toLocaleDateString('en-CA');
+                    const d = new Date(todayObj); d.setDate(todayObj.getDate() - currentDay + i); const dStr = d.toLocaleDateString('en-CA');
                     const isActive = state.items.some(h => h.history.includes(dStr));
-                    
-                    let cls = "streak-pill";
-                    if(isActive) cls += " active";
-                    if(dStr === viewingDate) cls += " selected";
-                    
+                    let cls = "streak-pill " + (isActive ? "active" : "") + (dStr === viewingDate ? " selected" : "");
                     streakRow.innerHTML += `<div onclick="App.viewDate('${dStr}')" class="${cls}">${days[i]}</div>`;
                 }
 
-                // --- PROGRESS TAB: PK LEVELS LAYOUT (MATCHING 1ST PHOTO) ---
+                // --- PROGRESS TAB: TOP CENTERPIECE & SUB-LEVEL STARS ---
                 const rank = Ranks[currentRankIndex];
                 const nextRank = Ranks[currentRankIndex + 1] || rank;
                 
+                document.getElementById('prog-badge-main').innerHTML = SVGBadge(rank, 200); 
                 document.getElementById('prog-rank').innerText = rank.name;
                 document.getElementById('prog-rank').style.color = rank.cMain;
                 document.getElementById('prog-xp').innerText = state.xp.toLocaleString();
                 document.getElementById('prog-next').innerText = nextRank.req.toLocaleString();
+                
                 let pct = nextRank.req > rank.req ? ((state.xp - rank.req) / (nextRank.req - rank.req)) * 100 : 100;
                 document.getElementById('prog-bar').style.width = `${Math.min(100, Math.max(0, pct))}%`;
 
+                // Render Sub-Level Stars (I, II, III) for Centerpiece
+                const starsContainer = document.getElementById('prog-stars'); starsContainer.innerHTML = '';
+                for(let i=1; i<=3; i++) {
+                    let starClass = i <= rank.sub ? 'star-lit' : 'star-dim';
+                    starsContainer.innerHTML += `<i class="ph-fill ph-star ${starClass}"></i>`;
+                }
+
+                // --- CARDS (10 Major Ranks) ---
                 const ladder = document.getElementById('ladder-container'); ladder.innerHTML = '';
                 
-                // Render Wide Cards for All Ranks (Like 1st Photo)
-                Ranks.forEach((r, idx) => {
-                    const isUnlocked = state.xp >= r.req;
-                    const isCurrent = currentRankIndex === idx;
-                    
-                    // Card Styling
-                    let cardBorder = isCurrent ? `border-[var(--accent)] shadow-[0_0_15px_rgba(212,255,0,0.15)]` : `border-white/5`;
-                    let opacity = isUnlocked ? 'opacity-100' : 'opacity-60 grayscale-[50%]';
-                    let nameColor = isUnlocked ? '#fff' : '#6B7280';
-                    let xpColor = isUnlocked ? 'text-[var(--accent)]' : 'text-gray-500';
+                MajorRanksConfig.forEach((mr) => {
+                    // Find how many sub-levels unlocked for this Major Rank
+                    const unlockedSubs = Ranks.filter(r => r.major === mr.major && state.xp >= r.req).length;
+                    const isCurrentMajor = rank.major === mr.major;
+                    const isFullyUnlocked = unlockedSubs === 3;
+                    const isLocked = unlockedSubs === 0;
+
+                    let cardBorder = isCurrentMajor ? `border-[var(--accent)] shadow-[0_0_15px_rgba(212,255,0,0.15)]` : `border-white/5`;
+                    let opacity = isLocked ? 'opacity-50 grayscale' : 'opacity-100';
+                    let nameColor = isLocked ? '#6B7280' : mr.cMain;
+
+                    // Generate mini stars for the card
+                    let cardStars = '';
+                    for(let i=1; i<=3; i++) {
+                        cardStars += `<i class="ph-fill ph-star ${i <= unlockedSubs ? 'text-[var(--accent)] drop-shadow-[0_0_5px_var(--accent)]' : 'text-[#2D3345]'} text-xs"></i>`;
+                    }
+
+                    // Render the Base Tier 1 badge for this major rank to show on the card
+                    const cardBadgeObj = Ranks.find(r => r.major === mr.major && r.sub === 1);
 
                     ladder.innerHTML += `
-                        <div class="bg-[var(--card)] rounded-xl p-5 mb-5 flex items-center justify-between border ${cardBorder} ${opacity} relative overflow-hidden transition-all duration-300">
-                            <!-- Geometric Background Slash -->
+                        <div class="bg-[var(--card)] rounded-xl p-5 flex items-center justify-between border ${cardBorder} ${opacity} relative overflow-hidden transition-all duration-300">
                             <div class="absolute -left-6 top-0 bottom-0 w-2/3 bg-white/5 skew-x-[-20deg]"></div>
-                            
                             <div class="relative z-10 flex flex-col justify-center">
-                                <h3 class="text-xl font-black mb-1 tracking-wide flex items-center gap-2" style="color: ${nameColor};">
-                                    ${r.name} <span class="text-xs text-gray-600 font-normal">>></span>
-                                </h3>
-                                <div class="bg-black/30 px-3 py-1 rounded-md inline-block w-max mt-1 border border-white/5">
-                                    <span class="text-xs font-bold ${xpColor}">${r.req.toLocaleString()} XP</span>
+                                <h3 class="text-xl font-black mb-1 tracking-wide" style="color: ${nameColor};">${mr.major}</h3>
+                                <div class="flex gap-1 mb-2">${cardStars}</div>
+                                <div class="bg-black/30 px-3 py-1 rounded-md inline-block w-max border border-white/5">
+                                    <span class="text-xs font-bold ${isLocked ? 'text-gray-500' : 'text-white'}">${mr.reqs[0].toLocaleString()} XP</span>
                                 </div>
                             </div>
-
-                            <div class="relative z-10 -my-2 mr-2">
-                                ${SVGBadge(r, 80, !isUnlocked)}
-                            </div>
+                            <div class="relative z-10 -my-2 mr-2">${SVGBadge(cardBadgeObj, 80, isLocked)}</div>
                         </div>`;
                 });
 
@@ -878,7 +845,7 @@
                 setTimeout(() => { backdrop.classList.add('hidden'); modal.classList.add('hidden'); }, 300);
             },
 
-            // EXACT MATCH LEVEL UP SEQUENCE (From Photo 1 & Video 1)
+            // EXACT MATCH LEVEL UP SEQUENCE
             showLevelUp: (rank) => {
                 const screen = document.getElementById('level-up-screen');
                 const content = document.getElementById('level-up-content');
@@ -890,6 +857,12 @@
                 document.getElementById('new-rank-name').innerText = rank.name;
                 document.getElementById('new-rank-name').style.color = rank.cMain;
                 
+                // Show stars for sub-level in level up animation
+                const stars = document.getElementById('new-rank-stars'); stars.innerHTML = '';
+                for(let i=1; i<=3; i++) {
+                    stars.innerHTML += `<i class="ph-fill ph-star ${i <= rank.sub ? 'star-lit text-[var(--accent)]' : 'star-dim'}"></i>`;
+                }
+
                 screen.classList.remove('hidden'); screen.classList.add('flex');
                 
                 [flash, energy, shockwave, content].forEach(el => {
@@ -902,9 +875,9 @@
             },
             addGoal: () => {
                 const text = prompt("Enter new strategic goal:");
-                if(text) { state.goals.push({id: Math.random().toString(), text, done: false}); localStorage.setItem('critiqueV11', JSON.stringify(state)); UI.render(); }
+                if(text) { state.goals.push({id: Math.random().toString(), text, done: false}); localStorage.setItem('critiqueV12', JSON.stringify(state)); UI.render(); }
             },
-            deleteGoal: (id) => { state.goals = state.goals.filter(g => g.id !== id); localStorage.setItem('critiqueV11', JSON.stringify(state)); UI.render(); },
+            deleteGoal: (id) => { state.goals = state.goals.filter(g => g.id !== id); localStorage.setItem('critiqueV12', JSON.stringify(state)); UI.render(); },
             
             renderChart: () => {
                 const ctx = document.getElementById('xpChart').getContext('2d');
@@ -928,3 +901,4 @@
     </script>
 </body>
 </html>
+
