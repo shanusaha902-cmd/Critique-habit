@@ -1,4 +1,4 @@
-  
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +33,7 @@
 
         .glass-card { background: var(--card); border: 1px solid rgba(255,255,255,0.03); }
         
-        /* Floating Pill Navigation (4 Tabs) */
+        /* Floating Pill Navigation */
         .floating-nav { 
             background: #13151F; border: 1px solid rgba(255,255,255,0.05); 
             border-radius: 40px; bottom: 15px; left: 5%; width: 90%; height: 75px; 
@@ -71,33 +71,16 @@
         /* --- THE ROYAL BANNER LEVEL UP SEQUENCE --- */
         .mask-banner { clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 92%, 0 100%); }
         
-        @keyframes bannerDrop {
-            0% { transform: translateY(-100%); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
+        @keyframes bannerDrop { 0% { transform: translateY(-100%); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
         .banner-drop-active { animation: bannerDrop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         
-        @keyframes badgeReveal {
-            0% { transform: scale(0.5) translateY(50px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
+        @keyframes badgeReveal { 0% { transform: scale(0.5) translateY(50px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
         .badge-reveal-active { opacity: 0; animation: badgeReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards; }
         
-        @keyframes lightSweep {
-            0% { left: -100%; }
-            100% { left: 200%; }
-        }
-        .banner-light-sweep {
-            position: absolute; top: 0; bottom: 0; width: 50%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: skewX(-20deg); animation: lightSweep 2s ease-in-out infinite; pointer-events: none;
-        }
+        @keyframes lightSweep { 0% { left: -100%; } 100% { left: 200%; } }
+        .banner-light-sweep { position: absolute; top: 0; bottom: 0; width: 50%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-20deg); animation: lightSweep 2s ease-in-out infinite; pointer-events: none; }
 
-        @keyframes floatParticle {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            20% { opacity: 1; transform: translateY(80vh) scale(1); }
-            100% { transform: translateY(-10vh) scale(0.5); opacity: 0; }
-        }
+        @keyframes floatParticle { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 20% { opacity: 1; transform: translateY(80vh) scale(1); } 100% { transform: translateY(-10vh) scale(0.5); opacity: 0; } }
         .lu-particle { position: absolute; background: #FEF08A; border-radius: 50%; box-shadow: 0 0 10px #EAB308; opacity: 0; animation: floatParticle 3s linear infinite; }
 
         .tab-content { display: none; animation: fadeIn 0.3s ease-out forwards; }
@@ -172,24 +155,19 @@
         <!-- ==================== TAB 3: PROGRESS ==================== -->
         <main id="tab-progress" class="tab-content px-5 pt-8">
             
-            <!-- Centerpiece: Floating Current Badge -->
             <div class="text-center mb-10 pt-2">
                 <p class="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Current Designation</p>
                 <div id="prog-badge-main" class="badge-centerpiece"></div>
                 <h2 id="prog-rank" class="text-4xl font-black text-white mb-3">Rank</h2>
                 
-                <!-- Sub-level Stars -->
                 <div id="prog-stars" class="flex justify-center gap-3 mb-4 text-2xl"></div>
                 
                 <p class="text-sm font-bold text-gray-400"><span id="prog-xp" class="text-[var(--accent)]">0</span> / <span id="prog-next">1000</span> XP to next tier</p>
                 <div class="w-64 h-3 bg-[#181B26] rounded-full mx-auto mt-4 overflow-hidden border border-white/5"><div id="prog-bar" class="h-full bg-[var(--accent)] w-0 transition-all duration-1000 shadow-[0_0_15px_var(--accent)]"></div></div>
             </div>
 
-            <!-- PK Level Style List (Major Ranks) -->
             <h3 class="text-xl font-black mb-6 border-b border-[#232838] pb-2">Levels of Membership</h3>
-            <div id="ladder-container" class="pb-10 space-y-5">
-                <!-- Cards Injected Here -->
-            </div>
+            <div id="ladder-container" class="pb-10 space-y-5"></div>
         </main>
 
         <!-- ==================== TAB 4: PROFILE ==================== -->
@@ -222,7 +200,7 @@
         <i class="ph-bold ph-plus"></i>
     </button>
 
-    <!-- FLOATING PILL NAVIGATION (4 TABS ONLY) -->
+    <!-- FLOATING PILL NAVIGATION (4 TABS) -->
     <nav class="fixed floating-nav flex justify-around items-center px-1 z-50">
         <button onclick="Navigation.switchTab('home')" class="nav-btn active flex items-center justify-center w-[25%] h-full" data-target="home">
             <div class="nav-icon-bg"><i class="ph-fill ph-house text-2xl"></i></div>
@@ -291,7 +269,7 @@
         <div class="lu-particle w-4 h-4" style="left: 80%; animation-delay: 1.5s;"></div>
 
         <div id="level-up-content" class="relative z-10 flex flex-col items-center w-full">
-            <div id="new-rank-icon" class="mb-6 drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] flex justify-center w-full"></div>
+            <div id="new-rank-icon" class="mb-6 drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]"></div>
             
             <h1 class="text-[var(--accent)] font-black text-5xl mb-2 tracking-widest uppercase drop-shadow-[0_0_10px_rgba(212,255,0,0.5)]">PROMOTED</h1>
             
@@ -304,6 +282,39 @@
     </div>
 
     <script>
+        // --- OFFLINE PWA ENGINE (GENERATES ICON & SERVICE WORKER) ---
+        const PWAEngine = {
+            init: () => {
+                // Generate Base64 High-Res Logo for Home Screen
+                const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#0F111A" rx="115"/><path d="M256 80 L420 160 L380 380 L256 460 L132 380 L92 160 Z" fill="#181B26" stroke="#D4FF00" stroke-width="24"/><polygon points="256,140 330,240 256,380 180,240" fill="#D4FF00"/><polygon points="256,140 256,380 180,240" fill="#A3C900"/></svg>`;
+                const base64Icon = "data:image/svg+xml;base64," + btoa(svgIcon);
+
+                const manifest = {
+                    name: "Critique Pro Max", short_name: "Critique", start_url: window.location.pathname,
+                    display: "standalone", background_color: "#0F111A", theme_color: "#D4FF00",
+                    icons: [{ src: base64Icon, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }]
+                };
+                
+                document.getElementById('manifest-link').setAttribute('href', 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest)));
+
+                // Install the Offline Service Worker
+                const swCode = `
+                    const CACHE = 'critique-v15';
+                    self.addEventListener('install', e => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c => c.addAll([location.pathname]))); });
+                    self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
+                    self.addEventListener('fetch', e => {
+                        e.respondWith(
+                            caches.match(e.request).then(res => res || fetch(e.request).then(fRes => {
+                                return caches.open(CACHE).then(c => { if(e.request.url.startsWith('http')) c.put(e.request, fRes.clone()); return fRes; });
+                            })).catch(() => caches.match(location.pathname))
+                        );
+                    });
+                `;
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(console.error);
+            }
+        };
+
         // --- AUDIO ENGINE ---
         const AudioSys = {
             ctx: null,
@@ -325,18 +336,13 @@
                 });
             },
             playLevelUpRoyal: () => {
-                // Royal Brass/Bell Fanfare matching the banner drop
                 AudioSys.init(); const now = AudioSys.ctx.currentTime;
-                
-                // Sweep
                 [261.63, 329.63, 392.00].forEach(freq => {
                     const osc = AudioSys.ctx.createOscillator(); const gain = AudioSys.ctx.createGain();
                     osc.type = 'sine'; osc.frequency.setValueAtTime(freq / 2, AudioSys.ctx.currentTime); 
                     gain.gain.setValueAtTime(0, AudioSys.ctx.currentTime); gain.gain.linearRampToValueAtTime(0.2, AudioSys.ctx.currentTime + 0.5); gain.gain.exponentialRampToValueAtTime(0.01, AudioSys.ctx.currentTime + 2.5);
                     osc.connect(gain).connect(AudioSys.ctx.destination); osc.start(); osc.stop(AudioSys.ctx.currentTime + 2.5);
                 });
-
-                // Triumphant Horns (C, E, G, High C)
                 [261.63, 329.63, 392.00, 523.25].forEach((freq, i) => {
                     setTimeout(() => {
                         const osc = AudioSys.ctx.createOscillator(); const gain = AudioSys.ctx.createGain();
@@ -349,22 +355,15 @@
             }
         };
 
-        // --- PROCEDURAL SVG MEDAL GENERATOR (With Unique Gradient IDs Fix) ---
+        // --- PROCEDURAL SVG MEDAL GENERATOR ---
         const SVGBadge = (rank, size = 120, isLocked = false) => {
             const t = rank.tier;
-            let cMain = rank.cMain; let cInner = rank.cInner; let cStar = rank.cStar; let stripe = rank.ribbon || rank.cMain;
-            
-            if (isLocked) {
-                cMain = "#2D3345"; cInner = "#1F2633"; cStar = "#3B4252"; stripe = "#2D3345";
-            }
+            let cMain = rank.cMain; let cInner = rank.cInner; let cStar = rank.cStar; let stripe = rank.ribbon;
+            if (isLocked) { cMain = "#2D3345"; cInner = "#1F2633"; cStar = "#3B4252"; stripe = "#2D3345"; }
 
-            // UNIQUE IDs PREVENT SVG RENDERING BUGS IN HIDDEN MODALS!
+            // UNIQUE IDs prevent Safari/Chrome SVG rendering bugs in hidden containers
             const uid = Math.random().toString(36).substr(2, 6);
-            const gMain = `gMain_${t}_${uid}`;
-            const gInner = `gInner_${t}_${uid}`;
-            const gStar = `gStar_${t}_${uid}`;
-            const gGold = `gGold_${uid}`;
-            const rGlow = `rGlow_${t}_${uid}`;
+            const gMain = `gMain_${t}_${uid}`; const gInner = `gInner_${t}_${uid}`; const gStar = `gStar_${t}_${uid}`; const gGold = `gGold_${uid}`; const rGlow = `rGlow_${t}_${uid}`;
 
             let svg = `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6)); overflow: visible;">
                 <defs>
@@ -375,66 +374,41 @@
                     <radialGradient id="${rGlow}" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="${cStar}" stop-opacity="1"/><stop offset="100%" stop-color="${cMain}" stop-opacity="0.2"/></radialGradient>
                 </defs>`;
 
-            // Inner Glow
             if(!isLocked) { svg += `<circle cx="50" cy="55" r="35" fill="url(#${rGlow})"/>`; }
 
-            // Ribbon
-            svg += `
-                <g transform="translate(38, -5)">
-                    <rect x="0" y="0" width="24" height="25" fill="${isLocked ? '#1F2633' : '#f8fafc'}"/>
-                    <rect x="4" y="0" width="4" height="25" fill="${stripe}"/>
-                    <rect x="10" y="0" width="4" height="25" fill="${stripe}"/>
-                    <rect x="16" y="0" width="4" height="25" fill="${stripe}"/>
-                    <polygon points="0,25 12,20 24,25 24,15 0,15" fill="${isLocked ? '#1F2633' : '#e2e8f0'}"/>
-                </g>`;
-                
-            // Medal connector ring
+            svg += `<g transform="translate(38, -5)"><rect x="0" y="0" width="24" height="25" fill="${isLocked ? '#1F2633' : '#f8fafc'}"/><rect x="4" y="0" width="4" height="25" fill="${stripe}"/><rect x="10" y="0" width="4" height="25" fill="${stripe}"/><rect x="16" y="0" width="4" height="25" fill="${stripe}"/><polygon points="0,25 12,20 24,25 24,15 0,15" fill="${isLocked ? '#1F2633' : '#e2e8f0'}"/></g>`;
             svg += `<circle cx="50" cy="18" r="4" fill="${isLocked ? '#2D3345' : '#fff'}" stroke="${cMain}" stroke-width="2"/>`;
 
             if (t < 2) {
-                // Tier 0-1 (Silver): Hexagon + 4-Point Star
                 svg += `<polygon points="50,22 80,38 80,72 50,88 20,72 20,38" fill="url(#${gMain})" stroke="#111" stroke-width="1.5"/>`;
                 svg += `<polygon points="50,27 75,42 75,68 50,83 25,68 25,42" fill="url(#${gInner})"/>`;
-                // 4-Point Star
                 svg += `<polygon points="50,35 58,52 75,55 58,58 50,75 42,58 25,55 42,52" fill="url(#${gStar})"/>`;
                 svg += `<polygon points="50,35 58,52 50,55 42,52" fill="#fff" opacity="0.6"/>`;
-                
             } else if (t < 4) {
-                // Tier 2-3 (Gold): Octagon + 8-Point Star
                 svg += `<polygon points="50,20 80,35 80,75 50,90 20,75 20,35" fill="url(#${gMain})" stroke="#111" stroke-width="1.5"/>`;
                 svg += `<polygon points="50,25 75,38 75,72 50,85 25,72 25,38" fill="url(#${gInner})"/>`;
-                // 8-Point Star
                 svg += `<path d="M50 35 L55 48 L68 50 L55 52 L50 65 L45 52 L32 50 L45 48 Z" fill="url(#${gStar})"/>`;
                 svg += `<path d="M42 42 L58 42 L58 58 L42 58 Z" fill="url(#${gStar})" transform="rotate(45 50 50)"/>`;
                 svg += `<circle cx="50" cy="50" r="5" fill="#EAB308"/>`;
-                
             } else if (t < 6) {
-                // Tier 4-5 (Platinum/Purple): Hexagon + 5-Point Star
                 svg += `<polygon points="50,22 80,38 80,72 50,88 20,72 20,38" fill="url(#${gMain})" stroke="#111" stroke-width="1.5"/>`;
                 svg += `<polygon points="50,27 75,42 75,68 50,83 25,68 25,42" fill="url(#${gInner})"/>`;
-                // 5-Point Star
                 svg += `<polygon points="50,35 54,47 68,47 56,55 60,68 50,60 40,68 44,55 32,47 46,47" fill="url(#${gStar})"/>`;
                 svg += `<circle cx="50" cy="53" r="4" fill="#3B82F6"/>`;
-
             } else if (t < 8) {
-                // Tier 6-7 (Diamond/Pink): Diamond + Pink Wings
                 svg += `<path d="M 25 50 Q 5 40 10 25 Q 15 45 25 55 Z" fill="${isLocked ? '#2D3345' : '#FBCFE8'}"/>`;
                 svg += `<path d="M 25 60 Q 0 50 5 35 Q 15 55 25 65 Z" fill="${isLocked ? '#1F2633' : '#FDA4AF'}"/>`;
                 svg += `<path d="M 75 50 Q 95 40 90 25 Q 85 45 75 55 Z" fill="${isLocked ? '#2D3345' : '#FBCFE8'}"/>`;
                 svg += `<path d="M 75 60 Q 100 50 95 35 Q 85 55 75 65 Z" fill="${isLocked ? '#1F2633' : '#FDA4AF'}"/>`;
-
                 svg += `<polygon points="50,22 80,38 80,72 50,88 20,72 20,38" fill="url(#${gMain})" stroke="#111" stroke-width="1.5"/>`;
                 svg += `<polygon points="50,27 75,42 75,68 50,83 25,68 25,42" fill="url(#${gInner})"/>`;
                 svg += `<polygon points="50,32 65,55 50,78 35,55" fill="url(#${gStar})"/>`;
                 svg += `<polygon points="50,32 58,55 50,78 42,55" fill="#fff" opacity="0.4"/>`;
-                
             } else {
-                // Tier 8-9 (Champion/Trophy): Trophy + Massive Gold Wings
                 svg += `<path d="M 25 50 Q 5 20 15 10 Q 20 30 30 45 Z" fill="${isLocked ? '#2D3345' : `url(#${gGold})`}"/>`;
                 svg += `<path d="M 25 65 Q -5 30 5 20 Q 15 45 25 55 Z" fill="${isLocked ? '#1F2633' : '#CA8A04'}"/>`;
                 svg += `<path d="M 75 50 Q 95 20 85 10 Q 80 30 70 45 Z" fill="${isLocked ? '#2D3345' : `url(#${gGold})`}"/>`;
                 svg += `<path d="M 75 65 Q 105 30 95 20 Q 85 45 75 55 Z" fill="${isLocked ? '#1F2633' : '#CA8A04'}"/>`;
-
                 svg += `<polygon points="50,25 80,40 80,75 50,90 20,75 20,40" fill="url(#${gMain})" stroke="#111" stroke-width="1.5"/>`;
                 const goldFill = isLocked ? '#3B4252' : `url(#${gGold})`;
                 svg += `<path d="M 38 40 L 62 40 L 56 60 L 44 60 Z" fill="${goldFill}"/>`;
@@ -445,7 +419,6 @@
                 if(!isLocked) svg += `<polygon points="50,45 52,50 57,50 53,53 55,58 50,55 45,58 47,53 43,50 48,50" fill="#fff"/>`;
             }
 
-            // Lower Banner Text Overlay
             if(!isLocked) {
                 svg += `<path d="M 15 85 L 85 85 L 90 95 L 50 100 L 10 95 Z" fill="#0F111A" stroke="${cMain}" stroke-width="1"/>`;
                 const shortName = rank.name.length > 10 ? rank.name.substring(0,9) + '..' : rank.name;
@@ -456,7 +429,6 @@
             return svg;
         };
 
-        // --- SUB-LEVEL PROGRESSION LOGIC (I, II, III for every rank) ---
         const MajorRanksConfig = [
             { major: "Warrior", t: 0, cMain: "#94A3B8", cInner: "#475569", cStar: "#FFFFFF", reqs: [0, 500, 1000], ribbon: "#475569" },
             { major: "Elite", t: 1, cMain: "#94A3B8", cInner: "#475569", cStar: "#FFFFFF", reqs: [1500, 3000, 4500], ribbon: "#475569" },
@@ -491,7 +463,8 @@
 
         const App = {
             init: () => {
-                const saved = localStorage.getItem('critiqueV14');
+                PWAEngine.init(); // Boot offline engine
+                const saved = localStorage.getItem('critiqueV15');
                 if (saved) state = JSON.parse(saved);
                 else {
                     state.items = [
@@ -521,14 +494,14 @@
                     item.history.push(viewingDate); state.xp += Number(item.xpReward); state.xpHistory[viewingDate] = (state.xpHistory[viewingDate] || 0) + Number(item.xpReward);
                     AudioSys.playConquerDing();
                 }
-                App.checkLevelUp(); localStorage.setItem('critiqueV14', JSON.stringify(state));
+                App.checkLevelUp(); localStorage.setItem('critiqueV15', JSON.stringify(state));
                 UI.render(); if(chartInstance) UI.renderChart();
                 if(document.getElementById('tab-calendar').classList.contains('active')) CalendarUI.renderSchedule(viewingDate);
             },
             toggleGoal: (id) => {
                 AudioSys.init(); const goal = state.goals.find(g => g.id === id);
                 if(goal) { goal.done = !goal.done; if(goal.done) AudioSys.playConquerDing(); }
-                localStorage.setItem('critiqueV14', JSON.stringify(state)); UI.render();
+                localStorage.setItem('critiqueV15', JSON.stringify(state)); UI.render();
             },
             checkLevelUp: () => {
                 const newRank = App.calculateRankIndex(state.xp);
@@ -553,12 +526,12 @@
                     item.text=text; item.type=type; item.date=date; item.time=time; item.xpReward=xp; item.category=cat;
                 } else { state.items.push({ id: Math.random().toString(), text, type, date, time, xpReward:xp, category:cat, history: [] }); }
                 
-                localStorage.setItem('critiqueV14', JSON.stringify(state)); UI.closeModal(); UI.render();
+                localStorage.setItem('critiqueV15', JSON.stringify(state)); UI.closeModal(); UI.render();
             },
             deleteItem: () => {
                 const id = document.getElementById('item-id').value;
                 state.items = state.items.filter(i => i.id !== id);
-                localStorage.setItem('critiqueV14', JSON.stringify(state)); UI.closeModal(); UI.render();
+                localStorage.setItem('critiqueV15', JSON.stringify(state)); UI.closeModal(); UI.render();
             },
             updateCategories: () => {
                 const dl = document.getElementById('cat-list'); dl.innerHTML = '';
@@ -574,13 +547,12 @@
             },
             exportData: () => {
                 const blob = new Blob([JSON.stringify(state)], {type: "application/json"}); const url = URL.createObjectURL(blob);
-                const a = document.createElement('a'); a.href = url; a.download = `CritiqueV14_${App.getTodayReal()}.json`;
+                const a = document.createElement('a'); a.href = url; a.download = `CritiqueV15_${App.getTodayReal()}.json`;
                 a.click(); URL.revokeObjectURL(url);
             },
-            resetData: () => { if(confirm("INITIATE TOTAL WIPE? THIS CANNOT BE UNDONE.")) { localStorage.removeItem('critiqueV14'); location.reload(); } }
+            resetData: () => { if(confirm("INITIATE TOTAL WIPE? THIS CANNOT BE UNDONE.")) { localStorage.removeItem('critiqueV15'); location.reload(); } }
         };
 
-        // --- CALENDAR UI ---
         const CalendarUI = {
             currentMonth: new Date().getMonth(), currentYear: new Date().getFullYear(),
             init: () => { CalendarUI.renderMonth(); CalendarUI.renderSchedule(App.getTodayReal()); },
@@ -647,7 +619,6 @@
             }
         };
 
-        // --- UI SYSTEM & FLOATING NAV LOGIC ---
         const Navigation = {
             switchTab: (tabId) => {
                 document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -704,7 +675,6 @@
                     streakRow.innerHTML += `<div onclick="App.viewDate('${dStr}')" class="${cls}">${days[i]}</div>`;
                 }
 
-                // --- PROGRESS TAB: TOP CENTERPIECE & SUB-LEVEL STARS ---
                 const rank = Ranks[currentRankIndex];
                 const nextRank = Ranks[currentRankIndex + 1] || rank;
                 
@@ -723,7 +693,6 @@
                     starsContainer.innerHTML += `<i class="ph-fill ph-star ${starClass}"></i>`;
                 }
 
-                // --- CARDS (Major Ranks) ---
                 const ladder = document.getElementById('ladder-container'); ladder.innerHTML = '';
                 
                 MajorRanksConfig.forEach((mr) => {
@@ -756,7 +725,6 @@
                         </div>`;
                 });
 
-                // Goals
                 const gc = document.getElementById('goals-container'); gc.innerHTML = '';
                 state.goals.forEach(g => {
                     gc.innerHTML += `
@@ -822,7 +790,6 @@
                 setTimeout(() => { backdrop.classList.add('hidden'); modal.classList.add('hidden'); }, 300);
             },
 
-            // --- REGAL ROYAL BANNER LEVEL UP SEQUENCE ---
             showLevelUp: (rank) => {
                 const screen = document.getElementById('level-up-screen');
                 const content = document.getElementById('level-up-content');
@@ -839,33 +806,25 @@
 
                 screen.classList.remove('hidden'); screen.classList.add('flex');
                 
-                [banner, content].forEach(el => {
-                    el.style.animation = 'none'; void el.offsetWidth; el.style.animation = null; 
-                });
-                
-                banner.classList.add('banner-drop-active');
-                content.classList.add('badge-reveal-active');
+                [banner, content].forEach(el => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = null; });
+                banner.classList.add('banner-drop-active'); content.classList.add('badge-reveal-active');
             },
             hideLevelUp: () => { 
-                const screen = document.getElementById('level-up-screen');
-                screen.classList.add('hidden'); screen.classList.remove('flex'); 
-                document.getElementById('lu-banner').classList.remove('banner-drop-active');
-                document.getElementById('level-up-content').classList.remove('badge-reveal-active');
+                const screen = document.getElementById('level-up-screen'); screen.classList.add('hidden'); screen.classList.remove('flex'); 
+                document.getElementById('lu-banner').classList.remove('banner-drop-active'); document.getElementById('level-up-content').classList.remove('badge-reveal-active');
             },
             addGoal: () => {
                 const text = prompt("Enter new strategic goal:");
-                if(text) { state.goals.push({id: Math.random().toString(), text, done: false}); localStorage.setItem('critiqueV14', JSON.stringify(state)); UI.render(); }
+                if(text) { state.goals.push({id: Math.random().toString(), text, done: false}); localStorage.setItem('critiqueV15', JSON.stringify(state)); UI.render(); }
             },
-            deleteGoal: (id) => { state.goals = state.goals.filter(g => g.id !== id); localStorage.setItem('critiqueV14', JSON.stringify(state)); UI.render(); },
+            deleteGoal: (id) => { state.goals = state.goals.filter(g => g.id !== id); localStorage.setItem('critiqueV15', JSON.stringify(state)); UI.render(); },
             
             renderChart: () => {
                 const ctx = document.getElementById('xpChart').getContext('2d');
                 const labels = []; const data = [];
                 for(let i=6; i>=0; i--) {
-                    const d = new Date(); d.setDate(d.getDate() - i);
-                    const dStr = d.toLocaleDateString('en-CA');
-                    labels.push(d.toLocaleDateString('en-US', {weekday:'short'}));
-                    data.push(state.xpHistory[dStr] || 0);
+                    const d = new Date(); d.setDate(d.getDate() - i); const dStr = d.toLocaleDateString('en-CA');
+                    labels.push(d.toLocaleDateString('en-US', {weekday:'short'})); data.push(state.xpHistory[dStr] || 0);
                 }
                 if(chartInstance) chartInstance.destroy();
                 chartInstance = new Chart(ctx, {
