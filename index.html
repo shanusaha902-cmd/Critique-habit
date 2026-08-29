@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,10 +13,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* DARK NEON LIME THEME (Matches 2nd Photo) */
+        /* DARK INDIGO THEME + NEON LIME ACCENT (From Previous Favorites) */
         :root { 
-            --bg: #0B0E14; 
-            --card: #151A22; 
+            --bg: #0F111A; 
+            --card: #181B26; 
             --accent: #D4FF00; /* Neon Lime */
             --accent-dark: #A3C900;
             --text: #F5F5F7; 
@@ -25,7 +26,7 @@
         
         @media (min-width: 768px) {
             body { display: flex; justify-content: center; background: #000; }
-            #app-container { width: 100%; max-w: 480px; background: var(--bg); min-height: 100vh; border-left: 1px solid #1F2633; border-right: 1px solid #1F2633; position: relative; }
+            #app-container { width: 100%; max-w: 480px; background: var(--bg); min-height: 100vh; border-left: 1px solid #232838; border-right: 1px solid #232838; position: relative; }
             .floating-nav { max-w: 440px; left: 50% !important; transform: translateX(-50%) !important; }
             .fab-btn { right: calc(50% - 200px) !important; bottom: 110px !important; }
         }
@@ -34,41 +35,25 @@
         
         /* Floating Pill Navigation */
         .floating-nav { 
-            background: #11151C; border: 1px solid rgba(255,255,255,0.05); 
+            background: #13151F; border: 1px solid rgba(255,255,255,0.05); 
             border-radius: 40px; bottom: 15px; left: 5%; width: 90%; height: 75px; 
             box-shadow: 0 20px 40px rgba(0,0,0,0.9); z-index: 50;
         }
         .nav-icon-bg { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-        .nav-btn.active .nav-icon-bg { background: var(--accent); color: #0B0E14; box-shadow: 0 0 15px rgba(212,255,0,0.4); }
+        .nav-btn.active .nav-icon-bg { background: var(--accent); color: #0F111A; box-shadow: 0 0 15px rgba(212,255,0,0.3); }
         .nav-btn:not(.active) .nav-icon-bg { background: transparent; color: #6B7280; }
         
         .progress-ring__circle { transition: stroke-dashoffset 0.5s ease-in-out; transform: rotate(-90deg); transform-origin: 50% 50%; }
         
         /* Interactive Checkbox */
-        .habit-checkbox { appearance: none; width: 26px; height: 26px; border: 2px solid #30363D; border-radius: 50%; background: transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .habit-checkbox { appearance: none; width: 26px; height: 26px; border: 2px solid #2D3345; border-radius: 50%; background: transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
         .habit-checkbox:checked { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px rgba(212, 255, 0, 0.4); transform: scale(1.1); }
-        .habit-checkbox:checked::after { content: '✓'; position: absolute; color: #0B0E14; font-size: 14px; font-weight: 900; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .habit-checkbox:checked::after { content: '✓'; position: absolute; color: #0F111A; font-size: 14px; font-weight: 900; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
         /* Streak Pills */
-        .streak-pill { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 12px; font-weight: 700; color: var(--gray); background: transparent; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
-        .streak-pill.active { background: var(--accent); color: #0B0E14; box-shadow: 0 0 10px rgba(212,255,0,0.3); }
-        .streak-pill.selected { border: 1px solid var(--accent); color: var(--text); }
-        .streak-pill:not(.active):not(.selected) { border: 1px solid #1F2633; }
-
-        /* 3D Floating Animation for Current Badge */
-        @keyframes majesticFloat3D {
-            0% { transform: translateY(0px) rotateX(5deg) rotateY(-5deg); filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8)); }
-            50% { transform: translateY(-20px) rotateX(-5deg) rotateY(5deg); filter: drop-shadow(0 35px 35px rgba(212,255,0,0.15)); }
-            100% { transform: translateY(0px) rotateX(5deg) rotateY(-5deg); filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8)); }
-        }
-        .badge-centerpiece { animation: majesticFloat3D 5s ease-in-out infinite; transform-style: preserve-3d; perspective: 1000px; display: flex; justify-content: center; margin-bottom: 1.5rem; margin-top: 1rem;}
-
-        /* Timeline Ladder (Matching 2nd Photo) */
-        .ladder-line-container { position: relative; padding-left: 1.5rem; }
-        .ladder-vertical-line { position: absolute; left: 6px; top: 30px; bottom: 30px; width: 2px; background: #1F2633; z-index: 0; }
-        .ladder-node { position: absolute; left: -19.5px; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border-radius: 50%; background: #1F2633; z-index: 10; transition: all 0.3s; }
-        .ladder-node.unlocked { background: var(--accent); box-shadow: 0 0 12px var(--accent); }
-        .ladder-node.current { background: #fff; box-shadow: 0 0 15px #fff; width: 14px; height: 14px; left: -21.5px; }
+        .streak-pill { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--gray); background: var(--card); border: 1px solid #232838; cursor: pointer; transition: all 0.2s; }
+        .streak-pill.active { background: var(--accent-dark); color: #0F111A; border-color: var(--accent-dark); }
+        .streak-pill.selected { border: 2px solid var(--accent); color: var(--text); }
 
         /* Epic Cosmic Level Up Sequence */
         .cosmic-bg {
@@ -86,11 +71,14 @@
         @keyframes badgeSlam { 0% { transform: scale(3); opacity: 0; filter: blur(10px); } 100% { transform: scale(1); opacity: 1; filter: blur(0px); } }
         .badge-slam-active { opacity: 0; animation: badgeSlam 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.5s forwards; }
 
+        @keyframes shockwave { 0% { transform: scale(0); opacity: 1; border-width: 20px; } 100% { transform: scale(3); opacity: 0; border-width: 0px; } }
+        .shockwave-ring { position: absolute; width: 250px; height: 250px; border-radius: 50%; border: solid var(--accent); opacity: 0; animation: shockwave 1s ease-out 1.5s forwards; }
+
         .tab-content { display: none; animation: fadeIn 0.3s ease-out forwards; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .timeline-line { position: absolute; left: 39px; top: 10px; bottom: 10px; width: 2px; background: #1F2633; z-index: 0; }
+        .timeline-line { position: absolute; left: 39px; top: 10px; bottom: 10px; width: 2px; background: #232838; z-index: 0; }
     </style>
 </head>
 <body class="antialiased">
@@ -102,20 +90,20 @@
             <header class="mb-6 flex justify-between items-start">
                 <div>
                     <h1 class="text-4xl font-black tracking-tight" id="header-title">Today's Plan</h1>
-                    <p id="current-date-text" class="text-sm font-semibold text-[var(--accent)] mt-1 cursor-pointer" onclick="Navigation.switchTab('calendar')">Select Date</p>
+                    <p id="current-date-text" class="text-sm font-semibold text-[var(--accent)] mt-1 cursor-pointer hover:underline" onclick="Navigation.switchTab('calendar')">Select Date</p>
                 </div>
-                <button onclick="App.requestNotifications()" class="w-10 h-10 rounded-full flex items-center justify-center text-[var(--accent)] hover:bg-[var(--card)] transition-colors"><i class="ph-fill ph-bell text-2xl"></i></button>
+                <button onclick="App.requestNotifications()" class="w-10 h-10 rounded-full flex items-center justify-center text-[var(--accent)] bg-[var(--card)] border border-white/5 transition-colors"><i class="ph-fill ph-bell text-xl"></i></button>
             </header>
 
             <div class="glass-card rounded-[32px] p-6 mb-8">
                 <div class="flex items-center gap-6 mb-6">
                     <div class="relative w-20 h-20">
-                        <svg class="w-20 h-20" viewBox="0 0 100 100"><circle class="text-[#1F2633] stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="home-ring" class="text-[var(--accent)] progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle></svg>
+                        <svg class="w-20 h-20" viewBox="0 0 100 100"><circle class="text-[#232838] stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="home-ring" class="text-[var(--accent)] progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle></svg>
                         <div id="home-ring-text" class="absolute inset-0 flex items-center justify-center font-black text-lg">0%</div>
                     </div>
                     <div>
-                        <div class="bg-[#1F2633] px-3 py-1 rounded-lg text-xs font-bold text-[var(--accent)] inline-block mb-1" id="task-ratio">0/0 Missions</div>
-                        <h2 class="text-2xl font-black text-white" id="dash-xp">0 XP</h2>
+                        <h2 class="text-2xl font-black mb-1 text-white" id="dash-xp">0 XP</h2>
+                        <div class="bg-[#232838] px-3 py-1 rounded-lg text-xs font-bold text-gray-300 inline-block" id="task-ratio">0/0 Missions</div>
                     </div>
                 </div>
                 <div class="flex justify-between items-center" id="streak-row"></div>
@@ -129,15 +117,15 @@
             <div id="habit-list-container" class="space-y-6"></div>
         </main>
 
-        <!-- ==================== TAB 2: SCHEDULE (CALENDAR) ==================== -->
+        <!-- ==================== TAB 2: SCHEDULE ==================== -->
         <main id="tab-calendar" class="tab-content px-5 pt-8">
             <h1 class="text-3xl font-black tracking-tight mb-6">Schedule</h1>
             
             <div class="glass-card rounded-[32px] p-5 mb-8">
                 <div class="flex justify-between items-center mb-4">
-                    <button onclick="CalendarUI.changeMonth(-1)" class="p-2 rounded-full bg-[#1F2633] text-white"><i class="ph-bold ph-caret-left"></i></button>
+                    <button onclick="CalendarUI.changeMonth(-1)" class="p-2 rounded-full bg-[#232838] text-white"><i class="ph-bold ph-caret-left"></i></button>
                     <h2 id="cal-month-year" class="font-bold text-base">Month Year</h2>
-                    <button onclick="CalendarUI.changeMonth(1)" class="p-2 rounded-full bg-[#1F2633] text-white"><i class="ph-bold ph-caret-right"></i></button>
+                    <button onclick="CalendarUI.changeMonth(1)" class="p-2 rounded-full bg-[#232838] text-white"><i class="ph-bold ph-caret-right"></i></button>
                 </div>
                 <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-gray-500 mb-2">
                     <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
@@ -147,7 +135,7 @@
 
             <div class="flex justify-between items-end mb-6">
                 <h2 id="schedule-date-title" class="text-xl font-bold text-white">Timeline</h2>
-                <button onclick="App.viewDate(App.getTodayReal())" class="text-xs font-bold bg-[var(--accent)] text-[#0B0E14] px-4 py-2 rounded-full">Jump to Today</button>
+                <button onclick="App.viewDate(App.getTodayReal())" class="text-xs font-bold bg-[var(--accent)] text-[#0F111A] px-4 py-2 rounded-full shadow-lg">Jump to Today</button>
             </div>
             
             <div class="relative min-h-[200px]" id="schedule-timeline">
@@ -155,20 +143,25 @@
             </div>
         </main>
 
-        <!-- ==================== TAB 3: PROGRESS (THE MOBA LADDER) ==================== -->
+        <!-- ==================== TAB 3: PROGRESS (THE MEDAL LAYOUT) ==================== -->
         <main id="tab-progress" class="tab-content px-5 pt-8">
-            <!-- Centerpiece: Massive Floating 3D Badge -->
-            <div class="text-center mb-12">
-                <div id="prog-badge-main" class="badge-centerpiece"></div>
-                <h2 id="prog-rank" class="text-5xl font-black text-white mb-2 tracking-tight">Rank</h2>
-                <p class="text-gray-400 font-bold text-lg"><span id="prog-xp" class="text-[var(--accent)]">0</span> / <span id="prog-next">1000</span> XP</p>
-                <div class="w-72 h-3 bg-[#151A22] rounded-full mx-auto mt-6 overflow-hidden border border-white/5"><div id="prog-bar" class="h-full bg-[var(--accent)] w-0 shadow-[0_0_15px_var(--accent)] transition-all duration-1000"></div></div>
+            
+            <!-- Sleek Header -->
+            <div class="flex justify-between items-end mb-4">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Current Rank</p>
+                    <h2 id="prog-rank" class="text-3xl font-black text-white">Rank</h2>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-bold"><span id="prog-xp" class="text-[var(--accent)]">0</span> <span class="text-gray-500">/ <span id="prog-next">1000</span> XP</span></p>
+                </div>
             </div>
+            <div class="w-full h-2 bg-[#232838] rounded-full mb-10 overflow-hidden"><div id="prog-bar" class="h-full bg-[var(--accent)] w-0 transition-all duration-1000 shadow-[0_0_10px_var(--accent)]"></div></div>
 
-            <h3 class="text-xl font-black mb-6 border-b border-[#1F2633] pb-2">Evolution Tree</h3>
-            <div class="ladder-line-container pb-10" id="ladder-container">
-                <div class="ladder-vertical-line"></div>
-                <!-- Dynamic MOBA Ladder Items -->
+            <!-- PK Level Style List (Match 1st Photo) -->
+            <h3 class="text-lg font-black mb-6">Levels of Membership</h3>
+            <div id="ladder-container" class="pb-10">
+                <!-- Cards Injected Here -->
             </div>
         </main>
 
@@ -180,14 +173,14 @@
             <div class="glass-card rounded-[32px] p-8 flex flex-col items-center justify-center mb-6 text-center border-t border-[var(--accent)]/30">
                 <div id="timer-display" class="text-7xl font-black tabular-nums tracking-tighter mb-8 text-[var(--accent)] drop-shadow-[0_0_15px_rgba(212,255,0,0.3)]">25:00</div>
                 <div class="flex gap-3 w-full mb-8">
-                    <input type="number" id="custom-time" placeholder="Custom Mins" class="w-full bg-[#0B0E14] border border-[#1F2633] rounded-2xl px-4 py-4 text-white font-bold text-center focus:border-[var(--accent)] focus:outline-none">
-                    <button onclick="Timer.setCustom()" class="px-6 bg-[#1F2633] rounded-2xl font-bold text-white hover:bg-[#2A3025]">Set</button>
+                    <input type="number" id="custom-time" placeholder="Custom Mins" class="w-full bg-[#0F111A] border border-[#232838] rounded-2xl px-4 py-4 text-white font-bold text-center focus:border-[var(--accent)] focus:outline-none">
+                    <button onclick="Timer.setCustom()" class="px-6 bg-[#232838] rounded-2xl font-bold text-white hover:bg-[#2D3345]">Set</button>
                 </div>
-                <div class="w-full bg-[#0B0E14] rounded-2xl p-5 mb-8 border border-[#1F2633] text-left">
+                <div class="w-full bg-[#0F111A] rounded-2xl p-5 mb-8 border border-[#232838] text-left">
                     <span class="text-xs font-bold text-[#FF3B30] uppercase tracking-widest block mb-2">Breach Penalty</span>
                     <input type="text" id="penalty-text" class="w-full bg-transparent text-sm text-white font-bold focus:outline-none" value="20 Pull-ups or 40 Push-ups">
                 </div>
-                <button id="timer-btn" onclick="Timer.toggle()" class="w-full py-5 rounded-full bg-[var(--accent)] text-[#0B0E14] font-black text-xl shadow-[0_5px_20px_rgba(212,255,0,0.4)]">Initiate Lockdown</button>
+                <button id="timer-btn" onclick="Timer.toggle()" class="w-full py-5 rounded-full bg-[var(--accent)] text-[#0F111A] font-black text-xl shadow-[0_5px_20px_rgba(212,255,0,0.4)]">Initiate Lockdown</button>
             </div>
         </main>
 
@@ -195,7 +188,7 @@
         <main id="tab-profile" class="tab-content px-5 pt-8">
             <h1 class="text-3xl font-black tracking-tight mb-8">Commander Profile</h1>
             
-            <div class="glass-card rounded-[32px] p-6 mb-8">
+            <div class="glass-card rounded-[32px] p-6 mb-8 border-t border-[var(--accent)]/20">
                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">XP Trajectory (7 Days)</h3>
                 <canvas id="xpChart" height="150"></canvas>
             </div>
@@ -203,13 +196,13 @@
             <div class="mb-8">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-black text-white">Strategic Goals</h2>
-                    <button onclick="UI.addGoal()" class="text-[#0B0E14] bg-[var(--accent)] text-xs font-bold px-4 py-2 rounded-full shadow-md">+ Add Goal</button>
+                    <button onclick="UI.addGoal()" class="text-[#0F111A] bg-[var(--accent)] text-xs font-bold px-4 py-2 rounded-full shadow-md">+ Add Goal</button>
                 </div>
                 <div id="goals-container" class="space-y-4"></div>
             </div>
             
             <div class="grid grid-cols-2 gap-4 mt-10">
-                <button onclick="App.exportData()" class="py-4 rounded-2xl bg-[#1F2633] text-white font-bold text-sm hover:bg-[#2A3025]">Backup Data</button>
+                <button onclick="App.exportData()" class="py-4 rounded-2xl bg-[#232838] text-white font-bold text-sm hover:bg-[#2D3345]">Backup Data</button>
                 <button onclick="App.resetData()" class="py-4 rounded-2xl bg-[#FF3B30]/10 text-[#FF3B30] font-bold border border-[#FF3B30]/30 text-sm">Wipe System</button>
             </div>
         </main>
@@ -217,7 +210,7 @@
     </div>
 
     <!-- FLOATING ADD BUTTON -->
-    <button onclick="UI.openModal()" class="fixed bottom-[110px] right-6 w-16 h-16 bg-[var(--accent)] text-[#0B0E14] rounded-full flex items-center justify-center text-4xl shadow-[0_10px_25px_rgba(212,255,0,0.4)] hover:scale-105 transition-transform z-40 fab-btn">
+    <button onclick="UI.openModal()" class="fixed bottom-[110px] right-6 w-16 h-16 bg-[var(--accent)] text-[#0F111A] rounded-full flex items-center justify-center text-4xl shadow-[0_10px_25px_rgba(212,255,0,0.4)] hover:scale-105 transition-transform z-40 fab-btn">
         <i class="ph-bold ph-plus"></i>
     </button>
 
@@ -245,38 +238,38 @@
         <div id="habit-modal" class="bg-[var(--card)] w-full max-w-md sm:rounded-[32px] rounded-t-[32px] border border-white/5 p-8 pb-12 transform translate-y-full transition-transform">
             <div class="flex justify-between items-center mb-8">
                 <h2 id="modal-title" class="text-2xl font-black text-white">Configure Target</h2>
-                <button onclick="UI.closeModal()" class="w-10 h-10 bg-[#1F2633] rounded-full text-gray-400 hover:text-white flex items-center justify-center"><i class="ph-bold ph-x text-xl"></i></button>
+                <button onclick="UI.closeModal()" class="w-10 h-10 bg-[#232838] rounded-full text-gray-400 hover:text-white flex items-center justify-center"><i class="ph-bold ph-x text-xl"></i></button>
             </div>
             <input type="hidden" id="item-id">
             <div class="space-y-5">
-                <input type="text" id="item-text" placeholder="Mission Title" class="w-full bg-[#0B0E14] border border-[#1F2633] rounded-2xl px-5 py-4 text-white focus:border-[var(--accent)] focus:outline-none font-bold">
+                <input type="text" id="item-text" placeholder="Mission Title" class="w-full bg-[#0F111A] border border-[#232838] rounded-2xl px-5 py-4 text-white focus:border-[var(--accent)] focus:outline-none font-bold">
                 
                 <div class="grid grid-cols-2 gap-4">
-                    <select id="item-type" onchange="UI.toggleDateInput()" class="w-full bg-[#0B0E14] border border-[#1F2633] rounded-2xl px-5 py-4 text-white font-bold focus:outline-none">
+                    <select id="item-type" onchange="UI.toggleDateInput()" class="w-full bg-[#0F111A] border border-[#232838] rounded-2xl px-5 py-4 text-white font-bold focus:outline-none">
                         <option value="habit">Daily Habit</option>
                         <option value="task">Scheduled Task</option>
                         <option value="priority">Top Priority</option>
                     </select>
-                    <input type="date" id="item-date" class="w-full bg-[#0B0E14] border border-[#1F2633] rounded-2xl px-5 py-4 text-white font-bold opacity-50 focus:outline-none" disabled>
+                    <input type="date" id="item-date" class="w-full bg-[#0F111A] border border-[#232838] rounded-2xl px-5 py-4 text-white font-bold opacity-50 focus:outline-none" disabled>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="number" id="item-xp" placeholder="XP (e.g. 50)" class="w-full bg-[#0B0E14] border border-[#1F2633] rounded-2xl px-5 py-4 text-[var(--accent)] font-black focus:outline-none focus:border-[var(--accent)]">
-                    <input type="time" id="item-time" class="w-full bg-[#0B0E14] border border-[#1F2633] rounded-2xl px-5 py-4 text-white font-bold focus:outline-none focus:border-[var(--accent)]">
+                    <input type="number" id="item-xp" placeholder="XP (e.g. 50)" class="w-full bg-[#0F111A] border border-[#232838] rounded-2xl px-5 py-4 text-[var(--accent)] font-black focus:outline-none focus:border-[var(--accent)]">
+                    <input type="time" id="item-time" class="w-full bg-[#0F111A] border border-[#232838] rounded-2xl px-5 py-4 text-white font-bold focus:outline-none focus:border-[var(--accent)]">
                 </div>
 
                 <div>
-                    <input type="text" id="item-category" list="cat-list" placeholder="Category (e.g. Morning)" class="w-full bg-[#0B0E14] border border-[#1F2633] rounded-2xl px-5 py-4 text-white font-bold focus:outline-none focus:border-[var(--accent)]">
+                    <input type="text" id="item-category" list="cat-list" placeholder="Category (e.g. Morning)" class="w-full bg-[#0F111A] border border-[#232838] rounded-2xl px-5 py-4 text-white font-bold focus:outline-none focus:border-[var(--accent)]">
                     <datalist id="cat-list"></datalist>
                 </div>
                 
-                <button onclick="App.saveItem()" class="w-full py-5 bg-[var(--accent)] text-[#0B0E14] font-black text-xl rounded-full shadow-[0_5px_20px_rgba(212,255,0,0.3)] mt-4">LOCK IT IN</button>
+                <button onclick="App.saveItem()" class="w-full py-5 bg-[var(--accent)] text-[#0F111A] font-black text-xl rounded-full shadow-[0_5px_20px_rgba(212,255,0,0.3)] mt-4">LOCK IT IN</button>
                 <button id="btn-delete" onclick="App.deleteItem()" class="hidden w-full py-4 rounded-full text-[#FF3B30] bg-[#FF3B30]/10 font-bold border border-[#FF3B30]/30 mt-2">Delete Mission</button>
             </div>
         </div>
     </div>
 
-    <!-- EPIC LEVEL UP OVERLAY (Cosmic Implosion matched to Photo 1) -->
+    <!-- EPIC LEVEL UP OVERLAY (Matches 1st Video Sequence) -->
     <div id="level-up-screen" class="fixed inset-0 z-[200] hidden items-center justify-center overflow-hidden cosmic-bg">
         <div class="flash-overlay" id="lu-flash"></div>
         <div id="lu-energy" class="energy-swirl"></div>
@@ -341,93 +334,119 @@
             }
         };
 
-        // --- PROCEDURAL SVG BADGE GENERATOR (HIGHLY DETAILED MOBA CRESTS - Match Photo 4) ---
+        // --- PROCEDURAL SVG MEDAL GENERATOR (Matches 1st Photo: Ribbon + Hexagons + Jewels) ---
         const SVGBadge = (rank, size = 120, isLocked = false) => {
             const t = rank.tier;
-            const cMain = isLocked ? "#30363D" : rank.color;
-            const cDark = isLocked ? "#151A22" : rank.dark;
-            const cLight = isLocked ? "#8B949E" : rank.light;
-            const filter = isLocked ? "" : `filter="drop-shadow(0 10px 20px rgba(0,0,0,0.8))"`;
+            let cMain = rank.cMain; let cInner = rank.cInner; let cStar = rank.cStar; let stripe = rank.ribbon;
             
-            let svg = `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" ${filter}>
-                <defs>
-                    <linearGradient id="g${t}M" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="${cLight}"/><stop offset="100%" stop-color="${cMain}"/></linearGradient>
-                    <linearGradient id="g${t}D" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="${cMain}"/><stop offset="100%" stop-color="${cDark}"/></linearGradient>
-                    <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFF7A1"/><stop offset="50%" stop-color="#FFD700"/><stop offset="100%" stop-color="#B8860B"/></linearGradient>
-                    <linearGradient id="gSilver" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff"/><stop offset="50%" stop-color="#a1a1a1"/><stop offset="100%" stop-color="#5c5c5c"/></linearGradient>
-                </defs>`;
-            
-            // Base Background Shadow
-            svg += `<path d="M50 95 L5 50 L20 10 L50 25 L80 10 L95 50 Z" fill="#000" opacity="0.5" transform="translate(0, 4)"/>`;
-
-            if (t === 0) {
-                // Warrior: Bronze Helmet
-                svg += `<path d="M50 90 L20 45 L30 15 L50 25 L70 15 L80 45 Z" fill="url(#g${t}D)" stroke="#111" stroke-width="2"/>`;
-                svg += `<path d="M50 85 L25 45 L35 25 L50 35 L65 25 L75 45 Z" fill="url(#g${t}M)"/>`;
-                svg += `<polygon points="50,40 55,60 50,70 45,60" fill="${cLight}"/>`; 
-            } else if (t === 1) {
-                // Elite: Silver Ram
-                svg += `<path d="M50 90 L20 45 L30 15 L50 25 L70 15 L80 45 Z" fill="url(#gSilver)" stroke="#111" stroke-width="2"/>`;
-                svg += `<path d="M20 45 Q0 20 20 5 Q40 -5 40 25 Z" fill="url(#gSilver)" stroke="#111" stroke-width="1.5"/><path d="M80 45 Q100 20 80 5 Q60 -5 60 25 Z" fill="url(#gSilver)" stroke="#111" stroke-width="1.5"/>`;
-                svg += `<polygon points="50,40 55,60 50,70 45,60" fill="#ffffff"/>`; 
-            } else if (t === 2) {
-                // Master: Golden Bear/Lion
-                svg += `<circle cx="50" cy="50" r="40" fill="url(#gGold)" stroke="#111" stroke-width="2"/>`;
-                svg += `<path d="M50 95 L15 50 L25 15 L50 30 L75 15 L85 50 Z" fill="url(#gGold)" stroke="#111" stroke-width="2"/>`;
-                svg += `<path d="M50 85 L22 50 L32 25 L50 40 L68 25 L78 50 Z" fill="url(#gGold)"/>`;
-                svg += `<polygon points="35,45 45,52 30,52" fill="#111"/><polygon points="65,45 55,52 70,52" fill="#111"/>`; // Eyes
-                svg += `<polygon points="50,55 60,75 40,75" fill="#FFF7A1"/>`; // Snout
-            } else if (t === 3) {
-                // Grand Master: Silver/Blue Wolf
-                svg += `<path d="M50 90 L10 40 L25 10 L50 25 L75 10 L90 40 Z" fill="url(#gSilver)" stroke="#111" stroke-width="2"/>`;
-                svg += `<path d="M50 82 L18 42 L28 20 L50 35 L72 20 L82 42 Z" fill="url(#gSilver)"/>`;
-                svg += `<polygon points="38,45 48,50 35,55" fill="#111"/><polygon points="62,45 52,50 65,55" fill="#111"/>`; // Eyes
-                svg += `<polygon points="50,15 55,30 50,40 45,30" fill="${isLocked ? cLight : '#00e5ff'}" stroke="#fff" stroke-width="1"/>`; // Center blue gem
-            } else if (t === 4) {
-                // Epic: Green Rhino/Dragon
-                svg += `<path d="M50 90 L15 50 L25 20 L50 35 L75 20 L85 50 Z" fill="url(#g${t}D)" stroke="#111" stroke-width="2"/>`;
-                svg += `<path d="M50 80 L25 50 L35 30 L50 42 L65 30 L75 50 Z" fill="url(#g${t}M)"/>`;
-                svg += `<polygon points="50,5 65,50 50,85 35,50" fill="${isLocked ? cLight : '#3cb371'}" stroke="#111" stroke-width="1"/>`; // Green Horn
-                svg += `<polygon points="50,15 58,50 50,75 42,50" fill="#fff" opacity="0.6"/>`; 
-            } else if (t === 5) {
-                // Legend: Gold/Red Lion with Mane
-                svg += `<path d="M50 95 L5 50 L20 10 L50 25 L80 10 L95 50 Z" fill="url(#gGold)" stroke="#111" stroke-width="2"/>`;
-                svg += `<path d="M50 85 L20 50 L30 20 L50 35 L70 20 L80 50 Z" fill="url(#g${t}D)"/>`;
-                svg += `<polygon points="35,45 45,55 30,55" fill="${isLocked ? '#111' : '#fff'}"/><polygon points="65,45 55,55 70,55" fill="${isLocked ? '#111' : '#fff'}"/>`; // Glowing Eyes
-                svg += `<polygon points="50,60 60,80 40,80" fill="url(#gGold)"/>`;
-            } else {
-                // Tier 6+ (Mythic Series) - Golden Dragon Wings + Colored Gem
-                // Outer Majestic Wings
-                svg += `<path d="M50 90 L0 45 L15 5 L50 25 L85 5 L100 45 Z" fill="${isLocked ? 'url(#g'+t+'D)' : 'url(#gGold)'}" stroke="#111" stroke-width="2"/>`;
-                // Inner Shield Frame
-                svg += `<path d="M50 80 L15 45 L25 15 L50 35 L75 15 L85 45 Z" fill="${isLocked ? 'url(#g'+t+'M)' : 'url(#gGold)'}"/>`;
-                
-                // Mythic Glory / Immortal extra accents (Horns/Crowns)
-                if (t >= 8) {
-                    svg += `<path d="M50 5 L25 -5 L35 25 Z" fill="${isLocked ? cLight : '#FFD700'}"/><path d="M50 5 L75 -5 L65 25 Z" fill="${isLocked ? cLight : '#FFD700'}"/>`;
-                }
-                
-                // Massive Center Diamond
-                svg += `<polygon points="50,15 75,45 50,85 25,45" fill="${isLocked ? cLight : cMain}" stroke="#fff" stroke-width="2" ${isLocked ? '' : 'filter="drop-shadow(0 0 10px '+cMain+')"' }/>`;
-                svg += `<polygon points="50,20 65,45 50,75 35,45" fill="#fff" opacity="${isLocked ? '0.3' : '0.8'}"/>`;
+            if (isLocked) {
+                cMain = "#2D3345"; cInner = "#1F2633"; cStar = "#3B4252"; stripe = "#2D3345";
             }
-            
+
+            let svg = `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6)); overflow: visible;">
+                <defs>
+                    <linearGradient id="gMain${t}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fff" stop-opacity="0.5"/><stop offset="100%" stop-color="${cMain}"/></linearGradient>
+                    <linearGradient id="gInner${t}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="${cInner}"/><stop offset="100%" stop-color="#000" stop-opacity="0.3"/></linearGradient>
+                    <linearGradient id="gStar${t}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="${cStar}"/></linearGradient>
+                    <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFF7A1"/><stop offset="50%" stop-color="#FFD700"/><stop offset="100%" stop-color="#B8860B"/></linearGradient>
+                </defs>`;
+
+            // Ribbon Component (Top)
+            svg += `
+                <g transform="translate(38, -5)">
+                    <rect x="0" y="0" width="24" height="25" fill="${isLocked ? '#1F2633' : '#f8fafc'}"/>
+                    <rect x="4" y="0" width="4" height="25" fill="${stripe}"/>
+                    <rect x="10" y="0" width="4" height="25" fill="${stripe}"/>
+                    <rect x="16" y="0" width="4" height="25" fill="${stripe}"/>
+                    <polygon points="0,25 12,20 24,25 24,15 0,15" fill="${isLocked ? '#1F2633' : '#e2e8f0'}"/>
+                </g>`;
+                
+            // Medal connector ring
+            svg += `<circle cx="50" cy="18" r="4" fill="${isLocked ? '#2D3345' : '#fff'}" stroke="${cMain}" stroke-width="2"/>`;
+
+            if (t < 2) {
+                // Tier 0-1 (Silver): Hexagon + 4-Point Star
+                svg += `<polygon points="50,22 80,38 80,72 50,88 20,72 20,38" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
+                svg += `<polygon points="50,27 75,42 75,68 50,83 25,68 25,42" fill="url(#gInner${t})"/>`;
+                // 4-Point Star (Compass)
+                svg += `<polygon points="50,35 58,52 75,55 58,58 50,75 42,58 25,55 42,52" fill="url(#gStar${t})"/>`;
+                svg += `<polygon points="50,35 58,52 50,55 42,52" fill="#fff" opacity="0.6"/>`;
+                
+            } else if (t < 4) {
+                // Tier 2-3 (Gold): Octagon + 8-Point Star
+                svg += `<polygon points="50,20 80,35 80,75 50,90 20,75 20,35" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
+                svg += `<polygon points="50,25 75,38 75,72 50,85 25,72 25,38" fill="url(#gInner${t})"/>`;
+                // 8-Point Star
+                svg += `<path d="M50 35 L55 48 L68 50 L55 52 L50 65 L45 52 L32 50 L45 48 Z" fill="url(#gStar${t})"/>`;
+                svg += `<path d="M42 42 L58 42 L58 58 L42 58 Z" fill="url(#gStar${t})" transform="rotate(45 50 50)"/>`;
+                svg += `<circle cx="50" cy="50" r="5" fill="#EAB308"/>`;
+                
+            } else if (t < 6) {
+                // Tier 4-5 (Platinum/Purple): Hexagon + 5-Point Star
+                svg += `<polygon points="50,22 80,38 80,72 50,88 20,72 20,38" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
+                svg += `<polygon points="50,27 75,42 75,68 50,83 25,68 25,42" fill="url(#gInner${t})"/>`;
+                // 5-Point Star
+                svg += `<polygon points="50,35 54,47 68,47 56,55 60,68 50,60 40,68 44,55 32,47 46,47" fill="url(#gStar${t})"/>`;
+                svg += `<circle cx="50" cy="53" r="4" fill="#3B82F6"/>`;
+
+            } else if (t < 8) {
+                // Tier 6-7 (Diamond/Pink): Diamond + Pink Wings
+                // Wings Behind Base
+                svg += `<path d="M 25 50 Q 5 40 10 25 Q 15 45 25 55 Z" fill="${isLocked ? '#2D3345' : '#FBCFE8'}"/>`;
+                svg += `<path d="M 25 60 Q 0 50 5 35 Q 15 55 25 65 Z" fill="${isLocked ? '#1F2633' : '#FDA4AF'}"/>`;
+                svg += `<path d="M 75 50 Q 95 40 90 25 Q 85 45 75 55 Z" fill="${isLocked ? '#2D3345' : '#FBCFE8'}"/>`;
+                svg += `<path d="M 75 60 Q 100 50 95 35 Q 85 55 75 65 Z" fill="${isLocked ? '#1F2633' : '#FDA4AF'}"/>`;
+
+                svg += `<polygon points="50,22 80,38 80,72 50,88 20,72 20,38" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
+                svg += `<polygon points="50,27 75,42 75,68 50,83 25,68 25,42" fill="url(#gInner${t})"/>`;
+                // Big Diamond
+                svg += `<polygon points="50,32 65,55 50,78 35,55" fill="url(#gStar${t})"/>`;
+                svg += `<polygon points="50,32 58,55 50,78 42,55" fill="#fff" opacity="0.4"/>`;
+                
+            } else {
+                // Tier 8-9 (Champion/Trophy): Trophy + Massive Gold Wings
+                // Gold Wings
+                svg += `<path d="M 25 50 Q 5 20 15 10 Q 20 30 30 45 Z" fill="${isLocked ? '#2D3345' : 'url(#gGold)'}"/>`;
+                svg += `<path d="M 25 65 Q -5 30 5 20 Q 15 45 25 55 Z" fill="${isLocked ? '#1F2633' : '#CA8A04'}"/>`;
+                svg += `<path d="M 75 50 Q 95 20 85 10 Q 80 30 70 45 Z" fill="${isLocked ? '#2D3345' : 'url(#gGold)'}"/>`;
+                svg += `<path d="M 75 65 Q 105 30 95 20 Q 85 45 75 55 Z" fill="${isLocked ? '#1F2633' : '#CA8A04'}"/>`;
+
+                svg += `<polygon points="50,25 80,40 80,75 50,90 20,75 20,40" fill="url(#gMain${t})" stroke="#111" stroke-width="1.5"/>`;
+                // Golden Trophy
+                const gold = isLocked ? '#3B4252' : 'url(#gGold)';
+                svg += `<path d="M 38 40 L 62 40 L 56 60 L 44 60 Z" fill="${gold}"/>`;
+                svg += `<rect x="46" y="60" width="8" height="12" fill="${gold}"/>`;
+                svg += `<rect x="35" y="72" width="30" height="6" fill="${gold}"/>`;
+                // Trophy handles
+                svg += `<path d="M 38 40 Q 30 40 30 50 Q 30 60 42 50" fill="none" stroke="${gold}" stroke-width="3"/>`;
+                svg += `<path d="M 62 40 Q 70 40 70 50 Q 70 60 58 50" fill="none" stroke="${gold}" stroke-width="3"/>`;
+                if(!isLocked) svg += `<polygon points="50,45 52,50 57,50 53,53 55,58 50,55 45,58 47,53 43,50 48,50" fill="#fff"/>`;
+            }
+
+            // Lower Banner Text Overlay (To give it the complete card feel)
+            if(!isLocked) {
+                svg += `<path d="M 15 85 L 85 85 L 90 95 L 50 100 L 10 95 Z" fill="#0F111A" stroke="${cMain}" stroke-width="1"/>`;
+                // Use substring to fit text inside the tiny banner
+                const shortName = rank.name.length > 10 ? rank.name.substring(0,9) + '..' : rank.name;
+                svg += `<text x="50" y="93" fill="#fff" font-size="8" font-family="sans-serif" font-weight="bold" text-anchor="middle" letter-spacing="0.5">${shortName.toUpperCase()}</text>`;
+            }
+
             svg += `</svg>`;
             return svg;
         };
 
-        // SCALED XP REQUIREMENTS & MOBA COLORS
+        // RANKS: Mapped to 1st Photo (Silver, Gold, Plat, Diamond, Champion)
         const Ranks = [
-            { tier: 0, name: "Warrior", req: 0, color: "#8b5a2b", dark: "#5c3a18", light: "#cd853f" },
-            { tier: 1, name: "Elite", req: 2000, color: "#a1a1a1", dark: "#5c5c5c", light: "#d6d6d6" },
-            { tier: 2, name: "Master", req: 7000, color: "#daa520", dark: "#8b6508", light: "#ffd700" },
-            { tier: 3, name: "Grand Master", req: 15000, color: "#4682b4", dark: "#27408b", light: "#87cefa" },
-            { tier: 4, name: "Epic", req: 30000, color: "#2e8b57", dark: "#006400", light: "#3cb371" },
-            { tier: 5, name: "Legend", req: 55000, color: "#d2691e", dark: "#8b4500", light: "#ff8c00" },
-            { tier: 6, name: "Mythic", req: 90000, color: "#9370db", dark: "#4b0082", light: "#ba55d3" },
-            { tier: 7, name: "Mythical Honor", req: 140000, color: "#4169e1", dark: "#00008b", light: "#6495ed" },
-            { tier: 8, name: "Mythical Glory", req: 200000, color: "#dc143c", dark: "#8b0000", light: "#ff6347" },
-            { tier: 9, name: "Mythical Immortal", req: 300000, color: "#ff1493", dark: "#c71585", light: "#ffb6c1" }
+            { tier: 0, name: "Warrior", req: 0, cMain: "#94A3B8", cInner: "#475569", cStar: "#FFFFFF", ribbon: "#475569" },
+            { tier: 1, name: "Elite", req: 2000, cMain: "#94A3B8", cInner: "#475569", cStar: "#FFFFFF", ribbon: "#475569" },
+            { tier: 2, name: "Master", req: 7000, cMain: "#EAB308", cInner: "#A16207", cStar: "#FEF08A", ribbon: "#CA8A04" },
+            { tier: 3, name: "Grand Master", req: 15000, cMain: "#EAB308", cInner: "#A16207", cStar: "#FEF08A", ribbon: "#CA8A04" },
+            { tier: 4, name: "Epic", req: 30000, cMain: "#A855F7", cInner: "#6B21A8", cStar: "#D8B4FE", ribbon: "#9333EA" },
+            { tier: 5, name: "Legend", req: 55000, cMain: "#A855F7", cInner: "#6B21A8", cStar: "#D8B4FE", ribbon: "#9333EA" },
+            { tier: 6, name: "Mythic", req: 90000, cMain: "#E11D48", cInner: "#9F1239", cStar: "#FDA4AF", ribbon: "#E11D48" },
+            { tier: 7, name: "Mythical Honor", req: 140000, cMain: "#E11D48", cInner: "#9F1239", cStar: "#FDA4AF", ribbon: "#E11D48" },
+            { tier: 8, name: "Mythical Glory", req: 200000, cMain: "#FEF08A", cInner: "#E11D48", cStar: "#CA8A04", ribbon: "#E11D48" },
+            { tier: 9, name: "Immortal", req: 300000, cMain: "#FEF08A", cInner: "#E11D48", cStar: "#CA8A04", ribbon: "#E11D48" }
         ];
 
         let state = { 
@@ -440,7 +459,7 @@
 
         const App = {
             init: () => {
-                const saved = localStorage.getItem('critiqueV10');
+                const saved = localStorage.getItem('critiqueV11');
                 if (saved) state = JSON.parse(saved);
                 else {
                     state.items = [
@@ -484,7 +503,7 @@
                 }
                 
                 App.checkLevelUp();
-                localStorage.setItem('critiqueV10', JSON.stringify(state));
+                localStorage.setItem('critiqueV11', JSON.stringify(state));
                 UI.render();
                 if(chartInstance) UI.renderChart();
                 if(document.getElementById('tab-calendar').classList.contains('active')) CalendarUI.renderSchedule(viewingDate);
@@ -492,7 +511,7 @@
             toggleGoal: (id) => {
                 AudioSys.init(); const goal = state.goals.find(g => g.id === id);
                 if(goal) { goal.done = !goal.done; if(goal.done) AudioSys.playConquerDing(); }
-                localStorage.setItem('critiqueV10', JSON.stringify(state)); UI.render();
+                localStorage.setItem('critiqueV11', JSON.stringify(state)); UI.render();
             },
             checkLevelUp: () => {
                 const newRank = App.calculateRankIndex(state.xp);
@@ -521,13 +540,13 @@
                     state.items.push({ id: Math.random().toString(), text, type, date, time, xpReward:xp, category:cat, history: [] });
                 }
                 
-                localStorage.setItem('critiqueV10', JSON.stringify(state));
+                localStorage.setItem('critiqueV11', JSON.stringify(state));
                 UI.closeModal(); UI.render();
             },
             deleteItem: () => {
                 const id = document.getElementById('item-id').value;
                 state.items = state.items.filter(i => i.id !== id);
-                localStorage.setItem('critiqueV10', JSON.stringify(state));
+                localStorage.setItem('critiqueV11', JSON.stringify(state));
                 UI.closeModal(); UI.render();
             },
             updateCategories: () => {
@@ -545,10 +564,10 @@
             exportData: () => {
                 const blob = new Blob([JSON.stringify(state)], {type: "application/json"});
                 const url = URL.createObjectURL(blob);
-                const a = document.createElement('a'); a.href = url; a.download = `CritiqueV10_${App.getTodayReal()}.json`;
+                const a = document.createElement('a'); a.href = url; a.download = `CritiqueV11_${App.getTodayReal()}.json`;
                 a.click(); URL.revokeObjectURL(url);
             },
-            resetData: () => { if(confirm("INITIATE TOTAL WIPE? THIS CANNOT BE UNDONE.")) { localStorage.removeItem('critiqueV10'); location.reload(); } }
+            resetData: () => { if(confirm("INITIATE TOTAL WIPE? THIS CANNOT BE UNDONE.")) { localStorage.removeItem('critiqueV11'); location.reload(); } }
         };
 
         // --- CALENDAR UI ---
@@ -578,9 +597,9 @@
                     const hasActivity = state.items.some(item => item.history.includes(dStr));
                     
                     let cls = "w-7 h-7 mx-auto flex items-center justify-center rounded-full text-[11px] font-bold cursor-pointer transition ";
-                    if(isToday) cls += "bg-[var(--accent)] text-[#0B0E14] shadow-[0_0_10px_rgba(212,255,0,0.5)]";
-                    else if(hasActivity) cls += "bg-[#1F2633] text-white border border-[var(--accent)]";
-                    else cls += "text-gray-500 hover:bg-[#1F2633]";
+                    if(isToday) cls += "bg-[var(--accent)] text-[#0F111A] shadow-[0_0_10px_rgba(212,255,0,0.5)]";
+                    else if(hasActivity) cls += "bg-[#232838] text-white border border-[var(--accent)]";
+                    else cls += "text-gray-500 hover:bg-[#232838]";
                     
                     grid.innerHTML += `<div class="${cls}" onclick="CalendarUI.renderSchedule('${dStr}')">${i}</div>`;
                 }
@@ -604,15 +623,15 @@
                 dayItems.forEach(item => {
                     const isDone = item.history.includes(dateStr);
                     const timeStr = item.time ? (new Date(`1970-01-01T${item.time}:00Z`).toLocaleTimeString('en-US', {hour: 'numeric', minute:'2-digit', timeZone:'UTC'})) : "All Day";
-                    const dotColor = isDone ? 'bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]' : 'bg-[#30363D]';
-                    const cardStyle = isDone ? 'border-[var(--accent)]/30 bg-[var(--accent)]/10' : 'border-[#1F2633] bg-[var(--card)]';
+                    const dotColor = isDone ? 'bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]' : 'bg-[#2D3345]';
+                    const cardStyle = isDone ? 'border-[var(--accent)]/30 bg-[var(--accent)]/10' : 'border-[#232838] bg-[var(--card)]';
                     const textStyle = isDone ? 'text-gray-500 line-through' : 'text-white';
 
                     const el = document.createElement('div');
                     el.className = "flex items-start gap-4 mb-4 relative z-10 w-full";
                     el.innerHTML = `
                         <div class="w-14 text-right pt-2 text-[10px] font-bold text-gray-400 leading-tight">${timeStr.replace(' ', '<br>')}</div>
-                        <div class="mt-2 w-3 h-3 rounded-full ${dotColor} border-2 border-[#0B0E14] shrink-0"></div>
+                        <div class="mt-2 w-3 h-3 rounded-full ${dotColor} border-2 border-[#0F111A] shrink-0"></div>
                         <div class="flex-1 rounded-[24px] p-4 border ${cardStyle} transition-all flex items-center justify-between" onclick="App.toggleItem('${item.id}', event)">
                             <div class="flex items-center gap-4">
                                 <input type="checkbox" class="habit-checkbox w-5 h-5 border-[1px]" ${isDone ? 'checked' : ''} style="width:22px;height:22px;" onclick="event.stopPropagation(); App.toggleItem('${item.id}', event)">
@@ -639,7 +658,7 @@
                 const btn = document.getElementById('timer-btn');
                 if (Timer.isRunning) {
                     clearInterval(Timer.interval); Timer.isRunning = false;
-                    btn.innerText = "Initiate Lockdown"; btn.classList.replace('bg-[#FF3B30]', 'bg-[var(--accent)]'); btn.classList.replace('text-white', 'text-[#0B0E14]');
+                    btn.innerText = "Initiate Lockdown"; btn.classList.replace('bg-[#FF3B30]', 'bg-[var(--accent)]'); btn.classList.replace('text-white', 'text-[#0F111A]');
                 } else {
                     AudioSys.init(); Timer.isRunning = true;
                     if ("Notification" in window && Notification.permission === "granted") new Notification("Deep Focus", { body: "Lockdown initiated." });
@@ -650,7 +669,7 @@
                             alert("Session Conquered!"); Timer.toggle();
                         }
                     }, 1000);
-                    btn.innerText = "Abandon Protocol (Fail)"; btn.classList.replace('bg-[var(--accent)]', 'bg-[#FF3B30]'); btn.classList.replace('text-[#0B0E14]', 'text-white');
+                    btn.innerText = "Abandon Protocol (Fail)"; btn.classList.replace('bg-[var(--accent)]', 'bg-[#FF3B30]'); btn.classList.replace('text-[#0F111A]', 'text-white');
                 }
             },
             failProtocol: () => {
@@ -658,7 +677,7 @@
                 const penalty = document.getElementById('penalty-text').value;
                 alert(`PROTOCOL BREACHED!\nYou left the app.\n\nPenalty Due: ${penalty}`);
                 const btn = document.getElementById('timer-btn');
-                btn.innerText = "Initiate Lockdown"; btn.classList.replace('bg-[#FF3B30]', 'bg-[var(--accent)]'); btn.classList.replace('text-white', 'text-[#0B0E14]');
+                btn.innerText = "Initiate Lockdown"; btn.classList.replace('bg-[#FF3B30]', 'bg-[var(--accent)]'); btn.classList.replace('text-white', 'text-[#0F111A]');
             },
             updateDisplay: () => {
                 const m = Math.floor(Timer.timeLeft / 60).toString().padStart(2, '0');
@@ -676,12 +695,12 @@
                     const icon = btn.querySelector('i');
                     if (btn.dataset.target === tabId) {
                         btn.classList.add('active');
-                        iconBg.classList.add('bg-[var(--accent)]', 'text-[#0B0E14]');
+                        iconBg.classList.add('bg-[var(--accent)]', 'text-[#0F111A]');
                         iconBg.classList.remove('text-gray-400');
                         icon.classList.replace('ph-bold', 'ph-fill');
                     } else {
                         btn.classList.remove('active');
-                        iconBg.classList.remove('bg-[var(--accent)]', 'text-[#0B0E14]');
+                        iconBg.classList.remove('bg-[var(--accent)]', 'text-[#0F111A]');
                         iconBg.classList.add('text-gray-400');
                         icon.classList.replace('ph-fill', 'ph-bold');
                     }
@@ -749,40 +768,46 @@
                     streakRow.innerHTML += `<div onclick="App.viewDate('${dStr}')" class="${cls}">${days[i]}</div>`;
                 }
 
-                // Progress Tab (Massive Floating MOBA Beast Centerpiece)
+                // --- PROGRESS TAB: PK LEVELS LAYOUT (MATCHING 1ST PHOTO) ---
                 const rank = Ranks[currentRankIndex];
                 const nextRank = Ranks[currentRankIndex + 1] || rank;
-                document.getElementById('prog-badge-main').innerHTML = SVGBadge(rank, 280); 
+                
                 document.getElementById('prog-rank').innerText = rank.name;
-                document.getElementById('prog-rank').style.color = rank.color;
+                document.getElementById('prog-rank').style.color = rank.cMain;
                 document.getElementById('prog-xp').innerText = state.xp.toLocaleString();
                 document.getElementById('prog-next').innerText = nextRank.req.toLocaleString();
-                
                 let pct = nextRank.req > rank.req ? ((state.xp - rank.req) / (nextRank.req - rank.req)) * 100 : 100;
                 document.getElementById('prog-bar').style.width = `${Math.min(100, Math.max(0, pct))}%`;
 
-                // Comprehensive Timeline Ladder (Matching 2nd Photo - Past, Present, Future)
                 const ladder = document.getElementById('ladder-container'); ladder.innerHTML = '';
                 
+                // Render Wide Cards for All Ranks (Like 1st Photo)
                 Ranks.forEach((r, idx) => {
                     const isUnlocked = state.xp >= r.req;
                     const isCurrent = currentRankIndex === idx;
                     
-                    let nodeClass = "ladder-node";
-                    if (isCurrent) nodeClass += " current";
-                    else if (isUnlocked) nodeClass += " unlocked";
-
-                    const badgeRender = SVGBadge(r, 65, !isUnlocked);
-                    const nameColor = isUnlocked ? r.color : "#6B7280";
-                    const xpColor = isUnlocked ? "text-gray-400" : "text-gray-600";
+                    // Card Styling
+                    let cardBorder = isCurrent ? `border-[var(--accent)] shadow-[0_0_15px_rgba(212,255,0,0.15)]` : `border-white/5`;
+                    let opacity = isUnlocked ? 'opacity-100' : 'opacity-60 grayscale-[50%]';
+                    let nameColor = isUnlocked ? '#fff' : '#6B7280';
+                    let xpColor = isUnlocked ? 'text-[var(--accent)]' : 'text-gray-500';
 
                     ladder.innerHTML += `
-                        <div class="flex items-center gap-6 mb-8 relative z-10 opacity-${isUnlocked ? '100' : '60'}">
-                            <div class="${nodeClass}"></div>
-                            <div>${badgeRender}</div>
-                            <div class="flex-1">
-                                <div class="font-black text-xl tracking-wide" style="color:${nameColor}">${r.name}</div>
-                                <div class="text-[11px] font-bold tracking-widest mt-1 ${xpColor}">${r.req.toLocaleString()} XP</div>
+                        <div class="bg-[var(--card)] rounded-xl p-5 mb-5 flex items-center justify-between border ${cardBorder} ${opacity} relative overflow-hidden transition-all duration-300">
+                            <!-- Geometric Background Slash -->
+                            <div class="absolute -left-6 top-0 bottom-0 w-2/3 bg-white/5 skew-x-[-20deg]"></div>
+                            
+                            <div class="relative z-10 flex flex-col justify-center">
+                                <h3 class="text-xl font-black mb-1 tracking-wide flex items-center gap-2" style="color: ${nameColor};">
+                                    ${r.name} <span class="text-xs text-gray-600 font-normal">>></span>
+                                </h3>
+                                <div class="bg-black/30 px-3 py-1 rounded-md inline-block w-max mt-1 border border-white/5">
+                                    <span class="text-xs font-bold ${xpColor}">${r.req.toLocaleString()} XP</span>
+                                </div>
+                            </div>
+
+                            <div class="relative z-10 -my-2 mr-2">
+                                ${SVGBadge(r, 80, !isUnlocked)}
                             </div>
                         </div>`;
                 });
@@ -791,7 +816,7 @@
                 const gc = document.getElementById('goals-container'); gc.innerHTML = '';
                 state.goals.forEach(g => {
                     gc.innerHTML += `
-                        <div class="glass-card rounded-2xl p-5 flex items-center justify-between border ${g.done ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-[#1F2633]'}">
+                        <div class="glass-card rounded-2xl p-5 flex items-center justify-between border ${g.done ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-[#232838]'}">
                             <div class="flex items-center gap-4 flex-1" onclick="App.toggleGoal('${g.id}')">
                                 <input type="checkbox" class="habit-checkbox w-6 h-6 border-[2px]" ${g.done ? 'checked' : ''} style="border-radius:6px;" onclick="event.stopPropagation(); App.toggleGoal('${g.id}')">
                                 <span class="font-bold text-base ${g.done?'text-gray-500 line-through':'text-white'}">${g.text}</span>
@@ -801,7 +826,7 @@
                 });
             },
             generateItemHTML: (item, isDone, isPriority) => {
-                const timeLabel = item.time ? `<span class="bg-[#1F2633] px-2 py-1 rounded text-[10px] mr-2 border border-white/5 text-gray-300">${item.time}</span>` : "";
+                const timeLabel = item.time ? `<span class="bg-[#232838] px-2 py-1 rounded text-[10px] mr-2 border border-white/5 text-gray-300">${item.time}</span>` : "";
                 return `
                 <div class="glass-card rounded-[24px] p-5 flex justify-between items-center transition-all ${isDone ? 'border-[var(--accent)]/30 bg-[var(--accent)]/5' : (isPriority ? 'border-[#FFD700]/40 shadow-[0_0_15px_rgba(255,215,0,0.05)]' : '')}">
                     <div class="flex items-center gap-4 flex-1" onclick="App.toggleItem('${item.id}', event)">
@@ -811,7 +836,7 @@
                             <div class="text-[11px] font-black text-[var(--accent)] mt-1.5 flex items-center">${timeLabel} +${item.xpReward} XP</div>
                         </div>
                     </div>
-                    <button onclick="UI.openModal('${item.id}')" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-white rounded-full hover:bg-[#1F2633] transition-colors"><i class="ph-bold ph-pencil-simple text-xl"></i></button>
+                    <button onclick="UI.openModal('${item.id}')" class="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-white rounded-full hover:bg-[#232838] transition-colors"><i class="ph-bold ph-pencil-simple text-xl"></i></button>
                 </div>`;
             },
             
@@ -861,9 +886,9 @@
                 const energy = document.getElementById('lu-energy');
                 const shockwave = document.getElementById('lu-shockwave');
                 
-                document.getElementById('new-rank-icon').innerHTML = SVGBadge(rank, 300);
+                document.getElementById('new-rank-icon').innerHTML = SVGBadge(rank, 250);
                 document.getElementById('new-rank-name').innerText = rank.name;
-                document.getElementById('new-rank-name').style.color = rank.color;
+                document.getElementById('new-rank-name').style.color = rank.cMain;
                 
                 screen.classList.remove('hidden'); screen.classList.add('flex');
                 
@@ -877,9 +902,9 @@
             },
             addGoal: () => {
                 const text = prompt("Enter new strategic goal:");
-                if(text) { state.goals.push({id: Math.random().toString(), text, done: false}); localStorage.setItem('critiqueV10', JSON.stringify(state)); UI.render(); }
+                if(text) { state.goals.push({id: Math.random().toString(), text, done: false}); localStorage.setItem('critiqueV11', JSON.stringify(state)); UI.render(); }
             },
-            deleteGoal: (id) => { state.goals = state.goals.filter(g => g.id !== id); localStorage.setItem('critiqueV10', JSON.stringify(state)); UI.render(); },
+            deleteGoal: (id) => { state.goals = state.goals.filter(g => g.id !== id); localStorage.setItem('critiqueV11', JSON.stringify(state)); UI.render(); },
             
             renderChart: () => {
                 const ctx = document.getElementById('xpChart').getContext('2d');
@@ -903,4 +928,3 @@
     </script>
 </body>
 </html>
-
