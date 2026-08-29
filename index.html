@@ -12,74 +12,102 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* ELECTRIC CYAN THEME */
+        /* JADE GREEN THEME */
         :root { 
-            --bg: #05080f; 
-            --card: #0f141e; 
-            --accent: #00E5FF; 
-            --accent-dark: #0077FF;
+            --bg: #0B0E14; 
+            --card: #151A22; 
+            --accent: #00E676; 
+            --accent-dark: #00A655;
             --text: #F5F5F7; 
-            --gray: #86868B; 
+            --gray: #8B949E; 
         }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); -webkit-tap-highlight-color: transparent; overflow-x: hidden; padding-bottom: 90px; }
         
         @media (min-width: 768px) {
             body { display: flex; justify-content: center; background: #000; }
-            #app-container { width: 100%; max-w: 480px; background: var(--bg); min-height: 100vh; border-left: 1px solid #1a2233; border-right: 1px solid #1a2233; position: relative; }
+            #app-container { width: 100%; max-w: 480px; background: var(--bg); min-height: 100vh; border-left: 1px solid #1F2633; border-right: 1px solid #1F2633; position: relative; }
             .glass-nav { max-w: 480px; left: auto !important; }
             .fab-btn { right: calc(50% - 220px) !important; }
         }
 
-        .glass-nav { background: rgba(15, 20, 30, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(0,229,255,0.1); }
-        .glass-card { background: var(--card); border: 1px solid rgba(0,229,255,0.1); }
+        .glass-nav { background: rgba(21, 26, 34, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(0,230,118,0.15); }
+        .glass-card { background: var(--card); border: 1px solid rgba(0,230,118,0.15); }
         
         .progress-ring__circle { transition: stroke-dashoffset 0.5s ease-in-out; transform: rotate(-90deg); transform-origin: 50% 50%; }
         
         /* Interactive Checkbox */
-        .habit-checkbox { appearance: none; width: 28px; height: 28px; border: 2px solid #334155; border-radius: 8px; background: transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
-        .habit-checkbox:checked { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); transform: scale(1.1); }
+        .habit-checkbox { appearance: none; width: 28px; height: 28px; border: 2px solid #30363D; border-radius: 8px; background: transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .habit-checkbox:checked { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 230, 118, 0.5); transform: scale(1.1); }
         .habit-checkbox:checked::after { content: '✓'; position: absolute; color: #000; font-size: 16px; font-weight: 900; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
         /* Streak Pills */
-        .streak-pill { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 12px; font-weight: 700; color: var(--gray); background: var(--card); border: 1px solid #334155; cursor: pointer; transition: all 0.2s; }
-        .streak-pill.active { background: var(--accent-dark); color: #fff; border-color: var(--accent-dark); box-shadow: 0 0 10px rgba(0,119,255,0.5); }
-        .streak-pill.selected { border: 2px solid var(--accent); box-shadow: 0 0 15px rgba(0,229,255,0.4); }
+        .streak-pill { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 12px; font-weight: 700; color: var(--gray); background: var(--card); border: 1px solid #30363D; cursor: pointer; transition: all 0.2s; }
+        .streak-pill.active { background: var(--accent-dark); color: #fff; border-color: var(--accent-dark); box-shadow: 0 0 10px rgba(0,230,118,0.4); }
+        .streak-pill.selected { border: 2px solid var(--accent); box-shadow: 0 0 15px rgba(0,230,118,0.4); }
 
-        /* Continuous 3D Floating Animation */
-        @keyframes float3D {
-            0% { transform: translateY(0px) rotateX(5deg) rotateY(-5deg); drop-shadow: 0 5px 15px rgba(0,229,255,0.2); }
-            50% { transform: translateY(-12px) rotateX(-5deg) rotateY(10deg); drop-shadow: 0 25px 25px rgba(0,229,255,0.4); }
-            100% { transform: translateY(0px) rotateX(5deg) rotateY(-5deg); drop-shadow: 0 5px 15px rgba(0,229,255,0.2); }
+        /* Floating Badge Animation for Progress Tab */
+        @keyframes majesticFloat {
+            0% { transform: translateY(0px); filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
+            50% { transform: translateY(-15px); filter: drop-shadow(0 25px 25px rgba(0,230,118,0.3)); }
+            100% { transform: translateY(0px); filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
         }
-        .badge-3d { animation: float3D 4s ease-in-out infinite; transform-style: preserve-3d; perspective: 1000px; display: inline-block;}
+        .badge-centerpiece { animation: majesticFloat 4s ease-in-out infinite; width: 220px; height: 220px; margin: 0 auto; }
 
-        /* CSS Rank Shields (Simulating your images) */
-        .rank-shield { position: relative; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #222, #111); border: 2px solid; border-radius: 12px 12px 30px 30px; box-shadow: inset 0 0 15px rgba(255,255,255,0.1); }
-        .rank-shield::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom right, rgba(255,255,255,0.4) 0%, transparent 40%); border-radius: inherit; pointer-events: none; }
+        /* Epic Level Up Sequence */
+        .cosmic-bg {
+            background: radial-gradient(circle at center, #1a0b2e 0%, #000000 100%);
+            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                              radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
+            background-size: 550px 550px, 350px 350px; 
+            background-position: 0 0, 40px 60px;
+        }
 
-        /* Epic Level Up Animations */
-        @keyframes flashBang { 0% { background-color: rgba(255,255,255,1); } 100% { background-color: rgba(5,8,15,0.95); } }
-        @keyframes epicZoom { 
-            0% { transform: scale(0) rotate(-20deg); opacity: 0; } 
-            60% { transform: scale(1.3) rotate(10deg); opacity: 1; filter: brightness(2); } 
-            100% { transform: scale(1) rotate(0deg); filter: brightness(1); } 
+        @keyframes energyGather {
+            0% { transform: scale(5) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: scale(0) rotate(720deg); opacity: 1; filter: brightness(3); }
         }
-        @keyframes spinRays { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        
-        .portal-rays {
-            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: repeating-conic-gradient(from 0deg, transparent 0deg 15deg, rgba(0, 229, 255, 0.15) 15deg 30deg);
-            animation: spinRays 10s linear infinite; z-index: -1; pointer-events: none;
+        .energy-swirl {
+            position: absolute; width: 300px; height: 300px; border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0%, #a855f7 25%, #facc15 50%, transparent 100%);
+            animation: energyGather 1.5s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+            filter: blur(10px);
         }
-        .epic-active { animation: epicZoom 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        .flash-active { animation: flashBang 1s ease-out forwards; }
+
+        @keyframes whiteFlash {
+            0% { background-color: transparent; }
+            50% { background-color: #ffffff; }
+            100% { background-color: transparent; }
+        }
+        .flash-overlay {
+            position: absolute; inset: 0; pointer-events: none; z-index: 50;
+            animation: whiteFlash 0.8s ease-out 1.3s forwards; opacity: 0;
+        }
+
+        @keyframes badgeSlam {
+            0% { transform: scale(3); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1); opacity: 1; filter: blur(0px); }
+        }
+        .badge-slam-active {
+            opacity: 0; /* hidden until flash */
+            animation: badgeSlam 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.5s forwards;
+        }
+
+        @keyframes shockwave {
+            0% { transform: scale(0); opacity: 1; border-width: 20px; }
+            100% { transform: scale(3); opacity: 0; border-width: 0px; }
+        }
+        .shockwave-ring {
+            position: absolute; width: 200px; height: 200px; border-radius: 50%;
+            border: solid #00E676; opacity: 0;
+            animation: shockwave 1s ease-out 1.5s forwards;
+        }
 
         .tab-content { display: none; animation: fadeIn 0.3s ease-out forwards; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Timeline line for Schedule */
-        .timeline-line { position: absolute; left: 39px; top: 10px; bottom: 10px; width: 2px; background: #1e293b; z-index: 0; }
+        .timeline-line { position: absolute; left: 39px; top: 10px; bottom: 10px; width: 2px; background: #30363D; z-index: 0; }
     </style>
 </head>
 <body class="antialiased">
@@ -93,25 +121,24 @@
                     <h1 class="text-3xl font-black tracking-tight" id="header-title">Today's Plan</h1>
                     <p id="current-date-text" class="text-sm font-semibold text-[var(--accent)] mt-1 cursor-pointer hover:underline" onclick="Navigation.switchTab('calendar')">Select Date</p>
                 </div>
-                <button onclick="App.requestNotifications()" class="text-[var(--accent)] hover:text-white"><i class="ph-fill ph-bell text-2xl drop-shadow-[0_0_10px_rgba(0,229,255,0.5)]"></i></button>
+                <button onclick="App.requestNotifications()" class="text-[var(--accent)] hover:text-white"><i class="ph-fill ph-bell text-2xl drop-shadow-[0_0_10px_rgba(0,230,118,0.5)]"></i></button>
             </header>
 
             <div class="glass-card rounded-3xl p-5 mb-6">
                 <div class="flex items-center gap-5 mb-5">
                     <div class="relative w-16 h-16">
-                        <svg class="w-16 h-16" viewBox="0 0 100 100"><circle class="text-[#1a2233] stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="home-ring" class="text-[var(--accent)] progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle></svg>
+                        <svg class="w-16 h-16" viewBox="0 0 100 100"><circle class="text-[#1F2633] stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="home-ring" class="text-[var(--accent)] progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle></svg>
                         <div id="home-ring-text" class="absolute inset-0 flex items-center justify-center font-bold text-sm">0%</div>
                     </div>
                     <div>
                         <div class="flex gap-2 mb-2">
-                            <span class="bg-[#1a2233] px-3 py-1 rounded-full text-xs font-bold text-[var(--accent)] border border-[#0077FF]/30" id="task-ratio">0/0 Tasks</span>
+                            <span class="bg-[#1F2633] px-3 py-1 rounded-full text-xs font-bold text-[var(--accent)]" id="task-ratio">0/0 Tasks</span>
                         </div>
                     </div>
                 </div>
                 <div class="flex justify-between items-center" id="streak-row"></div>
             </div>
 
-            <!-- Top 3 Priorities -->
             <div class="mb-6">
                 <h3 class="text-[11px] font-bold text-[#FFD700] uppercase tracking-widest mb-3 flex items-center gap-2"><i class="ph-fill ph-star" style="color: #FFD700; drop-shadow: 0 0 5px #FFD700;"></i> Top Priorities</h3>
                 <div id="priority-list" class="space-y-3"></div>
@@ -120,11 +147,10 @@
             <div id="habit-list-container" class="space-y-6"></div>
         </main>
 
-        <!-- ==================== TAB 2: CALENDAR (GOOGLE CALENDAR STYLE) ==================== -->
+        <!-- ==================== TAB 2: SCHEDULE (CALENDAR) ==================== -->
         <main id="tab-calendar" class="tab-content px-5 pt-8">
             <h1 class="text-3xl font-black tracking-tight mb-4">Schedule</h1>
             
-            <!-- Compact Month Navigator -->
             <div class="glass-card rounded-2xl p-4 mb-6">
                 <div class="flex justify-between items-center mb-3">
                     <button onclick="CalendarUI.changeMonth(-1)" class="p-1 text-[var(--accent)]"><i class="ph-bold ph-caret-left"></i></button>
@@ -137,28 +163,30 @@
                 <div id="cal-grid" class="grid grid-cols-7 gap-1"></div>
             </div>
 
-            <!-- Chronological Timeline View -->
             <div class="flex justify-between items-end mb-4">
                 <h2 id="schedule-date-title" class="text-xl font-bold text-[var(--accent)]">Today's Timeline</h2>
-                <button onclick="App.viewDate(App.getTodayReal())" class="text-xs font-bold bg-[#1a2233] px-3 py-1 rounded-full">Jump to Today</button>
+                <button onclick="App.viewDate(App.getTodayReal())" class="text-xs font-bold bg-[#1F2633] px-3 py-1 rounded-full hover:bg-[#30363D]">Jump to Today</button>
             </div>
             
             <div class="relative min-h-[200px]" id="schedule-timeline">
                 <div class="timeline-line"></div>
-                <!-- Timeline items injected here -->
+                <!-- Timeline items -->
             </div>
         </main>
 
-        <!-- ==================== TAB 3: PROGRESS (3D BADGES) ==================== -->
+        <!-- ==================== TAB 3: PROGRESS (THE GRAND DISPLAY) ==================== -->
         <main id="tab-progress" class="tab-content px-5 pt-8">
-            <div class="text-center mb-10">
-                <div id="prog-badge-container" class="mb-4"></div>
-                <h2 id="prog-rank" class="text-4xl font-black text-white mb-2 tracking-wide">Rank</h2>
-                <p class="text-gray-400 font-bold"><span id="prog-xp" class="text-[var(--accent)]">0</span> / <span id="prog-next">1000</span> XP</p>
-                <div class="w-64 h-2 bg-[#1a2233] rounded-full mx-auto mt-4 overflow-hidden"><div id="prog-bar" class="h-full bg-[var(--accent)] w-0 shadow-[0_0_10px_var(--accent)]"></div></div>
+            <!-- Centerpiece -->
+            <div class="text-center mb-10 pt-4">
+                <div id="prog-badge-main" class="badge-centerpiece mb-8 flex items-center justify-center"></div>
+                <h2 id="prog-rank" class="text-5xl font-black text-white mb-2 tracking-tight drop-shadow-lg">Rank</h2>
+                <p class="text-gray-400 font-bold text-lg"><span id="prog-xp" class="text-[var(--accent)]">0</span> / <span id="prog-next">1000</span> XP</p>
+                <div class="w-72 h-3 bg-[#1F2633] rounded-full mx-auto mt-6 overflow-hidden border border-[#30363D]"><div id="prog-bar" class="h-full bg-[var(--accent)] w-0 shadow-[0_0_15px_var(--accent)] transition-all duration-1000"></div></div>
             </div>
-            <h3 class="text-xl font-black mb-4">Evolution Tree</h3>
-            <div class="relative pb-10 pl-8 border-l-2 border-[#1a2233]" id="ladder-container"></div>
+
+            <!-- Evolution Tree -->
+            <h3 class="text-2xl font-black mb-6 border-b border-[#1F2633] pb-3">Evolution Tree</h3>
+            <div class="relative pb-10 pl-8 border-l-2 border-[#1F2633]" id="ladder-container"></div>
         </main>
 
         <!-- ==================== TAB 4: TOOLS ==================== -->
@@ -166,17 +194,17 @@
             <h1 class="text-3xl font-black tracking-tight mb-2">Focus & Discipline</h1>
             <p class="text-gray-400 text-sm mb-6 font-medium">Leave this tab while the timer is running, and you fail.</p>
             
-            <div class="glass-card rounded-3xl p-8 flex flex-col items-center justify-center mb-6 text-center shadow-[0_10px_30px_rgba(0,119,255,0.1)] border-t border-[var(--accent)]/30">
-                <div id="timer-display" class="text-6xl font-black tabular-nums tracking-tighter mb-6 text-[var(--accent)] drop-shadow-[0_0_15px_rgba(0,229,255,0.4)]">25:00</div>
+            <div class="glass-card rounded-3xl p-8 flex flex-col items-center justify-center mb-6 text-center shadow-[0_10px_30px_rgba(0,230,118,0.1)] border-t border-[var(--accent)]/30">
+                <div id="timer-display" class="text-7xl font-black tabular-nums tracking-tighter mb-8 text-[var(--accent)] drop-shadow-[0_0_15px_rgba(0,230,118,0.4)]">25:00</div>
                 <div class="flex gap-2 w-full mb-6">
-                    <input type="number" id="custom-time" placeholder="Mins" class="w-full bg-[#1a2233] border border-[#334155] rounded-xl px-4 py-2 text-white font-bold text-center focus:border-[var(--accent)] focus:outline-none">
-                    <button onclick="Timer.setCustom()" class="px-4 bg-[#0077FF] rounded-xl font-bold shadow-lg">Set</button>
+                    <input type="number" id="custom-time" placeholder="Custom Mins" class="w-full bg-[#1F2633] border border-[#30363D] rounded-xl px-4 py-3 text-white font-bold text-center focus:border-[var(--accent)] focus:outline-none">
+                    <button onclick="Timer.setCustom()" class="px-6 bg-[#30363D] rounded-xl font-bold text-[var(--accent)] hover:bg-[#3b434d]">Set</button>
                 </div>
-                <div class="w-full bg-[#1a2233] rounded-xl p-4 mb-6 border border-[#334155] text-left">
-                    <span class="text-xs font-bold text-[#FF0055] uppercase tracking-widest block mb-1">Breach Penalty</span>
+                <div class="w-full bg-[#1F2633] rounded-xl p-4 mb-8 border border-[#30363D] text-left">
+                    <span class="text-xs font-bold text-[#FF3B30] uppercase tracking-widest block mb-1">Breach Penalty</span>
                     <input type="text" id="penalty-text" class="w-full bg-transparent text-sm text-white font-medium focus:outline-none" value="20 Pull-ups or 40 Push-ups">
                 </div>
-                <button id="timer-btn" onclick="Timer.toggle()" class="w-full py-4 rounded-full bg-[var(--accent)] text-[#05080f] font-black text-lg shadow-[0_0_20px_rgba(0,229,255,0.3)]">Initiate Lockdown</button>
+                <button id="timer-btn" onclick="Timer.toggle()" class="w-full py-5 rounded-2xl bg-[var(--accent)] text-[#0B0E14] font-black text-xl shadow-[0_0_20px_rgba(0,230,118,0.3)]">Initiate Lockdown</button>
             </div>
         </main>
 
@@ -192,21 +220,21 @@
             <div class="mb-8">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-bold flex items-center gap-2"><i class="ph-fill ph-target text-[var(--accent)]"></i> Strategic Goals</h2>
-                    <button onclick="UI.addGoal()" class="text-[var(--accent)] text-sm font-bold">+ Add</button>
+                    <button onclick="UI.addGoal()" class="text-[var(--accent)] text-sm font-bold bg-[var(--accent)]/10 px-3 py-1 rounded-full">+ Add</button>
                 </div>
                 <div id="goals-container" class="space-y-3"></div>
             </div>
             
             <div class="grid grid-cols-2 gap-4">
-                <button onclick="App.exportData()" class="py-3 rounded-xl bg-[#1a2233] text-[var(--accent)] font-bold border border-[#0077FF]/50 text-sm">Backup Data</button>
-                <button onclick="App.resetData()" class="py-3 rounded-xl bg-[#FF0055]/10 text-[#FF0055] font-bold border border-[#FF0055]/50 text-sm">Wipe System</button>
+                <button onclick="App.exportData()" class="py-3 rounded-xl bg-[#1F2633] text-[var(--accent)] font-bold border border-[var(--accent)]/30 text-sm">Backup Data</button>
+                <button onclick="App.resetData()" class="py-3 rounded-xl bg-[#FF3B30]/10 text-[#FF3B30] font-bold border border-[#FF3B30]/30 text-sm">Wipe System</button>
             </div>
         </main>
 
     </div>
 
     <!-- FLOATING ADD BUTTON -->
-    <button onclick="UI.openModal()" class="fixed bottom-[100px] right-5 w-14 h-14 bg-[var(--accent)] text-[#05080f] rounded-full flex items-center justify-center text-3xl shadow-[0_4px_20px_rgba(0,229,255,0.5)] hover:scale-105 transition-transform z-40 fab-btn">
+    <button onclick="UI.openModal()" class="fixed bottom-[100px] right-5 w-16 h-16 bg-[var(--accent)] text-[#0B0E14] rounded-full flex items-center justify-center text-4xl shadow-[0_4px_25px_rgba(0,230,118,0.5)] hover:scale-105 transition-transform z-40 fab-btn">
         <i class="ph-bold ph-plus"></i>
     </button>
 
@@ -231,48 +259,50 @@
 
     <!-- ADD/EDIT MODAL -->
     <div id="modal-backdrop" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity flex items-end sm:items-center justify-center">
-        <div id="habit-modal" class="bg-[#0f141e] w-full max-w-md sm:rounded-[2rem] rounded-t-[2rem] border border-[var(--accent)]/30 p-6 pb-12 transform translate-y-full transition-transform shadow-[0_-10px_40px_rgba(0,119,255,0.15)]">
+        <div id="habit-modal" class="bg-[#151A22] w-full max-w-md sm:rounded-[2rem] rounded-t-[2rem] border border-[var(--accent)]/30 p-6 pb-12 transform translate-y-full transition-transform shadow-[0_-10px_40px_rgba(0,230,118,0.15)]">
             <div class="flex justify-between items-center mb-6">
                 <h2 id="modal-title" class="text-2xl font-black text-[var(--accent)]">Configure Target</h2>
-                <button onclick="UI.closeModal()" class="w-8 h-8 bg-[#1a2233] rounded-full text-gray-400 hover:text-white"><i class="ph-bold ph-x"></i></button>
+                <button onclick="UI.closeModal()" class="w-8 h-8 bg-[#1F2633] rounded-full text-gray-400 hover:text-white"><i class="ph-bold ph-x"></i></button>
             </div>
             <input type="hidden" id="item-id">
             <div class="space-y-4">
-                <input type="text" id="item-text" placeholder="Mission Title" class="w-full bg-[#1a2233] border border-[#334155] rounded-2xl px-4 py-4 text-white focus:border-[var(--accent)] focus:outline-none font-semibold">
+                <input type="text" id="item-text" placeholder="Mission Title" class="w-full bg-[#1F2633] border border-[#30363D] rounded-2xl px-4 py-4 text-white focus:border-[var(--accent)] focus:outline-none font-semibold">
                 
                 <div class="grid grid-cols-2 gap-3">
-                    <select id="item-type" onchange="UI.toggleDateInput()" class="w-full bg-[#1a2233] border border-[#334155] rounded-2xl px-4 py-4 text-white font-semibold focus:outline-none">
+                    <select id="item-type" onchange="UI.toggleDateInput()" class="w-full bg-[#1F2633] border border-[#30363D] rounded-2xl px-4 py-4 text-white font-semibold focus:outline-none">
                         <option value="habit">Daily Habit</option>
                         <option value="task">Scheduled Task</option>
                         <option value="priority">Top Priority</option>
                     </select>
-                    <input type="date" id="item-date" class="w-full bg-[#1a2233] border border-[#334155] rounded-2xl px-4 py-4 text-white font-semibold opacity-50 focus:outline-none" disabled>
+                    <input type="date" id="item-date" class="w-full bg-[#1F2633] border border-[#30363D] rounded-2xl px-4 py-4 text-white font-semibold opacity-50 focus:outline-none" disabled>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="item-xp" placeholder="XP (e.g. 50)" class="w-full bg-[#1a2233] border border-[#334155] rounded-2xl px-4 py-4 text-[var(--accent)] font-black focus:outline-none focus:border-[var(--accent)]">
-                    <input type="time" id="item-time" class="w-full bg-[#1a2233] border border-[#334155] rounded-2xl px-4 py-4 text-white font-semibold focus:outline-none focus:border-[var(--accent)]">
+                    <input type="number" id="item-xp" placeholder="XP (e.g. 50)" class="w-full bg-[#1F2633] border border-[#30363D] rounded-2xl px-4 py-4 text-[var(--accent)] font-black focus:outline-none focus:border-[var(--accent)]">
+                    <input type="time" id="item-time" class="w-full bg-[#1F2633] border border-[#30363D] rounded-2xl px-4 py-4 text-white font-semibold focus:outline-none focus:border-[var(--accent)]">
                 </div>
 
                 <div>
-                    <input type="text" id="item-category" list="cat-list" placeholder="Category (e.g. Morning)" class="w-full bg-[#1a2233] border border-[#334155] rounded-2xl px-4 py-4 text-white font-semibold focus:outline-none focus:border-[var(--accent)]">
+                    <input type="text" id="item-category" list="cat-list" placeholder="Category (e.g. Morning)" class="w-full bg-[#1F2633] border border-[#30363D] rounded-2xl px-4 py-4 text-white font-semibold focus:outline-none focus:border-[var(--accent)]">
                     <datalist id="cat-list"></datalist>
                 </div>
                 
-                <button onclick="App.saveItem()" class="w-full py-4 bg-[var(--accent)] text-[#05080f] font-black text-lg rounded-2xl shadow-[0_0_15px_rgba(0,229,255,0.3)]">LOCK IT IN</button>
-                <button id="btn-delete" onclick="App.deleteItem()" class="hidden w-full py-3 rounded-xl text-[#FF0055] bg-[#FF0055]/10 font-bold border border-[#FF0055]/30">Delete Mission</button>
+                <button onclick="App.saveItem()" class="w-full py-4 bg-[var(--accent)] text-[#0B0E14] font-black text-lg rounded-2xl shadow-[0_0_15px_rgba(0,230,118,0.3)] hover:bg-[#00c968]">LOCK IT IN</button>
+                <button id="btn-delete" onclick="App.deleteItem()" class="hidden w-full py-3 rounded-xl text-[#FF3B30] bg-[#FF3B30]/10 font-bold border border-[#FF3B30]/30">Delete Mission</button>
             </div>
         </div>
     </div>
 
-    <!-- LEVEL UP OVERLAY -->
-    <div id="level-up-screen" class="fixed inset-0 z-[200] hidden items-center justify-center overflow-hidden transition-all duration-500">
-        <!-- Portal Rays for High Ranks -->
-        <div id="epic-rays" class="portal-rays hidden"></div>
-        <div id="level-up-content" class="text-center px-5 relative z-10 flex flex-col items-center">
-            <h1 class="text-white font-black text-6xl mb-8 tracking-tighter drop-shadow-2xl">RANK UP</h1>
-            <div id="new-rank-icon" class="mb-8"></div>
-            <h2 class="text-white/80 font-bold text-sm uppercase tracking-widest mb-1">New Designation Achieved</h2>
+    <!-- LEVEL UP OVERLAY (COSMIC VIDEO ANIMATION) -->
+    <div id="level-up-screen" class="fixed inset-0 z-[200] hidden items-center justify-center overflow-hidden cosmic-bg">
+        <div class="flash-overlay" id="lu-flash"></div>
+        <div id="lu-energy" class="energy-swirl"></div>
+        <div id="lu-shockwave" class="shockwave-ring"></div>
+        
+        <div id="level-up-content" class="text-center px-5 relative z-10 flex flex-col items-center badge-slam-active">
+            <h1 class="text-[#00E676] font-black text-6xl mb-4 tracking-tighter drop-shadow-[0_0_20px_rgba(0,230,118,0.5)]">RANK UP</h1>
+            <div id="new-rank-icon" class="mb-6 drop-shadow-[0_0_40px_rgba(255,255,255,0.3)]"></div>
+            <h2 class="text-white/80 font-bold text-sm uppercase tracking-widest mb-1">New Designation</h2>
             <h3 id="new-rank-name" class="text-5xl font-black text-white mb-10 drop-shadow-lg">SILVER</h3>
             <button onclick="UI.hideLevelUp()" class="w-full max-w-[250px] py-4 bg-white text-black font-black text-xl rounded-full shadow-[0_0_30px_rgba(255,255,255,0.5)] hover:scale-105 transition-transform">ACCEPT</button>
         </div>
@@ -285,13 +315,12 @@
             init: () => { if (!AudioSys.ctx) AudioSys.ctx = new (window.AudioContext || window.webkitAudioContext)(); if(AudioSys.ctx.state === 'suspended') AudioSys.ctx.resume(); },
             playConquerDing: () => {
                 AudioSys.init(); const now = AudioSys.ctx.currentTime;
-                // Bass
                 const osc1 = AudioSys.ctx.createOscillator(); const gain1 = AudioSys.ctx.createGain();
-                osc1.type = 'sine'; osc1.frequency.setValueAtTime(100, now); osc1.frequency.exponentialRampToValueAtTime(30, now + 0.3);
+                osc1.type = 'sine'; osc1.frequency.setValueAtTime(120, now); osc1.frequency.exponentialRampToValueAtTime(30, now + 0.3);
                 gain1.gain.setValueAtTime(0.7, now); gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
                 osc1.connect(gain1).connect(AudioSys.ctx.destination); osc1.start(); osc1.stop(now + 0.3);
-                // Sci-Fi Chime (Cyan Theme)
-                [587.33, 739.99, 880].forEach((freq, i) => { // D Major
+                
+                [523.25, 659.25, 783.99].forEach((freq, i) => { // C Major
                     setTimeout(() => {
                         const osc2 = AudioSys.ctx.createOscillator(); const gain2 = AudioSys.ctx.createGain();
                         osc2.type = 'triangle'; osc2.frequency.value = freq;
@@ -300,50 +329,95 @@
                     }, i * 40);
                 });
             },
-            playLevelUp: (isEpic) => {
-                AudioSys.init();
-                const now = AudioSys.ctx.currentTime;
-                // Arpeggio up
-                const chords = isEpic ? [329.63, 415.30, 493.88, 659.25, 830.61] : [440, 554.37, 659.25, 880];
-                chords.forEach((freq, i) => { 
-                    setTimeout(() => {
-                        const osc = AudioSys.ctx.createOscillator(); const gain = AudioSys.ctx.createGain();
-                        osc.type = isEpic ? 'sawtooth' : 'square'; osc.frequency.value = freq;
-                        gain.gain.setValueAtTime(0.15, AudioSys.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, AudioSys.ctx.currentTime + 0.8);
-                        // Add a lowpass filter for synthesis feel
-                        const filter = AudioSys.ctx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 2000;
-                        osc.connect(filter).connect(gain).connect(AudioSys.ctx.destination); osc.start(); osc.stop(AudioSys.ctx.currentTime + 0.8);
-                    }, i * (isEpic ? 120 : 150));
-                });
+            playLevelUpEpic: () => {
+                AudioSys.init(); const now = AudioSys.ctx.currentTime;
+                // Bass buildup (matches the energy swirl 1.5s)
+                const bass = AudioSys.ctx.createOscillator(); const bGain = AudioSys.ctx.createGain();
+                bass.type = 'sawtooth'; bass.frequency.setValueAtTime(40, now); bass.frequency.linearRampToValueAtTime(150, now + 1.2);
+                bGain.gain.setValueAtTime(0.01, now); bGain.gain.linearRampToValueAtTime(0.5, now + 1.2); bGain.gain.exponentialRampToValueAtTime(0.01, now + 3);
+                bass.connect(bGain).connect(AudioSys.ctx.destination); bass.start(); bass.stop(now + 3);
+
+                // Huge impact at 1.4s (The Flash & Slam)
+                setTimeout(() => {
+                    const impact = AudioSys.ctx.createOscillator(); const iGain = AudioSys.ctx.createGain();
+                    impact.type = 'square'; impact.frequency.setValueAtTime(100, AudioSys.ctx.currentTime); impact.frequency.exponentialRampToValueAtTime(20, AudioSys.ctx.currentTime + 1);
+                    iGain.gain.setValueAtTime(1, AudioSys.ctx.currentTime); iGain.gain.exponentialRampToValueAtTime(0.01, AudioSys.ctx.currentTime + 1.5);
+                    impact.connect(iGain).connect(AudioSys.ctx.destination); impact.start(); impact.stop(AudioSys.ctx.currentTime + 1.5);
+
+                    // Majestic Chords
+                    [261.63, 329.63, 392.00, 523.25, 659.25].forEach((freq, i) => {
+                        setTimeout(() => {
+                            const osc = AudioSys.ctx.createOscillator(); const gain = AudioSys.ctx.createGain();
+                            osc.type = 'sawtooth'; osc.frequency.value = freq;
+                            gain.gain.setValueAtTime(0.15, AudioSys.ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, AudioSys.ctx.currentTime + 2);
+                            const filter = AudioSys.ctx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 1500;
+                            osc.connect(filter).connect(gain).connect(AudioSys.ctx.destination); osc.start(); osc.stop(AudioSys.ctx.currentTime + 2);
+                        }, i * 50);
+                    });
+                }, 1400); // 1.4s delay matches CSS animations
             }
         };
 
-        // --- CSS BADGE GENERATOR ---
-        // Generates layered HTML/CSS to look like the 3D shields from the images.
-        const BadgeGen = (rank) => {
-            const size = "w-20 h-20";
-            let inner = `<div class="text-4xl relative z-10">${rank.icon}</div>`;
-            return `<div class="${size} rank-shield badge-3d" style="border-color: ${rank.color}; box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 0 20px ${rank.color}80;">${inner}</div>`;
-        };
-        const BadgeGenLarge = (rank) => {
-            const size = "w-40 h-40";
-            let inner = `<div class="text-7xl relative z-10" style="filter: drop-shadow(0 0 15px ${rank.color});">${rank.icon}</div>`;
-            return `<div class="${size} rank-shield" style="border-color: ${rank.color}; border-width: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 40px ${rank.color};">${inner}</div>`;
+        // --- PROCEDURAL SVG BADGE GENERATOR (COMPETITIVE STYLE) ---
+        // Mimics the layered wings/shields from the provided images
+        const SVGBadge = (rank, size = 100) => {
+            const tier = rank.tier;
+            const cMain = rank.color;
+            const cDark = rank.dark;
+            const cLight = rank.light;
+            
+            let svg = `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));">
+                <defs>
+                    <linearGradient id="g${tier}M" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="${cLight}"/><stop offset="100%" stop-color="${cMain}"/></linearGradient>
+                    <linearGradient id="g${tier}D" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="${cMain}"/><stop offset="100%" stop-color="${cDark}"/></linearGradient>
+                </defs>`;
+            
+            // Tier 3+ (Platinum/Diamond+) Add Outer Wings
+            if (tier >= 3) {
+                svg += `<path d="M50 85 L10 40 L25 15 L50 35 L75 15 L90 40 Z" fill="url(#g${tier}D)" stroke="#111" stroke-width="1.5"/>`;
+                svg += `<path d="M50 75 L15 35 L20 20 L50 40 L80 20 L85 35 Z" fill="url(#g${tier}M)"/>`;
+            }
+
+            // Core Shield (All tiers)
+            if (tier < 3) {
+                // Simple V shape for Novice/Iron/Bronze/Silver
+                svg += `<path d="M50 80 L15 40 L30 20 L50 35 L70 20 L85 40 Z" fill="url(#g${tier}D)" stroke="#111" stroke-width="2"/>`;
+                svg += `<path d="M50 75 L20 40 L30 25 L50 40 L70 25 L80 40 Z" fill="url(#g${tier}M)"/>`;
+            } else {
+                // Sharper center for higher tiers
+                svg += `<path d="M50 90 L30 50 L35 25 L50 15 L65 25 L70 50 Z" fill="url(#g${tier}D)" stroke="#111" stroke-width="2"/>`;
+                svg += `<path d="M50 85 L35 50 L40 30 L50 20 L60 30 L65 50 Z" fill="url(#g${tier}M)"/>`;
+            }
+
+            // Tier 6+ (Master+) Center Gem
+            if (tier >= 6) {
+                const gemColor = tier >= 8 ? "#FF0055" : "#00E676";
+                svg += `<polygon points="50,25 65,45 50,65 35,45" fill="${gemColor}" stroke="#fff" stroke-width="1" filter="drop-shadow(0 0 5px ${gemColor})"/>`;
+                svg += `<polygon points="50,30 58,45 50,55 42,45" fill="#fff" opacity="0.6"/>`;
+            }
+
+            // Tier 9+ (Mythic) Crown Accents
+            if (tier >= 9) {
+                svg += `<path d="M50 10 L30 5 L35 20 Z" fill="#FFD700"/><path d="M50 10 L70 5 L65 20 Z" fill="#FFD700"/>`;
+                svg += `<circle cx="50" cy="5" r="4" fill="#FF0055" filter="drop-shadow(0 0 5px #FF0055)"/>`;
+            }
+            
+            svg += `</svg>`;
+            return svg;
         };
 
-        // --- RANKS (COMPETITIVE STYLE) ---
         const Ranks = [
-            { name: "Novice", req: 0, color: "#8C8C8C", icon: "🌱", epic: false },
-            { name: "Iron", req: 500, color: "#A19D94", icon: "⚙️", epic: false },
-            { name: "Bronze", req: 1500, color: "#CD7F32", icon: "🥉", epic: false },
-            { name: "Silver", req: 3500, color: "#E0E0E0", icon: "🥈", epic: false },
-            { name: "Gold", req: 7000, color: "#FFD700", icon: "🥇", epic: false },
-            { name: "Platinum", req: 12000, color: "#E5E4E2", icon: "💠", epic: true }, // Starts getting epic
-            { name: "Diamond", req: 20000, color: "#00E5FF", icon: "💎", epic: true },
-            { name: "Master", req: 35000, color: "#9370DB", icon: "🔮", epic: true },
-            { name: "Grandmaster",req: 55000, color: "#FF00FF", icon: "🌌", epic: true },
-            { name: "Titan", req: 80000, color: "#FF4500", icon: "🔥", epic: true },
-            { name: "Mythic Legend", req: 150000, color: "#FFD700", icon: "👑", epic: true }
+            { tier: 0, name: "Novice", req: 0, color: "#6e7681", dark: "#30363d", light: "#8b949e" },
+            { tier: 1, name: "Iron", req: 500, color: "#a19d94", dark: "#5c5a55", light: "#d6d3cc" },
+            { tier: 2, name: "Bronze", req: 1500, color: "#cd7f32", dark: "#8b5016", light: "#f5a453" },
+            { tier: 3, name: "Silver", req: 3500, color: "#00E676", dark: "#008a46", light: "#66ffaf" }, // Adjusted to match green theme
+            { tier: 4, name: "Gold", req: 7000, color: "#FFD700", dark: "#b39600", light: "#ffe866" },
+            { tier: 5, name: "Platinum", req: 12000, color: "#e5e4e2", dark: "#999999", light: "#ffffff" },
+            { tier: 6, name: "Diamond", req: 20000, color: "#00e5ff", dark: "#008299", light: "#80f2ff" },
+            { tier: 7, name: "Master", req: 35000, color: "#ff8c00", dark: "#995400", light: "#ffb866" },
+            { tier: 8, name: "Grandmaster",req: 55000, color: "#ff00ff", dark: "#800080", light: "#ff80ff" },
+            { tier: 9, name: "Titan", req: 80000, color: "#ff3b30", dark: "#991c14", light: "#ff8b85" },
+            { tier: 10, name: "Mythic Legend", req: 150000, color: "#FFD700", dark: "#FF0055", light: "#ffffff" }
         ];
 
         let state = { 
@@ -356,15 +430,15 @@
 
         const App = {
             init: () => {
-                const saved = localStorage.getItem('critiqueV5');
+                const saved = localStorage.getItem('critiqueV6');
                 if (saved) state = JSON.parse(saved);
                 else {
                     state.items = [
-                        { id: '1', text: "Deep Work: Programming/Math", type: "priority", date: "", time: "09:00", xpReward: 200, category: "Academics", history: [] },
+                        { id: '1', text: "Deep Work: Core Subject", type: "priority", date: "", time: "09:00", xpReward: 200, category: "Academics", history: [] },
                         { id: '2', text: "Morning Calisthenics", type: "habit", date: "", time: "07:30", xpReward: 100, category: "Physical Training", history: [] },
-                        { id: '3', text: "Review Notes", type: "task", date: App.getTodayReal(), time: "18:00", xpReward: 50, category: "Evening", history: [] }
+                        { id: '3', text: "Review Formulas", type: "task", date: App.getTodayReal(), time: "18:00", xpReward: 50, category: "Evening", history: [] }
                     ];
-                    state.goals = [{ id: 'g1', text: "Ace Board Exams", done: false }];
+                    state.goals = [{ id: 'g1', text: "Ace Class 12 Boards", done: false }];
                 }
                 if(!state.xpHistory) state.xpHistory = {};
                 
@@ -400,22 +474,21 @@
                 }
                 
                 App.checkLevelUp();
-                localStorage.setItem('critiqueV5', JSON.stringify(state));
+                localStorage.setItem('critiqueV6', JSON.stringify(state));
                 UI.render();
                 if(chartInstance) UI.renderChart();
-                // Also update calendar tab if open
                 if(document.getElementById('tab-calendar').classList.contains('active')) CalendarUI.renderSchedule(viewingDate);
             },
             toggleGoal: (id) => {
                 AudioSys.init(); const goal = state.goals.find(g => g.id === id);
                 if(goal) { goal.done = !goal.done; if(goal.done) AudioSys.playConquerDing(); }
-                localStorage.setItem('critiqueV5', JSON.stringify(state)); UI.render();
+                localStorage.setItem('critiqueV6', JSON.stringify(state)); UI.render();
             },
             checkLevelUp: () => {
                 const newRank = App.calculateRankIndex(state.xp);
                 if (newRank > currentRankIndex) {
                     currentRankIndex = newRank; 
-                    AudioSys.playLevelUp(Ranks[newRank].epic); 
+                    AudioSys.playLevelUpEpic(); // Play the massive sound
                     UI.showLevelUp(Ranks[newRank]);
                 }
             },
@@ -438,13 +511,13 @@
                     state.items.push({ id: Math.random().toString(), text, type, date, time, xpReward:xp, category:cat, history: [] });
                 }
                 
-                localStorage.setItem('critiqueV5', JSON.stringify(state));
+                localStorage.setItem('critiqueV6', JSON.stringify(state));
                 UI.closeModal(); UI.render();
             },
             deleteItem: () => {
                 const id = document.getElementById('item-id').value;
                 state.items = state.items.filter(i => i.id !== id);
-                localStorage.setItem('critiqueV5', JSON.stringify(state));
+                localStorage.setItem('critiqueV6', JSON.stringify(state));
                 UI.closeModal(); UI.render();
             },
             updateCategories: () => {
@@ -454,7 +527,7 @@
             requestNotifications: () => {
                 if ("Notification" in window) {
                     Notification.requestPermission().then(perm => {
-                        if (perm === "granted") new Notification("Critique Pro Max", { body: "System Linked. Ready for commands." });
+                        if (perm === "granted") new Notification("Critique Pro", { body: "System Linked. Ready for commands." });
                         else alert("Notifications blocked by OS.");
                     });
                 }
@@ -462,13 +535,13 @@
             exportData: () => {
                 const blob = new Blob([JSON.stringify(state)], {type: "application/json"});
                 const url = URL.createObjectURL(blob);
-                const a = document.createElement('a'); a.href = url; a.download = `CritiqueV5_${App.getTodayReal()}.json`;
+                const a = document.createElement('a'); a.href = url; a.download = `CritiqueV6_${App.getTodayReal()}.json`;
                 a.click(); URL.revokeObjectURL(url);
             },
-            resetData: () => { if(confirm("INITIATE TOTAL WIPE? THIS CANNOT BE UNDONE.")) { localStorage.removeItem('critiqueV5'); location.reload(); } }
+            resetData: () => { if(confirm("INITIATE TOTAL WIPE? THIS CANNOT BE UNDONE.")) { localStorage.removeItem('critiqueV6'); location.reload(); } }
         };
 
-        // --- GOOGLE CALENDAR STYLE SCHEDULE ---
+        // --- CALENDAR UI ---
         const CalendarUI = {
             currentMonth: new Date().getMonth(),
             currentYear: new Date().getFullYear(),
@@ -495,27 +568,22 @@
                     const hasActivity = state.items.some(item => item.history.includes(dStr));
                     
                     let cls = "w-6 h-6 mx-auto flex items-center justify-center rounded-full text-[11px] font-bold cursor-pointer transition ";
-                    if(isToday) cls += "bg-[var(--accent)] text-[#05080f] shadow-[0_0_8px_var(--accent)]";
-                    else if(hasActivity) cls += "bg-[#1a2233] text-white border border-[var(--accent)]";
-                    else cls += "text-gray-500 hover:bg-[#1a2233]";
+                    if(isToday) cls += "bg-[var(--accent)] text-[#0B0E14] shadow-[0_0_8px_var(--accent)]";
+                    else if(hasActivity) cls += "bg-[#1F2633] text-white border border-[var(--accent)]";
+                    else cls += "text-gray-500 hover:bg-[#1F2633]";
                     
                     grid.innerHTML += `<div class="${cls}" onclick="CalendarUI.renderSchedule('${dStr}')">${i}</div>`;
                 }
             },
             renderSchedule: (dateStr) => {
-                // Formatting Date title
                 const dObj = new Date(dateStr);
                 const isToday = dateStr === App.getTodayReal();
                 document.getElementById('schedule-date-title').innerText = isToday ? "Today's Timeline" : dObj.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
                 
-                // Get items valid for this date
-                let dayItems = state.items.filter(i => i.date === dateStr || i.history.includes(dateStr) || (i.type !== 'task')); // Habits/Priorities show every day
-                
-                // Sort chronologically (Empty time goes to top as "All Day")
+                let dayItems = state.items.filter(i => i.date === dateStr || i.history.includes(dateStr) || (i.type !== 'task')); 
                 dayItems.sort((a,b) => (a.time || '00:00').localeCompare(b.time || '00:00'));
 
                 const timeline = document.getElementById('schedule-timeline');
-                // Keep the line
                 Array.from(timeline.children).forEach(c => { if(!c.classList.contains('timeline-line')) c.remove(); });
 
                 if(dayItems.length === 0) {
@@ -526,15 +594,15 @@
                 dayItems.forEach(item => {
                     const isDone = item.history.includes(dateStr);
                     const timeStr = item.time ? (new Date(`1970-01-01T${item.time}:00Z`).toLocaleTimeString('en-US', {hour: 'numeric', minute:'2-digit', timeZone:'UTC'})) : "All Day";
-                    const dotColor = isDone ? 'bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]' : 'bg-[#334155]';
-                    const cardStyle = isDone ? 'border-[var(--accent)]/30 bg-[var(--accent)]/5' : 'border-[#1a2233] bg-[#0f141e]';
+                    const dotColor = isDone ? 'bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]' : 'bg-[#30363D]';
+                    const cardStyle = isDone ? 'border-[var(--accent)]/30 bg-[var(--accent)]/5' : 'border-[#1F2633] bg-[#151A22]';
                     const textStyle = isDone ? 'text-gray-500 line-through' : 'text-white';
 
                     const el = document.createElement('div');
                     el.className = "flex items-start gap-4 mb-4 relative z-10 w-full";
                     el.innerHTML = `
                         <div class="w-14 text-right pt-2 text-[10px] font-bold text-gray-400 leading-tight">${timeStr.replace(' ', '<br>')}</div>
-                        <div class="mt-2 w-3 h-3 rounded-full ${dotColor} border-2 border-[#05080f] shrink-0"></div>
+                        <div class="mt-2 w-3 h-3 rounded-full ${dotColor} border-2 border-[#0B0E14] shrink-0"></div>
                         <div class="flex-1 rounded-2xl p-3 border ${cardStyle} transition-all flex items-center justify-between" onclick="App.toggleItem('${item.id}', event)">
                             <div class="flex items-center gap-3">
                                 <input type="checkbox" class="habit-checkbox w-5 h-5 border-[1px]" ${isDone ? 'checked' : ''} style="width:20px;height:20px;" onclick="event.stopPropagation(); App.toggleItem('${item.id}', event)">
@@ -561,18 +629,18 @@
                 const btn = document.getElementById('timer-btn');
                 if (Timer.isRunning) {
                     clearInterval(Timer.interval); Timer.isRunning = false;
-                    btn.innerText = "Initiate Lockdown"; btn.classList.replace('bg-[#FF0055]', 'bg-[var(--accent)]'); btn.classList.replace('text-white', 'text-[#05080f]');
+                    btn.innerText = "Initiate Lockdown"; btn.classList.replace('bg-[#FF3B30]', 'bg-[var(--accent)]'); btn.classList.replace('text-white', 'text-[#0B0E14]');
                 } else {
                     AudioSys.init(); Timer.isRunning = true;
                     if ("Notification" in window && Notification.permission === "granted") new Notification("Deep Focus", { body: "Lockdown initiated." });
                     Timer.interval = setInterval(() => {
                         Timer.timeLeft--; Timer.updateDisplay();
                         if (Timer.timeLeft <= 0) {
-                            clearInterval(Timer.interval); Timer.isRunning = false; AudioSys.playLevelUp(false);
+                            clearInterval(Timer.interval); Timer.isRunning = false; 
                             alert("Session Conquered!"); Timer.toggle();
                         }
                     }, 1000);
-                    btn.innerText = "Abandon Protocol (Fail)"; btn.classList.replace('bg-[var(--accent)]', 'bg-[#FF0055]'); btn.classList.replace('text-[#05080f]', 'text-white');
+                    btn.innerText = "Abandon Protocol (Fail)"; btn.classList.replace('bg-[var(--accent)]', 'bg-[#FF3B30]'); btn.classList.replace('text-[#0B0E14]', 'text-white');
                 }
             },
             failProtocol: () => {
@@ -580,7 +648,7 @@
                 const penalty = document.getElementById('penalty-text').value;
                 alert(`PROTOCOL BREACHED!\nYou left the app.\n\nPenalty Due: ${penalty}`);
                 const btn = document.getElementById('timer-btn');
-                btn.innerText = "Initiate Lockdown"; btn.classList.replace('bg-[#FF0055]', 'bg-[var(--accent)]'); btn.classList.replace('text-white', 'text-[#05080f]');
+                btn.innerText = "Initiate Lockdown"; btn.classList.replace('bg-[#FF3B30]', 'bg-[var(--accent)]'); btn.classList.replace('text-white', 'text-[#0B0E14]');
             },
             updateDisplay: () => {
                 const m = Math.floor(Timer.timeLeft / 60).toString().padStart(2, '0');
@@ -661,10 +729,10 @@
                     streakRow.innerHTML += `<div onclick="App.viewDate('${dStr}')" class="${cls}">${days[i]}</div>`;
                 }
 
-                // Progress Tab Badges
+                // Progress Tab (Massive Floating Centerpiece)
                 const rank = Ranks[currentRankIndex];
                 const nextRank = Ranks[currentRankIndex + 1] || rank;
-                document.getElementById('prog-badge-container').innerHTML = BadgeGen(rank);
+                document.getElementById('prog-badge-main').innerHTML = SVGBadge(rank, 220); // Very big badge
                 document.getElementById('prog-rank').innerText = rank.name;
                 document.getElementById('prog-rank').style.color = rank.color;
                 document.getElementById('prog-xp').innerText = state.xp.toLocaleString();
@@ -679,8 +747,8 @@
                     const isUnlocked = state.xp >= r.req;
                     ladder.innerHTML += `
                         <div class="flex items-center gap-5 mb-8 relative z-10">
-                            <div class="absolute -left-[39px] w-3 h-3 rounded-full ${isUnlocked ? 'bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]' : 'bg-[#1a2233]'}"></div>
-                            ${isUnlocked ? BadgeGen(r) : `<div class="w-20 h-20 rank-shield grayscale opacity-40">${r.icon}</div>`}
+                            <div class="absolute -left-[39px] w-3 h-3 rounded-full ${isUnlocked ? 'bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]' : 'bg-[#1F2633]'}"></div>
+                            ${isUnlocked ? SVGBadge(r, 70) : `<div class="w-[70px] h-[70px] grayscale opacity-30">${SVGBadge(r, 70)}</div>`}
                             <div class="flex-1 ${isUnlocked?'text-white':'text-gray-600'}">
                                 <div class="font-black text-xl" style="color:${isUnlocked?r.color:''}">${r.name}</div>
                                 <div class="text-[10px] font-bold tracking-widest mt-1">${r.req.toLocaleString()} XP</div>
@@ -692,17 +760,17 @@
                 const gc = document.getElementById('goals-container'); gc.innerHTML = '';
                 state.goals.forEach(g => {
                     gc.innerHTML += `
-                        <div class="glass-card rounded-xl p-4 flex items-center justify-between border ${g.done ? 'border-[var(--accent)] bg-[var(--accent)]/10' : 'border-[#1a2233]'}">
+                        <div class="glass-card rounded-xl p-4 flex items-center justify-between border ${g.done ? 'border-[var(--accent)] bg-[var(--accent)]/10' : 'border-[#1F2633]'}">
                             <div class="flex items-center gap-3 flex-1" onclick="App.toggleGoal('${g.id}')">
                                 <input type="checkbox" class="habit-checkbox w-5 h-5 border-[1px]" ${g.done ? 'checked' : ''} style="width:20px;height:20px;border-radius:4px;">
                                 <span class="font-bold text-sm ${g.done?'text-gray-500 line-through':'text-white'}">${g.text}</span>
                             </div>
-                            <button onclick="UI.deleteGoal('${g.id}')" class="text-gray-600 hover:text-[#FF0055]"><i class="ph-bold ph-trash"></i></button>
+                            <button onclick="UI.deleteGoal('${g.id}')" class="text-gray-600 hover:text-[#FF3B30]"><i class="ph-bold ph-trash"></i></button>
                         </div>`;
                 });
             },
             generateItemHTML: (item, isDone, isPriority) => {
-                const timeLabel = item.time ? `<span class="bg-[#1a2233] px-1.5 py-0.5 rounded text-[9px] mr-1 border border-[#334155]">${item.time}</span>` : "";
+                const timeLabel = item.time ? `<span class="bg-[#1F2633] px-1.5 py-0.5 rounded text-[9px] mr-1 border border-[#30363D]">${item.time}</span>` : "";
                 return `
                 <div class="glass-card rounded-2xl p-4 flex justify-between items-center transition-all ${isDone ? 'border-[var(--accent)]/30 bg-[var(--accent)]/5' : (isPriority ? 'border-[#FFD700]/40 shadow-[0_0_15px_rgba(255,215,0,0.05)]' : '')}">
                     <div class="flex items-center gap-4 flex-1" onclick="App.toggleItem('${item.id}', event)">
@@ -712,7 +780,7 @@
                             <div class="text-[11px] font-bold ${isDone ? 'text-gray-600' : 'text-[var(--accent)]'} mt-1 flex items-center">${timeLabel} +${item.xpReward} XP</div>
                         </div>
                     </div>
-                    <button onclick="UI.openModal('${item.id}')" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white rounded-full hover:bg-[#1a2233]"><i class="ph-bold ph-pencil-simple text-lg"></i></button>
+                    <button onclick="UI.openModal('${item.id}')" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white rounded-full hover:bg-[#1F2633]"><i class="ph-bold ph-pencil-simple text-lg"></i></button>
                 </div>`;
             },
             
@@ -753,39 +821,38 @@
                 backdrop.classList.add('opacity-0'); modal.classList.add('translate-y-full');
                 setTimeout(() => { backdrop.classList.add('hidden'); modal.classList.add('hidden'); }, 300);
             },
+
+            // The Epic Cosmic Video Animation Logic
             showLevelUp: (rank) => {
                 const screen = document.getElementById('level-up-screen');
                 const content = document.getElementById('level-up-content');
-                const rays = document.getElementById('epic-rays');
+                const flash = document.getElementById('lu-flash');
+                const energy = document.getElementById('lu-energy');
+                const shockwave = document.getElementById('lu-shockwave');
                 
-                document.getElementById('new-rank-icon').innerHTML = BadgeGenLarge(rank);
+                // Set text/badge
+                document.getElementById('new-rank-icon').innerHTML = SVGBadge(rank, 250);
                 document.getElementById('new-rank-name').innerText = rank.name;
                 document.getElementById('new-rank-name').style.color = rank.color;
                 
+                // Reset animation states by re-triggering reflow
                 screen.classList.remove('hidden'); screen.classList.add('flex');
                 
-                if(rank.epic) {
-                    screen.classList.add('flash-active');
-                    rays.classList.remove('hidden');
-                    content.classList.add('epic-active');
-                } else {
-                    screen.style.backgroundColor = 'rgba(5,8,15,0.95)';
-                    rays.classList.add('hidden');
-                    content.classList.add('epic-active'); // Standard zoom
-                }
+                [flash, energy, shockwave, content].forEach(el => {
+                    el.style.animation = 'none';
+                    void el.offsetWidth; // trigger reflow
+                    el.style.animation = null; 
+                });
             },
             hideLevelUp: () => { 
                 const screen = document.getElementById('level-up-screen');
                 screen.classList.add('hidden'); screen.classList.remove('flex'); 
-                screen.classList.remove('flash-active');
-                document.getElementById('level-up-content').classList.remove('epic-active');
-                document.getElementById('epic-rays').classList.add('hidden');
             },
             addGoal: () => {
                 const text = prompt("Enter new strategic goal:");
-                if(text) { state.goals.push({id: Math.random().toString(), text, done: false}); localStorage.setItem('critiqueV5', JSON.stringify(state)); UI.render(); }
+                if(text) { state.goals.push({id: Math.random().toString(), text, done: false}); localStorage.setItem('critiqueV6', JSON.stringify(state)); UI.render(); }
             },
-            deleteGoal: (id) => { state.goals = state.goals.filter(g => g.id !== id); localStorage.setItem('critiqueV5', JSON.stringify(state)); UI.render(); },
+            deleteGoal: (id) => { state.goals = state.goals.filter(g => g.id !== id); localStorage.setItem('critiqueV6', JSON.stringify(state)); UI.render(); },
             
             renderChart: () => {
                 const ctx = document.getElementById('xpChart').getContext('2d');
@@ -799,8 +866,8 @@
                 if(chartInstance) chartInstance.destroy();
                 chartInstance = new Chart(ctx, {
                     type: 'line',
-                    data: { labels: labels, datasets: [{ label: 'XP', data: data, borderColor: '#00E5FF', backgroundColor: 'rgba(0, 229, 255, 0.15)', tension: 0.4, fill: true, pointBackgroundColor: '#0077FF', pointBorderWidth: 2 }] },
-                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#86868B' } } } }
+                    data: { labels: labels, datasets: [{ label: 'XP', data: data, borderColor: '#00E676', backgroundColor: 'rgba(0, 230, 118, 0.1)', tension: 0.4, fill: true, pointBackgroundColor: '#00E676', pointBorderWidth: 2 }] },
+                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#8B949E' } } } }
                 });
             }
         };
